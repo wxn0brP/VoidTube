@@ -1,0 +1,81 @@
+:root{
+    --scrollbar-width: 5px;
+}
+
+/* WebKit (Chromium, Chrome, Opera, Safari) */
+::-webkit-scrollbar{
+    width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+    background: var(--accent);
+}
+
+::-webkit-scrollbar-thumb:hover{
+    background: var(--border);
+}
+
+/* Gecko (Firefox) */
+*{
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent) transparent;
+}
+
+*::-webkit-scrollbar{
+    width: var(--scrollbar-width);
+}
+
+*::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb{
+    background-color: var(--accent);
+}
+
+*::-webkit-scrollbar-thumb:hover{
+    background-color: var(--border);
+}
+
+/* Electron */
+html::-webkit-scrollbar{
+    width: var(--scrollbar-width);
+}
+
+html::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+html::-webkit-scrollbar-thumb{
+    background: var(--accent);
+}
+
+html::-webkit-scrollbar-thumb:hover{
+    background: var(--border);
+}
+
+/* WebView in React Native */
+body{
+    scrollbar-width: var(--scrollbar-width);
+    scrollbar-color: var(--accent) transparent;
+}
+
+body::-webkit-scrollbar{
+    width: var(--scrollbar-width);
+}
+
+body::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+body::-webkit-scrollbar-thumb{
+    background-color: var(--accent);
+}
+
+body::-webkit-scrollbar-thumb:hover{
+    background-color: var(--border);
+}

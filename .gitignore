@@ -1,0 +1,10 @@
+node_modules
+yarn.lock
+package-lock.json
+.vscode
+
+dist
+public/css
+internal-db
+
+.suglite_history
