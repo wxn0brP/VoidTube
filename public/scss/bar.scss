@@ -1,0 +1,107 @@
+$accent-color: #1e90ff;
+$text-color: #fff;
+$progress-bg: #444;
+$progress-thumb: #1e90ff;
+
+#player-bar {
+    background-color: var(--player-bg);
+    padding: 0.5em 1em;
+
+    button {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2em;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+        user-select: none;
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+    
+    .control-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        
+        div {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+        }
+    }
+
+    .custom-progress-container {
+        position: relative;
+        height: 8px;
+        background-color: #444;
+        border-radius: 5px;
+        overflow: hidden;
+        width: 100%;
+        cursor: pointer;
+
+        .buffered-range,
+        .played-range {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+        }
+
+        .buffered-range {
+            background-color: rgba(255, 255, 255, 0.2);
+            z-index: 1;
+        }
+
+        .played-range {
+            background-color: #1e90ff;
+            z-index: 2;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            z-index: 3;
+            cursor: pointer;
+
+            &::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: white;
+                cursor: pointer;
+                margin-top: -4px;
+            }
+
+            &::-moz-range-thumb {
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                background: white;
+                cursor: pointer;
+            }
+        }
+    }
+
+    .volume {
+        width: 80px;
+    }
+
+    .time {
+        color: white;
+        font-size: 0.9em;
+        min-width: 64px;
+        text-align: center;
+    }
+}

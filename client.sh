@@ -1,0 +1,1 @@
+suglite -c yarn start:client -w src/app -d 1000

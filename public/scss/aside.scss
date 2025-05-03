@@ -1,0 +1,25 @@
+aside {
+    padding-inline: 1px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    background-color: #0c0c0c;
+    div {
+        padding: 2px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        font-size: 1.5rem;
+
+        &:hover {
+            background-color: #1e1e1e;
+        }
+
+        div {
+            font-size: 0.9rem;
+        }
+    }
+}

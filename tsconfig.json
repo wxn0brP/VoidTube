@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "module": "ES2022",
+        "target": "ES2022",
+        "moduleResolution": "node",
+        "paths": {
+            "#vql/*": ["./node_modules/@wxn0brp/vql/dist/*"],
+            "#db/*": ["./node_modules/@wxn0brp/db/dist/*"]
+        },
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "outDir": "./dist",
+        "inlineSourceMap": true
+    },
+    "include": [
+       "./src"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "tsc-alias": {
+        "resolveFullPaths": true,
+        "verbose": false
+    }
+}
