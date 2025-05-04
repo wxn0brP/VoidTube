@@ -19,7 +19,7 @@ class SearchView implements UiComponent {
                 <div style="background-image: url(${entry.thumbnail})"></div>
                 <h3>${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
-                ${entry.views} views
+                ${entry.views.toLocaleString()} views
             `
 
             card.addEventListener("click", () => {

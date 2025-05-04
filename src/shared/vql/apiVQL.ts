@@ -16,44 +16,6 @@ export const YouTubeAdapter = createValtheraAdapter({
         return ["video", "playlist", "channel"];
     },
 
-    // find: async (collection, search) => {
-    //     const url = search.url;
-    //     if (!url) throw new Error("Missing 'url' in search");
-
-    //     if (cache[url]) return cache[url];
-
-    //     let data: any;
-    //     if (collection === "playlist") {
-    //         data = await getPlaylistInfo(url);
-    //     } else if (collection === "channel") {
-    //         data = await getChannelVideos(url);
-    //     } else {
-    //         throw new Error(`Collection '${collection}' does not support 'find'`);
-    //     }
-
-    //     cache[url] = data;
-    //     db.cache.add("video", { url, data, ttl: getTTL() });
-    //     return data;
-    // },
-
-    // findOne: async (collection, search) => {
-    //     const url = search.url;
-    //     if (!url) throw new Error("Missing 'url' in search");
-
-    //     if (cache[url]) return cache[url];
-
-    //     let data: any;
-    //     if (collection === "video") {
-    //         data = await getVideoInfo(url);
-    //     } else {
-    //         throw new Error(`Collection '${collection}' does not support 'findOne'`);
-    //     }
-
-    //     cache[url] = data;
-    //     db.cache.add("video", { url, data, ttl: getTTL() });
-    //     return data;
-    // }
-
     async findOne(collection, search) {
         if (collection === "video") return await apiGetVideo(search.url || search._id);
         if (collection === "video-static") return await apiGetVideo(search.url || search._id, false);

@@ -15,9 +15,9 @@ class PlayListView implements UiComponent {
             const card = document.createElement("div");
             card.className = "videoCard";
             card.innerHTML = `
-                <div style="background-image: url(${item["info.thumbnail"]})"></div>
-                <h3>${item["info.title"]}</h3>
-                ${formatTime(item["info.duration"], null)}
+                <div style="background-image: url(${item.info.thumbnail})"></div>
+                <h3>${item.info.title}</h3>
+                ${formatTime(item.info.duration, null)}
             `;
             card.addEventListener("click", () => {
                 $store.playlistIndex.set(i);

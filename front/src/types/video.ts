@@ -34,19 +34,23 @@ export interface HistoryEntry {
     time: number;
     watched: boolean;
     last: number;
-    "info.title": string;
-    "info.duration": number;
-    "info.uploadDate": string;
-    "info.views": number;
-    "info.thumbnail": string;
+    info: {
+        title: string;
+        duration: number;
+        uploadDate: string;
+        views: number;
+        thumbnail: string;
+    };
 }
 
 export interface PlaylistEntry {
     _id: string;
     time: number;
-    "info.title": string;
-    "info.duration": number;
-    "info.thumbnail": string;
+    info: {
+        title: string;
+        duration: number;
+        thumbnail: string;
+    };
 }
 
 export interface PlaylistsEntry {

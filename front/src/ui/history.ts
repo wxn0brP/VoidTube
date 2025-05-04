@@ -19,14 +19,14 @@ class HistoryView implements UiComponent {
                 const card = document.createElement("div");
                 card.className = "historyCard";
 
-                const dateRaw = entry["info.uploadDate"];
+                const dateRaw = entry.info.uploadDate;
                 const date = dateRaw[6] + dateRaw[7] + "." + dateRaw[4] + dateRaw[5] + "." + dateRaw[0] + dateRaw[1] + dateRaw[2] + dateRaw[3];
 
                 card.innerHTML = `
-                    <div style="background-image: url(${entry["info.thumbnail"]})"></div>
-                    <h3>${entry["info.title"]}</h3>
-                    ${formatTime(entry.time, null)} / ${formatTime(entry["info.duration"], null)} <br>
-                    ${entry["info.views"]} views -
+                    <div style="background-image: url(${entry.info.thumbnail})"></div>
+                    <h3>${entry.info.title}</h3>
+                    ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
+                    ${entry.info.views.toLocaleString()} views -
                     ${date}
                 `
 

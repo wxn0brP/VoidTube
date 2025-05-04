@@ -166,13 +166,15 @@ export class PlayerView implements UiComponent {
             }
 
             if (e.code === "ArrowUp") {
-                const vol = Math.min(1, this.videoEl.volume + 0.1);
+                const vol = Math.min(1, this.videoEl.volume + 0.05);
                 this.videoEl.volume = this.audioEl.volume = vol;
+                e.preventDefault();
             }
-
+            
             if (e.code === "ArrowDown") {
-                const vol = Math.max(0, this.videoEl.volume - 0.1);
+                const vol = Math.max(0, this.videoEl.volume - 0.05);
                 this.videoEl.volume = this.audioEl.volume = vol;
+                e.preventDefault();
             }
         });
 
