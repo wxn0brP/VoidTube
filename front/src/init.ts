@@ -1,5 +1,6 @@
 import { changeView } from "./ui";
 import playerView from "./ui/player";
+import { loadVideo } from "./ui/player/status";
 import playListView from "./ui/playList";
 import searchBarView from "./ui/searchBar";
 import { getYouTubeVideoId, updateQueryParam } from "./utils";
@@ -29,7 +30,7 @@ function params() {
     const videoId = urlParams.get("v");
     if (videoId) {
         const id = getYouTubeVideoId(videoId);
-        setTimeout(() => playerView.loadVideo(id), 1000);
+        setTimeout(() => loadVideo(id), 1000);
         updateQueryParam("v", id);
         changeView("video");
     } else {

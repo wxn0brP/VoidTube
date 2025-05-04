@@ -5,6 +5,7 @@ import { UiComponent } from "../types/ui";
 import { PlaylistEntry } from "../types/video";
 import { formatTime, updateQueryParam } from "../utils";
 import playerView from "./player";
+import { loadVideo } from "./player/status";
 
 class PlayListView implements UiComponent {
     element: HTMLDivElement;
@@ -21,7 +22,7 @@ class PlayListView implements UiComponent {
             `;
             card.addEventListener("click", () => {
                 $store.playlistIndex.set(i);
-                playerView.loadVideo(item._id);
+                loadVideo(item._id);
                 updateQueryParam("pi", i.toString());
             });
             this.element.appendChild(card);
@@ -41,7 +42,7 @@ class PlayListView implements UiComponent {
 
         const videoId = playlist[index]._id;
         $store.videoId.set(videoId);
-        playerView.loadVideo(videoId, !playerView.paused, false);
+        loadVideo(videoId, !playerView.paused, false);
         updateQueryParam("pi", index.toString());
     }
 

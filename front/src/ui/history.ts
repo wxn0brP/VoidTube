@@ -5,6 +5,7 @@ import { UiComponent } from "../types/ui";
 import { HistoryEntry } from "../types/video";
 import { formatTime, updateQueryParam } from "../utils";
 import playerView from "./player";
+import { loadVideo } from "./player/status";
 
 class HistoryView implements UiComponent {
     element: HTMLElement;
@@ -31,7 +32,7 @@ class HistoryView implements UiComponent {
                 `
 
                 card.addEventListener("click", () => {
-                    playerView.loadVideo(entry._id, !playerView.paused);
+                    loadVideo(entry._id, !playerView.paused);
                 });
 
                 this.element.appendChild(card);
