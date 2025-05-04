@@ -82,6 +82,7 @@ export class PlayerView implements UiComponent {
     }
 
     public show() {
+        if (!$store.videoId.get()) return;
         changeView("video");
         updateQueryParam("v", $store.videoId.get());
         updateQueryParam("query", undefined);

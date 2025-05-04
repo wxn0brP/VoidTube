@@ -1,0 +1,59 @@
+<main>
+    <aside>
+        <div id="player-view-button" onclick="playerShow()">
+            🎥
+            <div>Player</div>
+        </div>
+        <div onclick="historyShow()">
+            ⟳
+            <div>History</div>
+        </div>
+        <div onclick="playlistsShow()">
+            📂
+            <div>Playlists</div>
+        </div>
+    </aside>
+    <div id="video-view" class="view">
+        <section id="video">
+            <div id="player">
+                <video id="player-video"></video>
+                <div id="player-bar">
+                    <div class="custom-progress-container">
+                        <div class="buffered-range"></div>
+                        <div class="played-range"></div>
+                        <input type="range" class="progress" min="0" max="100" value="0" />
+                    </div>
+
+                    <div class="control-bar">
+                        <div class="left-bar">
+                            <button class="play-pause-btn" title="Play / Pause">▶️</button>
+                            <label>
+                                Loop
+                                <input type="checkbox" id="loop" title="Loop">
+                            </label>
+                            <label>
+                                Loop Playlist
+                                <input type="checkbox" id="loopPlaylist" title="Loop Playlist">
+                            </label>
+                            <input type="range" class="volume" title="Volume" min="0" max="1" step="0.01" value="1" />
+                        </div>
+
+                        <div class="right-bar">
+                            <span class="time">00:00 / 00:00</span>
+                            <button class="fullscreen-btn" title="Fullscreen">⛶</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="fromats">
+                <select id="audio-formats"></select>
+                <select id="video-formats"></select>
+            </div>
+            <div id="video-info"></div>
+        </section>
+        <section id="playlist"></section>
+    </div>
+    <div id="history-view" class="view"></div>
+    <div id="playlists-view" class="view"></div>
+    <div id="search-view" class="view"></div>
+</main>
