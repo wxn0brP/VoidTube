@@ -8,9 +8,20 @@ class LoaderView implements UiComponent {
         this.element = document.querySelector("#loader")!;
 
         $store.loader.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
+            this.element.style.opacity = open > 0 ? "1" : "0";
         });
     }
+
+    on() {
+        $store.loader.value++;
+        $store.loader.notify();
+    }
+
+    off() {
+        $store.loader.value--;
+        $store.loader.notify();
+    }
+
 }
 
 const loaderView = new LoaderView();

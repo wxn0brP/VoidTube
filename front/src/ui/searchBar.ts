@@ -2,6 +2,7 @@ import { searchVideo } from "../apiFront";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { clearQueryParams, getYouTubeVideoId, updateQueryParam } from "../utils";
+import loaderView from "./loader";
 import { loadVideo } from "./player/status";
 import searchView from "./search";
 
@@ -18,6 +19,11 @@ class SearchBarView implements UiComponent {
         this.searchBtn = this.element.querySelector("#search-btn")!;
         this.searchSizeInput = this.element.querySelector("#search-size")!;
         this.searchBtn.onclick = this.search.bind(this);
+        this.searchInput.onkeydown = (e) => {
+            if (e.key === "Enter") {
+                this.search();
+            }
+        }
     }
 
     public async search() {
@@ -33,12 +39,12 @@ class SearchBarView implements UiComponent {
             return;
         }
 
-        $store.loader.set(true);
         clearQueryParams();
         updateQueryParam("query", titleOrUrl);
         const size = Number(this.searchSizeInput.value) || 10;
+        loaderView.on();
         const searchResults = await searchVideo(titleOrUrl, size);
-        $store.loader.set(false);
+        loaderView.off();
         searchView.show();
         searchView.render(searchResults);
     }

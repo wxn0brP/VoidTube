@@ -17,7 +17,7 @@ const initData = {
         playlists: false,
         search: false,
     },
-    loader: false,
+    loader: 0,
 }
 
 export const $store = createStore(initData);

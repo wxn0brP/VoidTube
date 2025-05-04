@@ -2,6 +2,7 @@ import FalconFrame from "@wxn0brp/falcon-frame";
 import { scssMiddleware } from "./scss";
 import VQL from "../shared/vql";
 import { parseStringQuery } from "#vql/cpu/string/index";
+import { readFileSync } from "fs";
 
 const app = new FalconFrame();
 const port = parseInt(process.env.PORT) || 29848;
@@ -10,6 +11,19 @@ app.listen(port);
 app.use("/css", scssMiddleware);
 app.static("/", "public");
 app.static("/js", "front/dist");
+
+app.get("/", (req, res) => {
+    let html = "";
+    html += readFileSync("public/header.html", "utf-8");
+
+    html += readFileSync("public/nav.html", "utf-8");
+    html += readFileSync("public/app.html", "utf-8");
+
+    html += readFileSync("public/footer.html", "utf-8");
+
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.end(html);
+});
 
 app.post("/VQL", async (req, res) => {
     try {
