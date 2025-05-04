@@ -4,6 +4,7 @@ import { UiComponent } from "../types/ui";
 import { SearchEntry } from "../types/video";
 import { formatTime, updateQueryParam } from "../utils";
 import playerView from "./player";
+import { loadVideo } from "./player/status";
 
 class SearchView implements UiComponent {
     element: HTMLElement;
@@ -25,7 +26,7 @@ class SearchView implements UiComponent {
             card.addEventListener("click", () => {
                 updateQueryParam("v", entry.id);
                 updateQueryParam("query", undefined);
-                playerView.loadVideo(entry.id, !playerView.paused);
+                loadVideo(entry.id, !playerView.paused);
             });
 
             this.element.appendChild(card);

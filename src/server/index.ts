@@ -15,7 +15,7 @@ app.post("/VQL", async (req, res) => {
     try {
         const query = req.body.query;
         const result = await VQL.execute(query, {});
-        if (result.err) return result;
+        if (result && result.err) return result;
         return { err: false, result };
     } catch (e) {
         // console.error(e);
@@ -32,6 +32,6 @@ app.post("/VQL2", async (req, res) => {
         // console.error(e);
         return { err: true, msg: e.message };
     }
-})
+});
 
 console.log(`Server started on http://localhost:${port}`);

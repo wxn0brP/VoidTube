@@ -11,10 +11,13 @@ async function fetchVQL(query: string | object) {
         },
         body: JSON.stringify({ query })
     }).then(res => res.json());
+
     if (response.err) console.error(query, response);
+
     const end = Date.now();
     if (end - start > 2_000) console.warn("VQL time > 2s", end - start, "\n", query);
     middleTime.push(end - start);
+
     console.debug(query, response?.result || response);
     return response;
 }
@@ -111,7 +114,7 @@ select:
         thumbnail: videos[index].result[0]?.info?.thumbnail || "/favicon.svg",
         duration: videos[index].result.reduce((a, b) => a + b.info.duration, 0) || 0,
     }));
-    return result;
+    return result as PlaylistsEntry[];
 }
 
 export async function fetchPlaylistInfo(id: string) {

@@ -2,7 +2,7 @@ import { searchVideo } from "../apiFront";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { clearQueryParams, getYouTubeVideoId, updateQueryParam } from "../utils";
-import playerView from "./player";
+import { loadVideo } from "./player/status";
 import searchView from "./search";
 
 class SearchBarView implements UiComponent {
@@ -29,7 +29,7 @@ class SearchBarView implements UiComponent {
         if (titleOrUrl.startsWith("https://")) {
             const id = getYouTubeVideoId(titleOrUrl);
             updateQueryParam("v", id);
-            playerView.loadVideo(id);
+            loadVideo(id);
             return;
         }
 
