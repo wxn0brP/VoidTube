@@ -17,11 +17,11 @@
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/db": "^0.6.0",
+        "@wxn0brp/db": "^0.7.1",
         "@wxn0brp/falcon-frame": "github:wxn0brP/FalconFrame#dist",
         "@wxn0brp/vql": "github:wxn0brP/VQL#dist",
         "@wxn0brp/wts-logger": "github:wxn0brP/ts-shared#dist-logger",
-        "electron": "^36.0.0",
+        "electron": "^36.1.0",
         "sass": "^1.87.0"
     }
 }

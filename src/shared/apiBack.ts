@@ -64,7 +64,7 @@ export async function searchVideo(title: string, size: number) {
             id: entry.id,
             thumbnail: entry.thumbnail,
             duration: entry.duration,
-            views: result.view_count,
+            views: entry.view_count,
         }));
     } catch (error) {
         console.error('Error while searching video:', error);
