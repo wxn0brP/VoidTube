@@ -10,6 +10,7 @@ import videoFormatsView from "./videoFormat";
 import videoInfoView from "./videoInfo";
 import videoView from "./videoView";
 import loaderView from "./loader";
+import metaControlView from "./metaControl";
 
 export const components = [
     playerView,
@@ -23,6 +24,7 @@ export const components = [
     playListsView,
     searchView,
     loaderView,
+    metaControlView,
 ]
 
 components.forEach(component => component.mount());

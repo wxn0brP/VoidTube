@@ -49,11 +49,31 @@
                 <select id="audio-formats"></select>
                 <select id="video-formats"></select>
             </div>
+            <div id="meta-control-bar">
+                <label>
+                    Playlist
+                    <button id="toggle-to-playlist">📂</button>
+                </label>
+                <label>
+                    Share
+                    <button id="share">📤</button>
+                </label>
+                <label>
+                    Download
+                    <button id="download">⬇️</button>
+                </label>
+            </div>
             <div id="video-info"></div>
         </section>
         <section id="playlist"></section>
     </div>
     <div id="history-view" class="view"></div>
-    <div id="playlists-view" class="view"></div>
+    <div id="playlists-view" class="view">
+        <div id="playlists-bar">
+            <button id="create-playlist" class="btn">Create playlist</button>
+        </div>
+        <div id="playlists-container"></div>
+    </div>
     <div id="search-view" class="view"></div>
 </main>
+<div id="prompt"></div>

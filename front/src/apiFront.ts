@@ -2,7 +2,7 @@ import { HistoryEntry, PlaylistEntry, PlaylistsEntry, VideoInfo } from "./types/
 
 const middleTime: number[] = [];
 
-async function fetchVQL(query: string | object) {
+export async function fetchVQL(query: string | object) {
     const start = Date.now();
     const response = await fetch(`/VQL`, {
         method: "POST",
@@ -141,4 +141,17 @@ select:
 export async function searchVideo(title: string, size: number) {
     const response = await fetchVQL(`api search! s.q = "${title.replace("\n", " ")}" s.size = ${size}`);
     return response.result;
+}
+
+export async function fetchPlaylistsAndVideoExists(videoId: string) {
+    const playlists = await fetchPlaylists() as (PlaylistsEntry & { has: boolean })[];
+
+    const containsPromise = playlists.map(async (playlist) => {
+        const has = await fetchVQL(`playlist findOne ${playlist._id} s._id = ${videoId}`);
+        playlist.has = !!has.result;
+        return playlist;
+    });
+
+    const contains = await Promise.all(containsPromise);
+    return contains;
 }

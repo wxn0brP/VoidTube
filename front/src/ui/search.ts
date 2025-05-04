@@ -17,7 +17,7 @@ class SearchView implements UiComponent {
             card.className = "searchCard";
 
             card.innerHTML = `
-                <div style="background-image: url(${entry.thumbnail})"></div>
+                <div style="background-image: url(${entry.thumbnail})" class="img"></div>
                 <h3>${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
                 ${entry.views.toLocaleString()} views

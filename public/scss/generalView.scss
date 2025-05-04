@@ -1,5 +1,5 @@
 #history-view,
-#playlists-view,
+#playlists-container,
 #search-view {
     display: flex;
     flex-wrap: wrap;
@@ -19,8 +19,9 @@
     width: 300px;
     min-height: 250px;
     font-size: 0.7em;
+    position: relative;
 
-    div {
+    div.img {
         background-image: url("/favicon.svg");
         background-size: cover;
         background-position: center;
@@ -31,7 +32,39 @@
         margin-bottom: 5px;
     }
 
+    div.btns {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+
+    &:has(div.btns) {
+        padding-bottom: 2rem;
+    }
+
     &:hover {
         transform: scale(1.01);
+    }
+}
+
+.historyCard {
+    button {
+        float: right;
+        scale: 0.7;
+        cursor: pointer;
+
+        &.rm {
+            color: red;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.playlistCard {
+    button {
+        float: right;
+        color: red;
+        scale: 0.7;
+        cursor: not-allowed;
     }
 }
