@@ -1,30 +1,50 @@
 import { changeView } from ".";
-import { fetchPlaylists } from "../apiFront";
+import { fetchPlaylists, fetchVQL } from "../apiFront";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { PlaylistsEntry } from "../types/video";
 import { formatTime, updateQueryParam } from "../utils";
+import uiFunc from "./modal";
 import playListView from "./playList";
 
 class PlayListsView implements UiComponent {
     element: HTMLDivElement;
+    container: HTMLDivElement;
+    createPlaylistBtn: HTMLButtonElement;
 
     render(playlist: PlaylistsEntry[]) {
-        this.element.innerHTML = "";
+        this.container.innerHTML = "";
         playlist.forEach((item) => {
             const card = document.createElement("div");
             card.className = "playlistCard";
             card.innerHTML = `
-                <div style="background-image: url(${item.thumbnail})"></div>
+                <div style="background-image: url(${item.thumbnail})" class="img"></div>
                 <h3>${item.name}</h3>
                 ${item.videosCount} videos <br>
                 Duration: ${formatTime(item.duration, null)}
+                <div class="btns">
+                    <button class="btn" data-id="rm">Delete</button>
+                </div>
             `;
             card.addEventListener("click", () => {
                 playListView.loadPlaylist(item._id);
                 playListView.show();
             });
-            this.element.appendChild(card);
+            card.querySelector(`[data-id=rm]`)!.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                
+                const sure = await uiFunc.confirm("Are you sure? You can't undo this");
+                if (!sure) return;
+                const sure2 = await uiFunc.confirm("Are you really sure? You can't undo this");
+                if (!sure2) return;
+
+                fetchVQL(`user -playlist s._id = ${item._id}`).then(() => {
+                    this.loadPlaylists();
+                    fetchVQL(`playlist removeCollection ${item._id}`);
+                });
+            });
+            this.container.appendChild(card);
         });
     }
 
@@ -35,6 +55,16 @@ class PlayListsView implements UiComponent {
 
     mount(): void {
         this.element = document.querySelector("#playlists-view");
+        this.container = this.element.querySelector("#playlists-container")!;
+        this.createPlaylistBtn = this.element.querySelector("#create-playlist")!;
+
+        this.createPlaylistBtn.onclick = async () => {
+            const name = await uiFunc.prompt("Playlist name");
+            if (!name) return;
+            fetchVQL(`user +playlist d.name = ${name}`).then(() => {
+                this.loadPlaylists();
+            });
+        };
 
         $store.view.playlists.subscribe((open) => {
             this.element.style.display = open ? "" : "none";

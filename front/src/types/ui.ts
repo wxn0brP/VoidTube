@@ -1,4 +1,4 @@
 export interface UiComponent {
-    element: HTMLElement;
+    element: HTMLDivElement | HTMLSelectElement | HTMLElement;
     mount(): void;
 }

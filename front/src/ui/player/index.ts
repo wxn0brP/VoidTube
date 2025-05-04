@@ -6,7 +6,7 @@ import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 
 export class PlayerView implements UiComponent {
-    public element: HTMLElement;
+    public element: HTMLDivElement;
     public bar: HTMLDivElement;
     
     public lastUpdateTime = Date.now();
