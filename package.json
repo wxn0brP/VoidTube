@@ -27,7 +27,7 @@
     "dependencies": {
         "@wxn0brp/db": "^0.7.1",
         "@wxn0brp/falcon-frame": "github:wxn0brP/FalconFrame#dist",
-        "@wxn0brp/vql": "^0.1.0",
+        "@wxn0brp/vql": "^0.1.1",
         "@wxn0brp/wts-logger": "github:wxn0brP/ts-shared#dist-logger",
         "sass": "^1.87.0"
     },
