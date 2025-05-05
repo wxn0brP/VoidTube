@@ -1,3 +1,5 @@
+import { mgl } from "./mgl";
+
 export function debounce(func: Function, timeout: number = 300) {
     let timer: NodeJS.Timeout;
     return (...args: any) => {
@@ -21,6 +23,7 @@ export function updateQueryParam(key: string, value: string | undefined): void {
 export function clearQueryParams(): void {
     window.history.replaceState({}, '', window.location.origin);
 }
+mgl.clearQueryParams = clearQueryParams;
 
 export function formatTime(time: number, hasHours: boolean | null = true): string {
     if (isNaN(time)) return "00:00:00";

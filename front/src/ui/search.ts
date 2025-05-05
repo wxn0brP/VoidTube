@@ -1,4 +1,5 @@
 import { changeView } from ".";
+import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { SearchEntry } from "../types/video";
@@ -52,4 +53,4 @@ class SearchView implements UiComponent {
 const searchView = new SearchView();
 export default searchView;
 
-(window as any).searchShow = searchView.show;
+mgl.searchShow = searchView.show;

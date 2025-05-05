@@ -1,8 +1,6 @@
 import { searchVideo } from "../apiFront";
-import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { clearQueryParams, getYouTubeVideoId, updateQueryParam } from "../utils";
-import loaderView from "./loader";
 import { loadVideo } from "./player/status";
 import searchView from "./search";
 
@@ -42,9 +40,7 @@ class SearchBarView implements UiComponent {
         clearQueryParams();
         updateQueryParam("query", titleOrUrl);
         const size = Number(this.searchSizeInput.value) || 10;
-        loaderView.on();
         const searchResults = await searchVideo(titleOrUrl, size);
-        loaderView.off();
         searchView.show();
         searchView.render(searchResults);
     }

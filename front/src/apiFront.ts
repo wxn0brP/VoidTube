@@ -1,8 +1,11 @@
+import { mgl } from "./mgl";
 import { HistoryEntry, PlaylistEntry, PlaylistsEntry, VideoInfo } from "./types/video";
+import loaderView from "./ui/loader";
 
 const middleTime: number[] = [];
 
 export async function fetchVQL(query: string | object) {
+    loaderView.on();
     const start = Date.now();
     const response = await fetch(`/VQL`, {
         method: "POST",
@@ -19,16 +22,17 @@ export async function fetchVQL(query: string | object) {
     middleTime.push(end - start);
 
     console.debug(query, response?.result || response);
+    loaderView.off();
     return response;
 }
 
-(window as any).fetchVQL = fetchVQL;
 export function logVQLTime() {
     const time =  middleTime.reduce((a, b) => a + b, 0) / middleTime.length;
     const seconds = Math.round(time / 100) / 10;
     console.log("VQL middle time " + Math.floor(time) + "ms", "s =", seconds + "s");
 }
-(window as any).logVQLTime = logVQLTime;
+mgl.fetchVQL = fetchVQL;
+mgl.logVQLTime = logVQLTime;
 
 export async function fetchVideoInfo(id: string) {
     if (!id) return null;
@@ -154,4 +158,9 @@ export async function fetchPlaylistsAndVideoExists(videoId: string) {
 
     const contains = await Promise.all(containsPromise);
     return contains;
+}
+
+export async function getPlaylistIds(playlistId: string) {
+    const response = await fetchVQL(`api playlist s._id = ${playlistId}`);
+    return response.result;
 }

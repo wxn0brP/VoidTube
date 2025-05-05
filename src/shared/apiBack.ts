@@ -72,6 +72,23 @@ export async function searchVideo(title: string, size: number) {
     }
 }
 
+export async function getPlaylistIds(playlist: string) {
+    try {
+        if (!playlist.startsWith("https://www.youtube.com/playlist?list=")) {
+            playlist = `https://www.youtube.com/playlist?list=${playlist}`;
+        }
+
+        const opts = Object.assign({}, options, {
+            flatPlaylist: true,
+        })
+        const result = await wrapper(playlist, opts) as any;
+        return result.entries.map(entry => entry.id);
+    } catch (error) {
+        console.error('Error while getting playlist ids:', error);
+        throw error;
+    }
+}
+
 // export async function getPlaylistInfo(playlistUrl: string) {
 //     try {
 //         const opts = Object.assign({}, options, { flatPlaylist: true, });

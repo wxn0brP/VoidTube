@@ -1,3 +1,4 @@
+import { mgl } from "../mgl";
 import { VideoCache, VideoInfo } from "../types/video";
 import { createStore } from "./store";
 
@@ -21,6 +22,6 @@ const initData = {
 }
 
 export const $store = createStore(initData);
-(window as any).store = $store;
+mgl.store = $store;
 
 initData.videoMetaCache = {};

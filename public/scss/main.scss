@@ -76,53 +76,6 @@ section {
     padding: 15px 25px;
 }
 
-#prompt {
-    &>div {
-        position: absolute;
-        min-width: 200px;
-        max-width: 70%;
-        top: 50%;
-        left: 50%;
-        border-radius: 1rem;
-        padding: 12px;
-        transform: translate(-50%, -50%);
-        z-index: 99;
-        border: 2px solid var(--accent);
-        backdrop-filter: blur(4px);
-        background-color: rgba(0, 0, 0, 0.7);
-        text-align: center;
-    }
-
-    p {
-        font-size: 1.2rem;
-    }
-
-    input,
-    button,
-    select {
-        border-radius: 1rem;
-        padding: 7px 12px;
-        border: 2px solid var(--accent);
-        background-color: var(--bg);
-        color: var(--txt);
-        margin-top: 5px;
-    }
-
-    option {
-        background-color: var(--bg);
-        color: var(--txt);
-    }
-
-    button {
-        transition: background-color 0.3s;
-        cursor: pointer;
-
-        &:hover {
-            background-color: rgba(255, 0, 0, 0.5);
-        }
-    }
-}
-
 #meta-control-bar {
     display: flex;
     align-items: center;

@@ -1,5 +1,5 @@
 import { createValtheraAdapter } from "@wxn0brp/vql";
-import { getVideoInfo, searchVideo } from "../apiBack";
+import { getPlaylistIds, getVideoInfo, searchVideo } from "../apiBack";
 import db from "../db";
 import executorC from "#db/executor";
 
@@ -14,6 +14,11 @@ clearOldCache();
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
         return ["video", "playlist", "channel"];
+    },
+
+    async find(collection, search) {
+        if (collection === "playlist") return await getPlaylistIds(search.url || search._id);
+        return [];
     },
 
     async findOne(collection, search) {

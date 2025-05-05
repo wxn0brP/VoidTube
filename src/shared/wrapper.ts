@@ -18,7 +18,7 @@ async function wrapper(url: string, flags: YtFlags, unknownFlags?: string[]): Pr
         const cmd = `${ytDlp} ${flagsConvert(flags).join(' ')} ${url}` + (unknownFlags ? ' ' + unknownFlags.join(' ') : '');
         exec(cmd, { maxBuffer: 1024 * 1024 * 100 }, (error, stdout, stderr) => {
             if (stderr) console.log(stderr);
-            if (error) return reject(error);
+            if (error) return console.error(error);
             resolve(JSON.parse(stdout));
         });
     })

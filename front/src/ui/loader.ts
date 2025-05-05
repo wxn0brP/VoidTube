@@ -9,6 +9,7 @@ class LoaderView implements UiComponent {
 
         $store.loader.subscribe((open) => {
             this.element.style.opacity = open > 0 ? "1" : "0";
+            this.element.style.setProperty("--value", `"${open}"`);
         });
     }
 
@@ -21,7 +22,6 @@ class LoaderView implements UiComponent {
         $store.loader.value--;
         $store.loader.notify();
     }
-
 }
 
 const loaderView = new LoaderView();
