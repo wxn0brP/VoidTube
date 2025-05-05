@@ -1,6 +1,7 @@
 import { fetchPlaylistsAndVideoExists, fetchVQL } from "../apiFront";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
+import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
 import playListsView from "./playListsView";
 
@@ -55,7 +56,25 @@ class MetaControlView implements UiComponent {
         alert("Link copied to clipboard");
     }
 
-    public download() {
+    public async download() {
+        const formats = $store.video.get().formats;
+        const options = formats.map(f => {
+        return `
+            ${f.ext.toUpperCase()} -
+            ${f.is_video ? "Video" : ""}
+            ${f.is_audio && f.is_video ? "+" : ""}
+            ${f.is_audio ? "Audio" : ""}
+            ${f.fileSize ? (f.fileSize / (1024 * 1024)).toFixed(1) + " MB" : ""}
+            ${f.fps ? " - " + f.fps + " FPS" : ""}
+            ${f.resolution ? " - " + f.resolution : ""}
+            `;
+        });
+        options.push("Cancel");
+        const urls = formats.map(f => f.url);
+
+        const url = await uiFunc.selectPrompt<string>("Select format", options, urls);
+        if (!url || url === "Cancel") return;
+        window.open(url, "_blank");
     }
 }
 

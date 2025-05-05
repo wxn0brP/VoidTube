@@ -58,6 +58,8 @@ export class PlayerView implements UiComponent {
 
                 this.videoEl.load();
                 this.audioEl.load();
+
+                loadMediaSession();
             } catch (err) {
                 alert("Failed to load video: " + err.message);
             }
@@ -88,6 +90,19 @@ export class PlayerView implements UiComponent {
         updateQueryParam("v", $store.videoId.get());
         updateQueryParam("query", undefined);
     }
+}
+
+function loadMediaSession() {
+    const video = $store.video.get();
+    if (!video) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: video.title,
+        // artist: video.channel,
+        // album: 'Album',
+        artwork: [
+            { src: video.thumbnail, sizes: '480x360', type: 'image/png' }
+        ]
+    });
 }
 
 const playerView = new PlayerView();

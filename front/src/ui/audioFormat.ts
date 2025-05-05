@@ -10,7 +10,7 @@ export class AudioFormatsView implements UiComponent {
         $store.video.subscribe(video => {
             if (!video) return;
 
-            const audioFormats = video.formats.filter(f => f.is_audio);
+            const audioFormats = video.formats.filter(f => f.is_audio && !f.is_video);
 
             this.element.innerHTML = "";
 
