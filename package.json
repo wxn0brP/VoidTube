@@ -2,26 +2,68 @@
     "name": "void-tube",
     "version": "0.0.1",
     "main": "dist/app/index.js",
-    "author": "wxn0brP",
     "license": "MIT",
     "private": true,
     "type": "module",
     "scripts": {
         "build": "tsc && tsc-alias",
         "start:server": "node dist/server/index.js",
-        "start:client": "electron ."
+        "start:client": "electron .",
+        "electron:build": "electron-builder",
+        "electron:build-win": "electron-builder build --win",
+        "electron:build-linux": "electron-builder build --linux",
+        "electron:publish": "electron-builder --publish always",
+        "electron:publish-win": "electron-builder --publish always --win",
+        "electron:publish-linux": "electron-builder --publish always --linux",
+        "electron:dist": "electron-packager ."
     },
     "devDependencies": {
         "@types/node": "^22.12.0",
+        "electron-builder": "^26.0.12",
+        "electron": "^36.1.0",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
     },
     "dependencies": {
         "@wxn0brp/db": "^0.7.1",
         "@wxn0brp/falcon-frame": "github:wxn0brP/FalconFrame#dist",
-        "@wxn0brp/vql": "github:wxn0brP/VQL#dist",
+        "@wxn0brp/vql": "^0.1.0",
         "@wxn0brp/wts-logger": "github:wxn0brP/ts-shared#dist-logger",
-        "electron": "^36.1.0",
         "sass": "^1.87.0"
+    },
+    "author": {
+        "name": "wxn0brP",
+        "email": "toja.filiper@gmail.com"
+    },
+    "homepage": "https://github.com/wxn0brP/VoidTube",
+    "build": {
+        "appId": "com.wxn0brp.voidtube",
+        "productName": "VoidTube",
+        "directories": {
+            "buildResources": "public",
+            "output": "release"
+        },
+        "files": [
+            "dist/**/*",
+            "public/**/*",
+            "front/dist/**/*"
+        ],
+        "win": {
+            "target": ["nsis", "zip"],
+            "icon": "public/favicon.ico"
+        },
+        "linux": {
+            "target": ["AppImage", "deb", "rpm", "tar.gz", "pacman", "zip", "7z"],
+            "icon": "public/favicon.png",
+            "category": "Application"
+        },
+        "publish": {
+            "provider": "github",
+            "owner": "wxn0brP",
+            "repo": "VoidTube"
+        }
+    },
+    "engines": {
+        "node": ">=22.0.0"
     }
 }

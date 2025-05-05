@@ -8,19 +8,20 @@ const app = new FalconFrame();
 const port = parseInt(process.env.PORT) || 29848;
 app.listen(port);
 
+const __cwd = import.meta.dirname + "/../../";
 app.use("/css", scssMiddleware);
-app.static("/", "public");
-app.static("/js", "front/dist");
-app.static("/src", "front/src");
+app.static("/", __cwd+"public");
+app.static("/js", __cwd+"front/dist");
+app.static("/src", __cwd+"front/src");
 
 app.get("/", (req, res) => {
     let html = "";
-    html += readFileSync("public/header.html", "utf-8");
+    html += readFileSync(__cwd+"public/header.html", "utf-8");
 
-    html += readFileSync("public/nav.html", "utf-8");
-    html += readFileSync("public/app.html", "utf-8");
+    html += readFileSync(__cwd+"public/nav.html", "utf-8");
+    html += readFileSync(__cwd+"public/app.html", "utf-8");
 
-    html += readFileSync("public/footer.html", "utf-8");
+    html += readFileSync(__cwd+"public/footer.html", "utf-8");
 
     res.writeHead(200, { "Content-Type": "text/html" });
     res.end(html);
@@ -51,10 +52,10 @@ app.post("/VQL2", async (req, res) => {
 
 console.log(`Server started on http://localhost:${port}`);
 
-process.on("unhandledRejection", (reason, p) => {
-    console.error("Unhandled Rejection at: Promise", p, "reason:", reason);
-});
+// process.on("unhandledRejection", (reason, p) => {
+//     console.error("Unhandled Rejection at: Promise", p, "reason:", reason);
+// });
 
-process.on("uncaughtException", (err) => {
-    console.error("Uncaught Exception thrown:", err);
-});
+// process.on("uncaughtException", (err) => {
+//     console.error("Uncaught Exception thrown:", err);
+// });
