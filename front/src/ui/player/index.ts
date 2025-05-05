@@ -2,7 +2,7 @@ import { changeView } from "..";
 import { mgl } from "../../mgl";
 import { $store } from "../../store";
 import { UiComponent } from "../../types/ui";
-import { debounce, updateQueryParam } from "../../utils";
+import { debounce, setTitle, updateQueryParam } from "../../utils";
 import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 
@@ -65,6 +65,10 @@ export class PlayerView implements UiComponent {
             }
         };
 
+        $store.video.subscribe(video => {
+            setTitle(video ? video.title : "");
+        });
+
         this.videoEl.addEventListener("loadeddata", () => {
             this.videoEl.currentTime = this.savedTime;
             this.audioEl.currentTime = this.savedTime;
@@ -87,6 +91,7 @@ export class PlayerView implements UiComponent {
     public show() {
         if (!$store.videoId.get()) return;
         changeView("video");
+        setTitle($store.video.get()?.title);
         updateQueryParam("v", $store.videoId.get());
         updateQueryParam("query", undefined);
     }

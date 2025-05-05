@@ -4,7 +4,7 @@ import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { HistoryEntry } from "../types/video";
-import { formatTime, levenshtein, updateQueryParam } from "../utils";
+import { formatTime, levenshtein, setTitle, updateQueryParam } from "../utils";
 import metaControlView from "./metaControl";
 import uiFunc from "./modal";
 import playerView from "./player";
@@ -50,7 +50,7 @@ class HistoryView implements UiComponent {
 
                     const sure = await uiFunc.confirm("Are you sure? You can't undo this");
                     if (!sure) return;
-                    
+
                     fetchVQL(`user -history s._id = ${entry._id}`).then(() => {
                         this.loadHistory();
                     });
@@ -88,12 +88,13 @@ class HistoryView implements UiComponent {
             const query = this.searchInput.value;
             this.filterSeeAll();
             if (!query) return;
-            this.filter(query); 
+            this.filter(query);
         }
     }
 
     show() {
         changeView("history");
+        setTitle("");
         updateQueryParam("v", undefined);
     }
 
@@ -106,19 +107,19 @@ class HistoryView implements UiComponent {
 
     filter(query: string) {
         const normalizedQuery = query.trim().toLowerCase();
-    
+
         const cards = this.container.querySelectorAll<HTMLDivElement>(".historyCard");
-    
+
         cards.forEach(card => {
             const title = card.querySelector("h3")!.textContent!.toLowerCase();
-    
+
             const dist = levenshtein(normalizedQuery, title);
             const maxAllowed = Math.floor(title.length * 0.4);
-    
+
             card.style.display = dist <= maxAllowed || title.includes(normalizedQuery) ? "" : "none";
         });
     }
-    
+
 }
 
 const historyView = new HistoryView();

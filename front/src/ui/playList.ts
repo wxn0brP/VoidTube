@@ -3,7 +3,7 @@ import { fetchPlaylistInfo } from "../apiFront";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { PlaylistEntry } from "../types/video";
-import { formatTime, updateQueryParam } from "../utils";
+import { formatTime, setTitle, updateQueryParam } from "../utils";
 import playerView from "./player";
 import { loadVideo } from "./player/status";
 
@@ -48,6 +48,7 @@ class PlayListView implements UiComponent {
 
     public show() {
         changeView("video");
+        setTitle($store.video.get()?.title);
         updateQueryParam("v", $store.videoId.get() || undefined);
         updateQueryParam("query", undefined);
         const playlistId = $store.playlistId.get();
