@@ -4,17 +4,19 @@ import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { HistoryEntry } from "../types/video";
-import { formatTime, updateQueryParam } from "../utils";
+import { formatTime, levenshtein, updateQueryParam } from "../utils";
 import metaControlView from "./metaControl";
 import uiFunc from "./modal";
 import playerView from "./player";
 import { loadVideo } from "./player/status";
 
 class HistoryView implements UiComponent {
-    element: HTMLElement;
+    element: HTMLDivElement;
+    container: HTMLDivElement;
+    searchInput: HTMLInputElement;
 
     render(history: HistoryEntry[]) {
-        this.element.innerHTML = "";
+        this.container.innerHTML = "";
 
         history
             .filter(entry => entry.watched)
@@ -60,7 +62,7 @@ class HistoryView implements UiComponent {
                     metaControlView.toggleToPlayList(entry._id);
                 });
 
-                this.element.appendChild(card);
+                this.container.appendChild(card);
             });
     }
 
@@ -71,6 +73,8 @@ class HistoryView implements UiComponent {
 
     mount(): void {
         this.element = document.querySelector("#history-view");
+        this.container = this.element.querySelector("#history-container")!;
+        this.searchInput = document.querySelector("#history-search")!;
 
         $store.view.history.subscribe((open) => {
             this.element.style.display = open ? "" : "none";
@@ -79,12 +83,42 @@ class HistoryView implements UiComponent {
         $store.view.history.set(false);
 
         this.loadHistory();
+
+        this.searchInput.oninput = () => {
+            const query = this.searchInput.value;
+            this.filterSeeAll();
+            if (!query) return;
+            this.filter(query); 
+        }
     }
 
     show() {
         changeView("history");
         updateQueryParam("v", undefined);
     }
+
+    filterSeeAll() {
+        const cards = this.container.querySelectorAll<HTMLDivElement>(".historyCard");
+        cards.forEach(card => {
+            card.style.display = "";
+        });
+    }
+
+    filter(query: string) {
+        const normalizedQuery = query.trim().toLowerCase();
+    
+        const cards = this.container.querySelectorAll<HTMLDivElement>(".historyCard");
+    
+        cards.forEach(card => {
+            const title = card.querySelector("h3")!.textContent!.toLowerCase();
+    
+            const dist = levenshtein(normalizedQuery, title);
+            const maxAllowed = Math.floor(title.length * 0.4);
+    
+            card.style.display = dist <= maxAllowed || title.includes(normalizedQuery) ? "" : "none";
+        });
+    }
+    
 }
 
 const historyView = new HistoryView();

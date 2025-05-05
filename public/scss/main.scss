@@ -104,3 +104,24 @@ section {
         padding-block: 5px;
     }
 }
+
+#history-view {
+    flex-direction: column;
+
+    #history-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-inline: 15px;
+        padding-block: 5px;
+    
+        input {
+            width: 300px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--accent);
+            background-color: var(--bg);
+            color: var(--txt);
+        }
+    }
+}

@@ -54,3 +54,24 @@ export function getYouTubeVideoId(url: string): string | null {
 
     return null;
 }
+
+export function levenshtein(a: string, b: string): number {
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+
+    const dp = Array(b.length + 1).fill(0).map((_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+        let prev = i;
+        for (let j = 1; j <= b.length; j++) {
+            const temp = dp[j];
+            dp[j] = Math.min(
+                dp[j] + 1,
+                prev + (a[i - 1] === b[j - 1] ? 0 : 1),
+                dp[j - 1] + 1
+            );
+            prev = temp;
+        }
+    }
+    return dp[b.length];
+}
