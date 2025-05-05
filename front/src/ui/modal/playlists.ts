@@ -16,7 +16,7 @@ class PlayListsModal implements UiComponent {
     render(playlist: PlaylistsEntry[]) {
         this.container.innerHTML = "";
         this.elements = [];
-        playlist.forEach((item) => {
+        playlist.sort((a, b) => b.last - a.last).forEach((item) => {
             const card = document.createElement("div");
             card.className = "playlistCard";
             card.innerHTML = `
@@ -48,7 +48,7 @@ class PlayListsModal implements UiComponent {
         this.createPlaylistBtn.onclick = async () => {
             const name = await uiFunc.prompt("Playlist name");
             if (!name) return;
-            fetchVQL(`user +playlist d.name = ${name}`).then(async () => {
+            fetchVQL(`user +playlist d.name = ${name} d.last = ${Math.floor(Date.now() / 1000)}`).then(async () => {
                 const playlists = await playListsView.loadPlaylists();
                 this.render(playlists);
                 this.reRenderCallback?.();

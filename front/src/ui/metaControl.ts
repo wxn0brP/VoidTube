@@ -1,7 +1,6 @@
 import { fetchPlaylistsAndVideoExists, fetchVQL } from "../apiFront";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
-import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
 import playListsView from "./playListsView";
 
@@ -37,6 +36,7 @@ class MetaControlView implements UiComponent {
                 const op = playlist.has ? "removeOne" : "add";
 
                 await fetchVQL(`playlist ${op} ${playlistId} ${playlist.has ? "s" : "d"}._id = ${id}`);
+                await fetchVQL(`user ~playlist s._id=${playlistId} u.last=${Math.floor(Date.now() / 1000)}`)
                 await playListsView.loadPlaylists();
             },
             reRenderCallback: () => {

@@ -51,7 +51,7 @@ async function apiGetVideo(url: string, dynamic = true) {
             }
         }
 
-        const data = await getVideoInfo(url);
+        const data = await getVideoInfo(url, dynamic);
 
         const staticDataPayload = {
             _id: url,
@@ -63,17 +63,18 @@ async function apiGetVideo(url: string, dynamic = true) {
             likes: data.likes,
             views: data.views,
         };
+        await db.cache.updateOneOrAdd("video-static", { url }, staticDataPayload);
 
-        const dynamicDataPayload = {
-            _id: url,
-            formats: data.formats,
-            ttl: getTTL(),
-        };
+        if ("formats" in data) {
+            const dynamicDataPayload = {
+                _id: url,
+                formats: data.formats,
+                ttl: getTTL(),
+            };
+    
+            await db.cache.add("video-dynamic", dynamicDataPayload);
+        }
 
-        db.cache.updateOneOrAdd("video-static", { url }, staticDataPayload);
-        db.cache.add("video-dynamic", dynamicDataPayload);
-
-        if (!dynamic) delete data.formats;
         return data;
     }
 

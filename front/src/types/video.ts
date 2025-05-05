@@ -56,6 +56,7 @@ export interface PlaylistEntry {
 export interface PlaylistsEntry {
     _id: string;
     name: string;
+    last: number;
     videosCount: number;
     thumbnail: string;
     duration: number;

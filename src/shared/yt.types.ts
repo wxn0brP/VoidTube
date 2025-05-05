@@ -17,7 +17,8 @@ type YtFormat = {
     container: string,
     format: string,
     protocol: string,
-    http_headers: unknown
+    http_headers: unknown,
+    resolution: string,
 }
 
 type YtThumbnail = {
