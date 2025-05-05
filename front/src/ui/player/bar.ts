@@ -1,8 +1,9 @@
 import playerView from ".";
 import { updateVideoHistoryTime } from "../../apiFront";
 import { $store } from "../../store";
-import { debounce, formatTime, updateQueryParam } from "../../utils";
-import { changePlay, loadVideo, toggleFullscreen } from "./status";
+import { debounce, formatTime } from "../../utils";
+import { playNext } from "./audioSync";
+import { changePlay, toggleFullscreen } from "./status";
 
 export function setupBar() {
     let hasHours = false;
@@ -120,27 +121,7 @@ export function setupBar() {
         updateProgressBars();
     });
 
-    const playNext = debounce(() => {
-        const oldId = $store.videoId.get();
-        setTimeout(() => {
-            updateVideoHistoryTime(oldId, 0);
-        }, 3000);
-
-        const playlist = $store.playlist.get();
-        const playlistIndex = $store.playlistIndex.get() || 0;
-        let nextIndex = playlistIndex + 1;
-        if (nextIndex >= playlist.length) {
-            if (playerView.loopPlaylist) {
-                nextIndex = 0;
-            } else return;
-        }
-
-        const nextVideoId = playlist[nextIndex];
-        if (!nextVideoId) return;
-        loadVideo(nextVideoId, true);
-        $store.playlistIndex.set(nextIndex);
-        updateQueryParam("pi", (nextIndex).toString());
-    });
+    const playNextDebounced = debounce(playNext);
 
     playerView.videoEl.addEventListener("progress", () => updateProgressBars());
     playerView.videoEl.addEventListener("timeupdate", () => {
@@ -160,7 +141,7 @@ export function setupBar() {
         }
 
         if (playerView.videoEl.currentTime + 0.1 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
-            playNext();
+            playNextDebounced();
         }
     });
 
