@@ -6,6 +6,7 @@ nav {
     justify-content: space-between;
     background-color: #0c0c0c;
     padding-bottom: 20px;
+    white-space: nowrap;
 
     &>div {
         width: 33%;
@@ -42,5 +43,21 @@ nav {
 
     input[type="number"] {
         width: 100px;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    nav {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+
+        div:nth-child(3) {
+            display: none;
+        }
+
+        div {
+            width: auto;
+        }
     }
 }
