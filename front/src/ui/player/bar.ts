@@ -1,7 +1,7 @@
 import playerView from ".";
 import { updateVideoHistoryTime } from "../../apiFront";
 import { $store } from "../../store";
-import { debounce, formatTime } from "../../utils";
+import { clamp, debounce, formatTime } from "../../utils";
 import { playNext } from "./audioSync";
 import { changePlay, toggleFullscreen } from "./status";
 
@@ -41,7 +41,7 @@ export function setupBar() {
 
         if (e.target instanceof HTMLInputElement) return;
 
-        if (e.code === "Space") {
+        if (e.code === "Space" || e.key === "k") {
             e.preventDefault();
             changePlay();
         }
@@ -70,6 +70,12 @@ export function setupBar() {
             const vol = Math.max(0, playerView.videoEl.volume - 0.05);
             playerView.videoEl.volume = playerView.audioEl.volume = vol;
             e.preventDefault();
+        }
+
+        if (!isNaN(parseInt(e.key))) {
+            const value = parseInt(e.key) * 10;
+            const time = clamp(0, playerView.videoEl.duration * (value / 100), playerView.videoEl.duration);
+            playerView.videoEl.currentTime = playerView.audioEl.currentTime = time;
         }
     });
 

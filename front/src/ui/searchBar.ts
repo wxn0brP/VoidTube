@@ -1,6 +1,6 @@
 import { searchVideo } from "../apiFront";
 import { UiComponent } from "../types/ui";
-import { clearQueryParams, getYouTubeVideoId, updateQueryParam } from "../utils";
+import { clearQueryParams, getYouTubeVideoId, setTitle, updateQueryParam } from "../utils";
 import { loadVideo } from "./player/status";
 import searchView from "./search";
 
@@ -39,6 +39,7 @@ class SearchBarView implements UiComponent {
 
         clearQueryParams();
         updateQueryParam("query", titleOrUrl);
+        setTitle(titleOrUrl);
         const size = Number(this.searchSizeInput.value) || 10;
         const searchResults = await searchVideo(titleOrUrl, size);
         searchView.show();

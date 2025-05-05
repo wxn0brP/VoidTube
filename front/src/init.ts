@@ -3,7 +3,7 @@ import playerView from "./ui/player";
 import { loadVideo } from "./ui/player/status";
 import playListView from "./ui/playList";
 import searchBarView from "./ui/searchBar";
-import { getYouTubeVideoId, updateQueryParam } from "./utils";
+import { getYouTubeVideoId, setTitle, updateQueryParam } from "./utils";
 
 await new Promise(r => setTimeout(r, 100)); // wait for ui to mount
 
@@ -35,6 +35,7 @@ function params() {
         changeView("video");
     } else {
         changeView("history");
+        setTitle("");
     }
 
     const time = urlParams.get("t");

@@ -4,7 +4,7 @@ import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { PlaylistsEntry } from "../types/video";
-import { formatTime, updateQueryParam } from "../utils";
+import { formatTime, setTitle, updateQueryParam } from "../utils";
 import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
 import playListView from "./playList";
@@ -153,6 +153,7 @@ class PlayListsView implements UiComponent {
 
     show() {
         changeView("playlists");
+        setTitle("");
         updateQueryParam("v", undefined);
         updateQueryParam("query", undefined);
     }
