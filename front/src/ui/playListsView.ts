@@ -17,58 +17,64 @@ class PlayListsView implements UiComponent {
 
     render(playlist: PlaylistsEntry[]) {
         this.container.innerHTML = "";
-        playlist.forEach((item) => {
+        playlist.sort((a, b) => b.last - a.last).forEach((item) => {
             const card = document.createElement("div");
             card.className = "playlistCard";
-            card.innerHTML = `
-                <div style="background-image: url(${item.thumbnail})" class="img"></div>
-                <h3>${item.name}</h3>
-                ${item.videosCount} videos <br>
-                Duration: ${formatTime(item.duration, null)}
-                <div class="btns">
-                    <button class="btn rm" data-id="rm">Delete</button>
-                    <button class="btn" data-id="rename">Rename</button>
-                </div>
-            `;
-
-            card.addEventListener("click", () => {
-                playListView.loadPlaylist(item._id);
-                playListView.show();
-            });
-
-            card.querySelector(`[data-id=rm]`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-
-                const sure = await uiFunc.confirm("Are you sure? You can't undo this");
-                if (!sure) return;
-                const sure2 = await uiFunc.confirm("Are you really sure? You can't undo this");
-                if (!sure2) return;
-
-                fetchVQL(`user -playlist s._id = ${item._id}`).then(() => {
-                    this.loadPlaylists();
-                    fetchVQL(`playlist removeCollection ${item._id}`);
-                });
-            });
-
-            card.querySelector(`[data-id=rename]`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                const name = await uiFunc.prompt("Playlist name", item.name);
-                if (!name) return;
-                fetchVQL(`user updateOne playlist s._id = ${item._id} u.name = ${name}`).then(() => {
-                    this.loadPlaylists();
-                });
-            });
+            card.id = "playlist-" + item._id;
+            this.renderCard(card, item);
 
             this.container.appendChild(card);
         });
     }
 
+    renderCard(card: HTMLDivElement, item: PlaylistsEntry) {
+        card.innerHTML = `
+            <div style="background-image: url(${item?.thumbnail || "/favicon.svg"})" class="img"></div>
+            <h3>${item?.name}</h3>
+            ${item?.videosCount} videos <br>
+            Duration: ${formatTime(item?.duration, null)}
+            <div class="btns">
+                <button class="btn rm" data-id="rm">Delete</button>
+                <button class="btn" data-id="rename">Rename</button>
+            </div>
+        `;
+
+        card.addEventListener("click", () => {
+            playListView.loadPlaylist(item._id);
+            playListView.show();
+        });
+
+        card.querySelector(`[data-id=rm]`)!.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+
+            const sure = await uiFunc.confirm("Are you sure? You can't undo this");
+            if (!sure) return;
+            const sure2 = await uiFunc.confirm("Are you really sure? You can't undo this");
+            if (!sure2) return;
+
+            await fetchVQL(`user -playlist s._id = ${item._id}`)
+            this.loadPlaylists();
+            fetchVQL(`playlist removeCollection ${item._id}`);
+        });
+
+        card.querySelector(`[data-id=rename]`)!.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const name = await uiFunc.prompt("Playlist name", item.name);
+            if (!name) return;
+            await fetchVQL(`user updateOne playlist s._id = ${item._id} u.name = ${name} u.last = ${Math.floor(Date.now() / 1000)}`);
+            await this.loadPlaylists();
+        });
+    }
+
     async loadPlaylists() {
-        const playlist = await fetchPlaylists();
-        this.render(playlist);
-        return playlist;
+        const playlists = await fetchPlaylists(
+            (play) => this.render(play),
+            (item) => this.renderCard(this.container.querySelector(`#playlist-${item._id}`)!, item)
+        );
+        this.render(playlists)
+        return playlists;
     }
 
     mount(): void {
@@ -133,6 +139,7 @@ class PlayListsView implements UiComponent {
             for (let i = 0; i < ids.length; i++) {
                 await fetchVQL(`playlist +${playlist} d._id = ${ids[i]}`);
             }
+            await fetchVQL(`user ~playlist s._id=${playlist} u.last=${Math.floor(Date.now() / 1000)}`)
             this.loadPlaylists();
         };
 

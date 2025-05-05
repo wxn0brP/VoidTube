@@ -45,7 +45,11 @@
     Query:
     <pre id="p2"></pre>
     <script>
+        const title = document.querySelector("title");
+        const titleBase = title.textContent;
+
         async function fetchVQL(query) {
+            const start = Date.now();
             const response = await fetch(`/VQL`, {
                 method: "POST",
                 headers: {
@@ -53,6 +57,9 @@
                 },
                 body: JSON.stringify({ query })
             }).then(res => res.json());
+
+            const end = Date.now();
+            title.textContent = `${titleBase} (${end - start}ms)`;
             return response;
         }
         async function fetchVQL2(query) {

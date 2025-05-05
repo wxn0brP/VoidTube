@@ -18,10 +18,11 @@ export async function fetchVQL(query: string | object) {
     if (response.err) console.error(query, response);
 
     const end = Date.now();
-    if (end - start > 2_000) console.warn("VQL time > 2s", end - start, "\n", query);
-    middleTime.push(end - start);
+    const time = end - start;
+    if (time > 2_000) console.warn("VQL time > 2s", time, "\n", query);
+    middleTime.push(time);
 
-    console.debug(query, response?.result || response);
+    console.debug(query, response?.result || response, time);
     loaderView.off();
     return response;
 }
@@ -89,47 +90,60 @@ select:
     return response.result as HistoryEntry[];
 }
 
-export async function fetchPlaylists() {
+export async function fetchPlaylists(
+    playlistsCb?: (playlists: PlaylistsEntry[]) => void,
+    yieldCb?: (playlist: PlaylistsEntry) => void
+): Promise<PlaylistsEntry[]> {
     const playlists = await fetchVQL(`user playlist`);
-    const playlistsData = [];
-    playlists.result.forEach((playlist: { _id: string, name: string }) => {
-        const query = `
+    if (playlistsCb) playlistsCb(playlists.result);
+
+    const playlistEntries: PlaylistsEntry[] = [];
+
+    await Promise.all(
+        playlists.result.map(async (playlist: { _id: string, name: string, last: number }) => {
+            const query = `
 playlist ${playlist._id}
-many: true
 relations:
   info:
     path: [api, video-static]
     select: [thumbnail,duration]
 
+many: true
 search: {}
 select: 
   _id: 1
+  last: 1
   info:
     duration: 1
     thumbnail: 1
-    `.trim();
-        playlistsData.push(fetchVQL(query));
-    });
+            `.trim();
 
-    const videos = await Promise.all(playlistsData);
-    const result = playlists.result.map((playlist: { _id: string, name: string }, index: number) => ({
-        ...playlist,
-        videosCount: videos[index].result.length,
-        thumbnail: videos[index].result[0]?.info?.thumbnail || "/favicon.svg",
-        duration: videos[index].result.reduce((a, b) => a + b.info.duration, 0) || 0,
-    }));
-    return result as PlaylistsEntry[];
+            const videosRes = await fetchVQL(query);
+            const entry: PlaylistsEntry = {
+                ...playlist,
+                videosCount: videosRes.result.length,
+                thumbnail: videosRes.result[0]?.info?.thumbnail || "/favicon.svg",
+                duration: videosRes.result.reduce((a, b) => a + b.info.duration, 0) || 0,
+            };
+
+            playlistEntries.push(entry);
+            if (yieldCb) yieldCb(entry);
+        })
+    );
+
+    return playlistEntries;
 }
 
 export async function fetchPlaylistInfo(id: string) {
     if (!id) return null;
     const query = `
 playlist ${id}
-many: true
 relations:
   info:
     path: [api, video-static]
     select: [title,duration,thumbnail]
+
+many: true
 search: {}
 select:
   _id: 1

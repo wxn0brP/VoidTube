@@ -6,7 +6,7 @@ const options = {
     noWarnings: true,
 }
 
-export async function getVideoInfo(videoUrl: string) {
+export async function getVideoInfo(videoUrl: string, withFormats: boolean = false) {
     try {
         if (
             !videoUrl.startsWith("https://www.youtube.com/watch?v=") && !videoUrl.startsWith("https://youtu.be/")
@@ -17,30 +17,13 @@ export async function getVideoInfo(videoUrl: string) {
         const opts = Object.assign({}, options, {
             preferFreeFormats: true,
             youtubeSkipDashManifest: true,
-            skipDownload: true
+            skipDownload: true,
+            noCheckFormats: !withFormats,
         });
 
         const result = await wrapper(videoUrl, opts);
 
-        const formats = 
-            result.formats
-            .filter(format => !format.url.includes("ytimg.com"))
-            .filter(format => !format.url.includes("m3u8"))
-            .map(format => {
-                return {
-                    url: format.url,
-                    formatId: format.format_id,
-                    // @ts-ignore
-                    resolution: format.resolution,
-                    ext: format.ext,
-                    fps: format.fps,
-                    fileSize: format.filesize,
-                    is_video: format.vcodec !== 'none',
-                    is_audio: format.acodec !== 'none',
-                }
-            })
-
-        return {
+        const baseInfo = {
             title: result.title,
             description: result.description,
             thumbnail: result.thumbnail,
@@ -48,6 +31,26 @@ export async function getVideoInfo(videoUrl: string) {
             uploadDate: result.upload_date,
             views: result.view_count,
             likes: result.like_count,
+        };
+
+        if (!withFormats) return baseInfo;
+
+        const formats = (result.formats || [])
+            .filter(format => format.url && !format.url.includes("ytimg.com"))
+            .filter(format => !format.url.includes("m3u8"))
+            .map(format => ({
+                url: format.url,
+                formatId: format.format_id,
+                resolution: format.resolution ?? `${format.width}x${format.height}` ?? null,
+                ext: format.ext,
+                fps: format.fps,
+                fileSize: format.filesize,
+                is_video: format.vcodec !== 'none',
+                is_audio: format.acodec !== 'none',
+            }));
+
+        return {
+            ...baseInfo,
             formats,
         };
     } catch (error) {
