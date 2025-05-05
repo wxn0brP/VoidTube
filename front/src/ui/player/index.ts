@@ -1,4 +1,5 @@
 import { changeView } from "..";
+import { mgl } from "../../mgl";
 import { $store } from "../../store";
 import { UiComponent } from "../../types/ui";
 import { debounce, updateQueryParam } from "../../utils";
@@ -92,4 +93,4 @@ export class PlayerView implements UiComponent {
 const playerView = new PlayerView();
 export default playerView;
 
-(window as any).playerShow = playerView.show;
+mgl.playerShow = playerView.show;

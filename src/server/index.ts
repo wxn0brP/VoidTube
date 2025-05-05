@@ -11,6 +11,7 @@ app.listen(port);
 app.use("/css", scssMiddleware);
 app.static("/", "public");
 app.static("/js", "front/dist");
+app.static("/src", "front/src");
 
 app.get("/", (req, res) => {
     let html = "";
@@ -49,3 +50,11 @@ app.post("/VQL2", async (req, res) => {
 });
 
 console.log(`Server started on http://localhost:${port}`);
+
+process.on("unhandledRejection", (reason, p) => {
+    console.error("Unhandled Rejection at: Promise", p, "reason:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+    console.error("Uncaught Exception thrown:", err);
+});

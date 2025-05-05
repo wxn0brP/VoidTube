@@ -1,0 +1,84 @@
+import uiFunc from ".";
+import { fetchPlaylists, fetchVQL } from "../../apiFront";
+import { UiComponent } from "../../types/ui";
+import { PlaylistsEntry } from "../../types/video";
+import { formatTime } from "../../utils";
+import playListsView from "../playListsView";
+
+class PlayListsModal implements UiComponent {
+    element: HTMLDivElement;
+    container: HTMLDivElement;
+    callback: (id: string) => void;
+    createPlaylistBtn: HTMLButtonElement;
+    elements: { ele: HTMLDivElement; id: string }[] = [];
+    reRenderCallback: () => void;
+
+    render(playlist: PlaylistsEntry[]) {
+        this.container.innerHTML = "";
+        this.elements = [];
+        playlist.forEach((item) => {
+            const card = document.createElement("div");
+            card.className = "playlistCard";
+            card.innerHTML = `
+                <div style="background-image: url(${item.thumbnail})" class="img"></div>
+                <h3>${item.name}</h3>
+                ${item.videosCount} videos <br>
+                Duration: ${formatTime(item.duration, null)}
+            `;
+
+            card.addEventListener("click", () => {
+                this.callback(item._id);
+                this.hide();
+            });
+
+            this.container.appendChild(card);
+            this.elements.push({ ele: card, id: item._id });
+        });
+    }
+
+    mount(): void {
+        this.element = document.querySelector("#playlists-modal")!;
+        this.container = this.element.querySelector("#playlists-modal-container")!;
+        this.createPlaylistBtn = this.element.querySelector("[data-id=create]")!;
+        this.element.querySelector<HTMLButtonElement>("[data-id=cancel]")!.onclick = () => {
+            this.callback(null);
+            this.hide();
+        }
+
+        this.createPlaylistBtn.onclick = async () => {
+            const name = await uiFunc.prompt("Playlist name");
+            if (!name) return;
+            fetchVQL(`user +playlist d.name = ${name}`).then(async () => {
+                const playlists = await playListsView.loadPlaylists();
+                this.render(playlists);
+                this.reRenderCallback?.();
+            });
+        };
+    }
+
+    public async show(
+        cfg: {
+            callback: (id: string) => void
+            reRenderCallback?: () => void
+            playlists?: PlaylistsEntry[]
+        }
+    ) {
+        this.callback = cfg.callback;
+        if (cfg.reRenderCallback) this.reRenderCallback = cfg.reRenderCallback;
+
+        const playlists = cfg.playlists || await fetchPlaylists();
+        this.render(playlists);
+        this.reRenderCallback?.();
+
+        this.element.fadeIn();
+    }
+
+    hide() {
+        this.callback = () => { };
+        this.reRenderCallback = () => { };
+        this.element.fadeOut();
+    }
+}
+
+const playListsModal = new PlayListsModal();
+export default playListsModal;

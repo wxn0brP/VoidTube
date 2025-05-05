@@ -1,14 +1,14 @@
 <main>
     <aside>
-        <div id="player-view-button" onclick="playerShow()">
+        <div id="player-view-button" onclick="mgl.playerShow()">
             🎥
             <div>Player</div>
         </div>
-        <div onclick="historyShow()">
+        <div onclick="mgl.historyShow()">
             ⟳
             <div>History</div>
         </div>
-        <div onclick="playlistsShow()">
+        <div onclick="mgl.playlistsShow()">
             📂
             <div>Playlists</div>
         </div>
@@ -71,9 +71,19 @@
     <div id="playlists-view" class="view">
         <div id="playlists-bar">
             <button id="create-playlist" class="btn">Create playlist</button>
+            <button id="import-playlist" class="btn">Import playlist</button>
         </div>
         <div id="playlists-container"></div>
     </div>
     <div id="search-view" class="view"></div>
 </main>
+
 <div id="prompt"></div>
+<div id="playlists-modal" style="display: none;">
+    <div>
+        <button data-id="cancel" class="btn">Cancel</button>
+        <button data-id="create" class="btn">Create Playlist</button>
+    </div>
+    <br />
+    <div id="playlists-modal-container"></div>
+</div>

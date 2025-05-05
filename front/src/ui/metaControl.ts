@@ -2,7 +2,8 @@ import { fetchPlaylistsAndVideoExists, fetchVQL } from "../apiFront";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import uiFunc from "./modal";
-import playListsView from "./playLists";
+import playListsModal from "./modal/playlists";
+import playListsView from "./playListsView";
 
 class MetaControlView implements UiComponent {
     element: HTMLDivElement;
@@ -25,38 +26,28 @@ class MetaControlView implements UiComponent {
 
     public async toggleToPlayList(id = $store.videoId.get()) {
         const playlists = await fetchPlaylistsAndVideoExists(id);
-        const mappedPlaylists = playlists.map((playlist) => {
-            return playlist.name + " (" + (playlist.has ? "Remove" : "Add") + ")";
+
+        playListsModal.show({
+            callback: async (playlistId) => {
+                if (!playlistId) return;
+
+                const playlistIndex = playlists.findIndex((playlist) => playlist._id === playlistId);
+                if (playlistIndex === -1) return;
+                const playlist = playlists[playlistIndex];
+                const op = playlist.has ? "removeOne" : "add";
+
+                await fetchVQL(`playlist ${op} ${playlistId} ${playlist.has ? "s" : "d"}._id = ${id}`);
+                await playListsView.loadPlaylists();
+            },
+            reRenderCallback: () => {
+                playListsModal.elements.forEach((item) => {
+                    const has = playlists.find((playlist) => playlist._id === item.id)?.has ?? false;
+                    item.ele.classList.toggle("hasVideo", has);
+                    item.ele.style.setProperty("--title", `"Existing (remove)"`);
+                });
+            },
+            playlists
         });
-        const mappedPlaylistsIds = playlists.map((playlist) => playlist._id);
-        mappedPlaylists.push("Cancel");
-        mappedPlaylistsIds.push("");
-        mappedPlaylists.push("Create new playlist");
-        const newPlaylistId = "VLL_" + Math.random().toString(36).substring(2, 9);
-        mappedPlaylistsIds.push(newPlaylistId);
-
-        const select = await uiFunc.selectPrompt(
-            "Add/Remove to playlist",
-            mappedPlaylists,
-            mappedPlaylistsIds
-        );
-
-        if (select === "") return;
-        if (select === newPlaylistId) {
-            const name = await uiFunc.prompt("Playlist name");
-            if (!name) return;
-            fetchVQL(`user +playlist s.name = ${name}`).then(() => {
-                this.toggleToPlayList();
-            });
-            return;
-        }
-
-        const playlistIndex = playlists.findIndex((playlist) => playlist._id === select);
-        if (playlistIndex === -1) return;
-        const playlist = playlists[playlistIndex];
-        const op = playlist.has ? "removeOne" : "add";
-        await fetchVQL(`playlist ${op} ${select} ${playlist.has ? "s" : "d"}._id = ${id}`);
-        await playListsView.loadPlaylists();
     }
 
     public share(id = $store.videoId.get()) {

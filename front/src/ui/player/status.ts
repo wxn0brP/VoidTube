@@ -4,7 +4,6 @@ import { fetchVideoHistoryTime, fetchVideoInfo, markVideoAsWatched, updateVideoH
 import { $store } from "../../store";
 import { updateQueryParam } from "../../utils";
 import historyView from "../history";
-import loaderView from "../loader";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
@@ -40,9 +39,7 @@ export async function loadProgress() {
 export async function loadVideo(id: string, autoPlay: boolean = false, saveProgressOpt: boolean = true) {
     if (saveProgressOpt) saveProgress();
     
-    loaderView.on();
     const data = await fetchVideoInfo(id);
-    loaderView.off();
 
     $store.video.set(data);
     $store.videoId.set(id);

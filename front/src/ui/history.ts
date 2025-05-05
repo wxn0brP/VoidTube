@@ -1,5 +1,6 @@
 import { changeView } from ".";
 import { fetchHistory, fetchVQL } from "../apiFront";
+import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { HistoryEntry } from "../types/video";
@@ -89,4 +90,4 @@ class HistoryView implements UiComponent {
 const historyView = new HistoryView();
 export default historyView;
 
-(window as any).historyShow = historyView.show;
+mgl.historyShow = historyView.show;

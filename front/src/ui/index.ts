@@ -3,7 +3,7 @@ import audioFormatsView from "./audioFormat";
 import historyView from "./history";
 import playerView from "./player";
 import playListView from "./playList";
-import playListsView from "./playLists";
+import playListsView from "./playListsView";
 import searchView from "./search";
 import searchBarView from "./searchBar";
 import videoFormatsView from "./videoFormat";
@@ -11,6 +11,8 @@ import videoInfoView from "./videoInfo";
 import videoView from "./videoView";
 import loaderView from "./loader";
 import metaControlView from "./metaControl";
+import { mgl } from "../mgl";
+import playListsModal from "./modal/playlists";
 
 export const components = [
     playerView,
@@ -25,6 +27,7 @@ export const components = [
     searchView,
     loaderView,
     metaControlView,
+    playListsModal,
 ]
 
 components.forEach(component => component.mount());
@@ -36,4 +39,4 @@ export function changeView(view: string) {
     }
 }
 
-(window as any).changeView = changeView;
+mgl.changeView = changeView;
