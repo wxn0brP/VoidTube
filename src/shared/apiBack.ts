@@ -61,11 +61,14 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
 
 export async function searchVideo(title: string, size: number) {
     try {
-        const result = await wrapper(`ytsearch${size}:"${title}"`, options) as any;
+        const opts = Object.assign({}, options, {
+            flatPlaylist: true,
+        })
+        const result = await wrapper(`ytsearch${size}:"${title}"`, opts) as any;
         return result.entries.map(entry => ({
             title: entry.title,
             id: entry.id,
-            thumbnail: entry.thumbnail,
+            thumbnail: entry.thumbnails[entry.thumbnails.length - 1].url,
             duration: entry.duration,
             views: entry.view_count,
         }));
