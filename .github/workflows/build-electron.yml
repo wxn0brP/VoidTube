@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+      
+    paths:
+      - 'package.json'
+      - 'src/app/*'
 
   pull_request:
     branches:
@@ -51,5 +55,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm run build:ts
+          npm run build
           npx electron-builder --publish always --win --linux
