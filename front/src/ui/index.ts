@@ -13,6 +13,7 @@ import loaderView from "./loader";
 import metaControlView from "./metaControl";
 import { mgl } from "../mgl";
 import playListsModal from "./modal/playlists";
+import asideView from "./aside";
 
 export const components = [
     playerView,
@@ -28,6 +29,7 @@ export const components = [
     loaderView,
     metaControlView,
     playListsModal,
+    asideView,
 ]
 
 components.forEach(component => component.mount());

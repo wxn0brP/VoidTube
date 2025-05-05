@@ -82,12 +82,12 @@ section {
     gap: 1rem;
     padding: 0 1rem;
 
-    button {
+    button,
+    select {
         border: 1px solid var(--accent);
         padding: 5px;
         border-radius: 5px;
         background: none;
-        font-size: 1.2em;
         cursor: pointer;
         color: var(--txt);
     }
@@ -114,7 +114,7 @@ section {
         gap: 1rem;
         padding-inline: 15px;
         padding-block: 5px;
-    
+
         input {
             width: 300px;
             padding: 5px;

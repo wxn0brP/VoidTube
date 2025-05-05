@@ -4,11 +4,11 @@
             🎥
             <div>Player</div>
         </div>
-        <div onclick="mgl.historyShow()">
+        <div id="show-history-button" onclick="mgl.historyShow()">
             ⟳
             <div>History</div>
         </div>
-        <div onclick="mgl.playlistsShow()">
+        <div id="show-playlists-button" onclick="mgl.playlistsShow()">
             📂
             <div>Playlists</div>
         </div>
@@ -45,23 +45,12 @@
                     </div>
                 </div>
             </div>
-            <div id="fromats">
+            <div id="meta-control-bar">
                 <select id="audio-formats"></select>
                 <select id="video-formats"></select>
-            </div>
-            <div id="meta-control-bar">
-                <label>
-                    Playlist
-                    <button id="toggle-to-playlist">📂</button>
-                </label>
-                <label>
-                    Share
-                    <button id="share">📤</button>
-                </label>
-                <label>
-                    Download
-                    <button id="download">⬇️</button>
-                </label>
+                <button id="toggle-to-playlist">Playlist 📂</button>
+                <button id="share">Share 📤</button>
+                <button id="download">Download ⬇️</button>
             </div>
             <div id="video-info"></div>
         </section>
