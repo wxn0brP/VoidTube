@@ -1,6 +1,6 @@
-import { searchVideo } from "../apiFront";
-import { UiComponent } from "../types/ui";
-import { clearQueryParams, getYouTubeVideoId, setTitle, updateQueryParam } from "../utils";
+import { searchVideo } from "#api/video";
+import { UiComponent } from "#types/ui";
+import { getYouTubeVideoId, updateQueryParam, clearQueryParams, setTitle } from "#utils";
 import { loadVideo } from "./player/status";
 import searchView from "./search";
 

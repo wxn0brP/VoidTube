@@ -1,14 +1,15 @@
 import { changeView } from ".";
-import { fetchHistory, fetchVQL } from "../apiFront";
-import { mgl } from "../mgl";
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
-import { HistoryEntry } from "../types/video";
-import { formatTime, levenshtein, setTitle, updateQueryParam } from "../utils";
+import { mgl } from "#mgl";
+import { $store } from "#store";
+import { UiComponent } from "#types/ui";
+import { HistoryEntry } from "#types/video";
+import { formatTime, levenshtein, setTitle, updateQueryParam } from "#utils";
 import metaControlView from "./metaControl";
 import uiFunc from "./modal";
 import playerView from "./player";
 import { loadVideo } from "./player/status";
+import { fetchHistory } from "#api/history";
+import { fetchVQL } from "#api/index";
 
 class HistoryView implements UiComponent {
     element: HTMLDivElement;

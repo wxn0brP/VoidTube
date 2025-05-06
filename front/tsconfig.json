@@ -3,7 +3,15 @@
         "module": "ES2022",
         "target": "ES2022",
         "moduleResolution": "node",
-        "paths": {},
+        "paths": {
+            "#api/*": ["./src/api/*"],
+            "#ui/*": ["./src/ui/*"],
+            "#types/*": ["./src/types/*"],
+
+            "#mgl": ["./src/mgl"],
+            "#store": ["./src/store"],
+            "#utils": ["./src/utils"],
+        },
         "esModuleInterop": true,
         "skipLibCheck": true,
         "outDir": "./dist",

@@ -1,9 +1,9 @@
+import { fetchPlaylistInfo } from "#api/playlist";
+import { $store } from "#store";
+import { UiComponent } from "#types/ui";
+import { PlaylistEntry } from "#types/video";
+import { formatTime, updateQueryParam, setTitle } from "#utils";
 import { changeView } from ".";
-import { fetchPlaylistInfo } from "../apiFront";
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
-import { PlaylistEntry } from "../types/video";
-import { formatTime, setTitle, updateQueryParam } from "../utils";
 import playerView from "./player";
 import { loadVideo } from "./player/status";
 

@@ -1,9 +1,10 @@
+import { fetchVQL } from "#api/index";
+import { fetchPlaylists } from "#api/playlist";
+import { UiComponent } from "#types/ui";
+import { PlaylistsEntry } from "#types/video";
+import playListsView from "#ui/playListsView";
+import { formatTime } from "#utils";
 import uiFunc from ".";
-import { fetchPlaylists, fetchVQL } from "../../apiFront";
-import { UiComponent } from "../../types/ui";
-import { PlaylistsEntry } from "../../types/video";
-import { formatTime } from "../../utils";
-import playListsView from "../playListsView";
 
 class PlayListsModal implements UiComponent {
     element: HTMLDivElement;

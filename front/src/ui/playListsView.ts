@@ -1,10 +1,11 @@
+import { fetchVQL } from "#api/index";
+import { fetchPlaylists } from "#api/playlist";
+import { mgl } from "#mgl";
+import { $store } from "#store";
+import { UiComponent } from "#types/ui";
+import { PlaylistsEntry } from "#types/video";
+import { formatTime, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
-import { fetchPlaylists, fetchVQL, getPlaylistIds } from "../apiFront";
-import { mgl } from "../mgl";
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
-import { PlaylistsEntry } from "../types/video";
-import { formatTime, setTitle, updateQueryParam } from "../utils";
 import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
 import playListView from "./playList";
@@ -103,7 +104,7 @@ class PlayListsView implements UiComponent {
             if (from === "YouTube") {
                 const playlistUrl = await uiFunc.prompt("Playlist URL");
                 if (!playlistUrl) return;
-                ids = await getPlaylistIds(playlistUrl);
+                ids = await fetchVQL<string[]>(`api playlist s._id = ${playlistUrl}`);
             } else if (from === "URLs/IDs") {
                 const playlistUrls = await uiFunc.prompt("Playlist URLs/IDs");
                 if (!playlistUrls) return;

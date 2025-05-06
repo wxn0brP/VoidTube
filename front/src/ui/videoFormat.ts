@@ -1,7 +1,7 @@
-import { fetchVQL } from "../apiFront";
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
-import { Format } from "../types/video";
+import { fetchVQL } from "#api/index";
+import { $store } from "#store";
+import { UiComponent } from "#types/ui";
+import { Format } from "#types/video";
 
 export class VideoFormatsView implements UiComponent {
     element: HTMLSelectElement;

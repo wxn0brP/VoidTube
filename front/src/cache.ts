@@ -1,4 +1,4 @@
-import { updateVideoHistoryTime } from "./apiFront";
+import { updateVideoHistoryTime } from "#api/history";
 
 function lastProgres () {
     const lastProgress = localStorage.getItem("cache.progress");
