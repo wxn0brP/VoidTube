@@ -1,6 +1,7 @@
-import { fetchPlaylistsAndVideoExists, fetchVQL } from "../apiFront";
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
+import { fetchVQL } from "#api/index";
+import { fetchPlaylistsContainingVideo } from "#api/playlist";
+import { $store } from "#store";
+import { UiComponent } from "#types/ui";
 import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
 import playListsView from "./playListsView";
@@ -25,7 +26,7 @@ class MetaControlView implements UiComponent {
     }
 
     public async toggleToPlayList(id = $store.videoId.get()) {
-        const playlists = await fetchPlaylistsAndVideoExists(id);
+        const playlists = await fetchPlaylistsContainingVideo(id);
 
         playListsModal.show({
             callback: async (playlistId) => {

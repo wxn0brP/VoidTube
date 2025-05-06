@@ -1,7 +1,7 @@
+import { updateVideoHistoryTime } from "#api/history";
+import { $store } from "#store";
+import { updateQueryParam } from "#utils";
 import playerView from ".";
-import { updateVideoHistoryTime } from "../../apiFront";
-import { $store } from "../../store";
-import { updateQueryParam } from "../../utils";
 import { loadVideo } from "./status";
 
 export function setupAudioSync() {

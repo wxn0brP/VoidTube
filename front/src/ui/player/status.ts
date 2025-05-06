@@ -1,9 +1,11 @@
+import { updateVideoHistoryTime, fetchVideoHistoryTime } from "#api/history";
+import { fetchVQL } from "#api/index";
+import { $store } from "#store";
+import { VideoInfo } from "#types/video";
+import historyView from "#ui/history";
+import { updateQueryParam } from "#utils";
 import playerView from ".";
 import { changeView } from "..";
-import { fetchVideoHistoryTime, fetchVideoInfo, markVideoAsWatched, updateVideoHistoryTime } from "../../apiFront";
-import { $store } from "../../store";
-import { updateQueryParam } from "../../utils";
-import historyView from "../history";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
@@ -38,15 +40,16 @@ export async function loadProgress() {
 
 export async function loadVideo(id: string, autoPlay: boolean = false, saveProgressOpt: boolean = true) {
     if (saveProgressOpt) saveProgress();
+    if (!id) return console.error("No video id provided");
     
-    const data = await fetchVideoInfo(id);
+    const data = await fetchVQL<VideoInfo>(`api video! s.url = ${id}`);
 
     $store.video.set(data);
     $store.videoId.set(id);
     playerView.paused = true;
     playerView.videoEl.currentTime = 0;
 
-    markVideoAsWatched(id).then(() => {
+    fetchVQL(`user updateOneOrAdd history s._id=${id} u.watched=true u.last=${Math.floor(Date.now() / 1000)}`).then(() => {
         historyView.loadHistory(); // refresh history
     });
     changeView("video");

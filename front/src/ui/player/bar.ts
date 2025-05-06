@@ -1,7 +1,7 @@
+import { updateVideoHistoryTime } from "#api/history";
+import { $store } from "#store";
+import { clamp, debounce, formatTime } from "#utils";
 import playerView from ".";
-import { updateVideoHistoryTime } from "../../apiFront";
-import { $store } from "../../store";
-import { clamp, debounce, formatTime } from "../../utils";
 import { playNext } from "./audioSync";
 import { changePlay, toggleFullscreen } from "./status";
 
