@@ -2,8 +2,6 @@ name: Build Electron
 
 on:
   push:
-    branches:
-      - master
     tags:
       - "v*"
 
