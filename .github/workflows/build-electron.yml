@@ -94,6 +94,9 @@ jobs:
 
       - name: 📦 Quick build (only zip)
         if: env.BUILD_TYPE == 'quick'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx electron-builder build --win zip --linux zip
 
