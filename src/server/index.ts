@@ -3,12 +3,21 @@ import { scssMiddleware } from "./scss";
 import VQL from "../shared/vql";
 import { parseStringQuery } from "#vql/cpu/string/index";
 import { readFileSync } from "fs";
+import { LogLevelName } from "@wxn0brp/wts-logger";
 
-const app = new FalconFrame();
+const isDev = process.env.NODE_ENV === "development";
+
+const app = new FalconFrame({
+    loggerName: "void-tube-server",
+    logLevel: process.env.FALCON_LOG_LEVEL as LogLevelName || isDev ? "INFO" : "ERROR"
+});
+
 const port = parseInt(process.env.PORT) || 29848;
 app.listen(port);
 
-const __cwd = import.meta.dirname + "/../../";
+const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
+if (isDev) console.log("__cwd:", __cwd);
+
 app.use("/css", scssMiddleware);
 app.static("/", __cwd+"public");
 app.static("/js", __cwd+"front/dist");

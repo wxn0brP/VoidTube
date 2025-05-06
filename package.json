@@ -20,15 +20,15 @@
     },
     "devDependencies": {
         "@types/node": "^22.12.0",
-        "electron-builder": "^26.0.12",
         "electron": "^36.1.0",
+        "electron-builder": "^26.0.12",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
     },
     "dependencies": {
         "@wxn0brp/db": "^0.7.1",
         "@wxn0brp/falcon-frame": "github:wxn0brP/FalconFrame#dist",
-        "@wxn0brp/vql": "^0.1.1",
+        "@wxn0brp/vql": "^0.1.3",
         "@wxn0brp/wts-logger": "github:wxn0brP/ts-shared#dist-logger",
         "sass": "^1.87.0"
     },
@@ -50,11 +50,22 @@
             "front/dist/**/*"
         ],
         "win": {
-            "target": ["nsis", "zip"],
+            "target": [
+                "nsis",
+                "zip"
+            ],
             "icon": "public/favicon.ico"
         },
         "linux": {
-            "target": ["AppImage", "deb", "rpm", "tar.gz", "pacman", "zip", "7z"],
+            "target": [
+                "AppImage",
+                "deb",
+                "rpm",
+                "tar.gz",
+                "pacman",
+                "zip",
+                "7z"
+            ],
             "icon": "public/favicon.png",
             "category": "Application"
         },

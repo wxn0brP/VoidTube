@@ -1,6 +1,7 @@
 import { app, BrowserWindow, globalShortcut } from "electron";
-import "../server/index";
+process.env.APP_PATH = app.getAppPath() + "/";
 
+await import("../server/index");
 let mainWindow: BrowserWindow;
 const port = parseInt(process.env.PORT) || 29848;
 

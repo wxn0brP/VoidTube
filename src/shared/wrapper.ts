@@ -1,13 +1,18 @@
 import { exec } from "child_process";
 import { YtFlags, YtResponse } from "./yt.types";
-import { getYtDlpPath } from "./yt-dlp";
+import { checkIsFileEmpty, getYtDlpPath } from "./yt-dlp";
 
 let ytDlp: string = "yt-dlp";
 try {
-    ytDlp = process.env.YT_DLP || await getYtDlpPath();
+    if (process.env.YT_DLP_PATH) {
+        ytDlp = process.env.YT_DLP_PATH;
+        if (checkIsFileEmpty(ytDlp)) ytDlp = await getYtDlpPath();
+    } else
+    ytDlp = await getYtDlpPath();
 } catch (e) {
     console.error("Error while getting yt-dlp path:", e);
 }
+if (process.env.NODE_ENV === "development") console.log(`yt-dlp path: ${ytDlp}`);
 
 function camelToKebab(str: string): string {
     return str.replace(/([A-Z])/g, "-$1").toLowerCase();
