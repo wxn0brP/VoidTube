@@ -7,7 +7,6 @@ on:
     paths:
       - "package.json"
       - "src/app/**/*"
-      - "front/**/*"
       - ".github/workflows/build-electron.yml"
 
   pull_request:
