@@ -19,8 +19,15 @@ class HistoryView implements UiComponent {
     render(history: HistoryEntry[]) {
         this.container.innerHTML = "";
 
+        if (!history.length) {
+            this.container.innerHTML = `<h1 style="text-align: center;">No history</h1>`;
+            this.searchInput.style.display = "none";
+            return;
+        } else {
+            this.searchInput.style.display = "";
+        }
+
         history
-            .filter(entry => entry.watched)
             .sort((a, b) => b.last - a.last)
             .forEach(entry => {
                 const card = document.createElement("div");
@@ -67,15 +74,17 @@ class HistoryView implements UiComponent {
             });
     }
 
-    public async loadHistory() {
-        const history = await fetchHistory();
+    public async loadHistory(limit: number = 0) {
+        const history = await fetchHistory(limit);
         this.render(history);
+        return history;
     }
 
     mount(): void {
         this.element = document.querySelector("#history-view");
         this.container = this.element.querySelector("#history-container")!;
         this.searchInput = document.querySelector("#history-search")!;
+        this.searchInput.style.display = "none";
 
         $store.view.history.subscribe((open) => {
             this.element.style.display = open ? "" : "none";
@@ -83,7 +92,14 @@ class HistoryView implements UiComponent {
 
         $store.view.history.set(false);
 
-        this.loadHistory();
+        // quick load
+        setTimeout(() => {
+            this.loadHistory(24);
+        }, 100);
+        // load all history
+        setTimeout(() => {
+            this.loadHistory(); 
+        }, window.location.search.length > 0 ? 7_000 : 2_000);
 
         this.searchInput.oninput = () => {
             const query = this.searchInput.value;

@@ -140,7 +140,7 @@ class PlayListsView implements UiComponent {
             for (let i = 0; i < ids.length; i++) {
                 await fetchVQL(`playlist +${playlist} d._id = ${ids[i]}`);
             }
-            await fetchVQL(`user ~playlist s._id=${playlist} u.last=${Math.floor(Date.now() / 1000)}`)
+            await fetchVQL(`user ~playlist s._id=${playlist} u.last=${Math.floor(Date.now() / 1000)}`);
             this.loadPlaylists();
         };
 
@@ -149,7 +149,10 @@ class PlayListsView implements UiComponent {
         });
 
         $store.view.playlists.set(false);
-        this.loadPlaylists();
+
+        setTimeout(() => {
+            this.loadPlaylists();
+        }, window.location.search.length > 0 ? 8_000 : 2_000);
     }
 
     show() {

@@ -1,6 +1,7 @@
 import { updateVideoHistoryTime } from "#api/history";
+import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { clamp, debounce, formatTime } from "#utils";
+import { clamp, debounce, formatTime, throttle } from "#utils";
 import playerView from ".";
 import { playNext } from "./audioSync";
 import { changePlay, toggleFullscreen } from "./status";
@@ -128,6 +129,20 @@ export function setupBar() {
     });
 
     const playNextDebounced = debounce(playNext);
+    const bufferNextThrottled = throttle(() => {
+        const playlistIndex = $store.playlistIndex.get();
+        if (playlistIndex === undefined) return;
+
+        const nextVideoId = $store.playlist.get()[playlistIndex + 1];
+        if (!nextVideoId) return;
+        // if server don't have buffered video then fetch it
+        fetchVQL(`api video! s.url = ${nextVideoId}`, true);
+        console.debug("[player] buffering next video on server", nextVideoId);
+    }, 20_000);
+
+    const updateVideoHistoryTimeToZero = debounce(() => {
+        updateVideoHistoryTime($store.videoId.get(), 0);
+    });
 
     playerView.videoEl.addEventListener("progress", () => updateProgressBars());
     playerView.videoEl.addEventListener("timeupdate", () => {
@@ -143,11 +158,21 @@ export function setupBar() {
 
         // if video was watched of last 3 seconds then start from the beginning
         if (Math.floor(playerView.videoEl.currentTime) + 3 >= Math.floor(playerView.videoEl.duration)) {
-            updateVideoHistoryTime($store.videoId.get(), 0);
+            updateVideoHistoryTimeToZero();
         }
 
+        // play next video
         if (playerView.videoEl.currentTime + 0.1 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
             playNextDebounced();
+        }
+
+        // if video was watched of last 10 seconds then buffer next (server side)
+        if (
+            playerView.videoEl.currentTime + 10 >= playerView.videoEl.duration &&
+            !playerView.videoEl.loop &&
+            $store.playlistId.get()
+        ) {
+            bufferNextThrottled();
         }
     });
 

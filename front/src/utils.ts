@@ -7,6 +7,17 @@ export function debounce(func: Function, timeout: number = 300) {
         timer = setTimeout(() => { func.apply(this, args); }, timeout);
     }
 }
+export function throttle(fn: Function, delay = 5000) {
+    let lastCall = 0;
+
+    return function (this: any, ...args: any[]) {
+        const now = Date.now();
+        if (now - lastCall >= delay) {
+            fn.apply(this, args);
+            lastCall = now;
+        }
+    };
+}
 
 export function updateQueryParam(key: string, value: string | undefined): void {
     const url = new URL(window.location.href);
@@ -31,7 +42,7 @@ export function formatTime(time: number, hasHours: boolean | null = true): strin
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);
     if (hasHours === null) hasHours = hours > 0;
-    const timeString = 
+    const timeString =
         (hasHours ? (hours < 10 ? "0" : "") + hours.toString() + ":" : "") +
         (minutes < 10 ? "0" : "") + minutes.toString() + ":" +
         (seconds < 10 ? "0" : "") + seconds.toString();

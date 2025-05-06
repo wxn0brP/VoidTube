@@ -4,8 +4,8 @@ import { mgl } from "../mgl";
 
 const middleTime: number[] = [];
 
-export async function fetchVQL<T=any>(query: string | object): Promise<T> {
-    loaderView.on();
+export async function fetchVQL<T=any>(query: string | object, silent: boolean = false): Promise<T> {
+    if (!silent) loaderView.on();
     const start = Date.now();
     const response = await fetch(`/VQL`, {
         method: "POST",
@@ -20,7 +20,7 @@ export async function fetchVQL<T=any>(query: string | object): Promise<T> {
         searchBarView.searchInput.value = "Something went wrong. Probably server is down.";
         throw e;
     })
-    .finally(() => loaderView.off());
+    .finally(() => !silent && loaderView.off());
 
     if (response.err) {
         console.error(query, response);
@@ -32,7 +32,7 @@ export async function fetchVQL<T=any>(query: string | object): Promise<T> {
     if (time > 5_000) console.warn("VQL time > 5s", time, "\n", query);
     middleTime.push(time);
 
-    console.debug(query, response?.result || response, time);
+    console.debug("[VQL]", query, response?.result || response, time);
 
     return response?.result;
 }

@@ -1,5 +1,6 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { $store } from "#store";
+import playListView from "#ui/playList";
 import { updateQueryParam } from "#utils";
 import playerView from ".";
 import { loadVideo } from "./status";
@@ -18,7 +19,7 @@ export function setupAudioSync() {
 
     playerView.videoEl.addEventListener("seeking", () => {
         playerView.audioEl.currentTime = playerView.videoEl.currentTime;
-        if (!playerView.videoEl.paused) {
+        if (!playerView.videoEl.paused && playerView.audioEl.paused) {
             playerView.audioEl.play().catch(err => console.error("Audio resume error:", err));
         }
     });
@@ -39,7 +40,8 @@ export function setupAudioSync() {
     const resumeAudio = () => {
         if (!playerView.videoEl.paused) {
             playerView.audioEl.currentTime = playerView.videoEl.currentTime;
-            playerView.audioEl.play().catch(err => console.error("Audio resume error:", err));
+            if (playerView.audioEl.paused)
+                playerView.audioEl.play().catch(err => console.error("Audio resume error:", err));
         }
     };
     playerView.videoEl.addEventListener("playing", resumeAudio);
@@ -95,6 +97,7 @@ export function playNext() {
     loadVideo(nextVideoId, true);
     $store.playlistIndex.set(nextIndex);
     updateQueryParam("pi", (nextIndex).toString());
+    scrollToPlaylistElement();
 }
 
 export function playPrev() {
@@ -114,4 +117,10 @@ export function playPrev() {
     loadVideo(nextVideoId, true);
     $store.playlistIndex.set(nextIndex);
     updateQueryParam("pi", (nextIndex).toString());
+    scrollToPlaylistElement();
+}
+
+export function scrollToPlaylistElement() {
+    const elements = playListView.element.querySelectorAll(".videoCard");
+    elements[$store.playlistIndex.get() || 0].scrollIntoView({ behavior: "smooth", block: "center" });
 }
