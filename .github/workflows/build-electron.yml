@@ -4,16 +4,25 @@ on:
   push:
     branches:
       - master
-      
     paths:
       - 'package.json'
-      - 'src/app/*'
+      - 'src/app/**/*'
+      - 'front/**/*'
+      - '.github/workflows/electron-build.yml'
 
   pull_request:
     branches:
       - master
 
   workflow_dispatch:
+    inputs:
+      build-type:
+        type: choice
+        options:
+          - full
+          - quick
+        default: 'quick'
+        description: "Select build type"
 
 concurrency:
   group: build-electron-${{ github.ref }}
@@ -24,36 +33,79 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the source repository
-        uses: actions/checkout@v2
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '22.x'
-          
-      - name: Setup wine for Windows build
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt update
-          sudo apt install -y \
-            wine32 wine64 \
-            libarchive-tools pacman fakeroot libarchive-tools rpm
+          cache: 'npm'
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: |
-          npm install -g typescript tsc-alias
+          npm install -g typescript tsc-alias electron-builder
           npm install
 
-      - name: Build frontend
+      - name: 🌐 Build frontend
         run: |
           cd front
           npm install
           npm run build
 
-      - name: Build
+      - name: 🤖 Determine build type
+        id: determine_build_type
+        run: |
+          if [ -z "${{ github.event.inputs.build-type }}" ]; then
+            if git diff --name-only HEAD~1 | grep -E '^(package.json|src/app/)'; then
+              echo "BUILD_TYPE=full" >> $GITHUB_ENV
+            else
+              echo "BUILD_TYPE=quick" >> $GITHUB_ENV
+            fi
+          else
+            echo "BUILD_TYPE=${{ github.event.inputs.build-type }}" >> $GITHUB_ENV
+          fi
+
+      - name: 🍷 Setup Wine & base Linux tools
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install -y wine32 wine64 libarchive-tools
+
+      - name: 📦 Install pacman/rpm
+        if: env.BUILD_TYPE == 'full'
+        run: |
+          sudo apt install -y pacman fakeroot rpm
+
+      - name: 📦 Install gh
+        if: env.BUILD_TYPE == 'quick'
+        run: |
+          sudo apt install -y gh
+
+      - name: ⚙️ Compile TypeScript
+        run: |
+          npm run build
+
+      - name: 🚀 Full build and publish
+        if: env.BUILD_TYPE == 'full'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npm run build
           npx electron-builder --publish always --win --linux
+
+      - name: 📦 Quick build (only zip)
+        if: env.BUILD_TYPE == 'quick'
+        run: |
+          npx electron-builder build --win zip --linux zip
+
+      - name: 📤 Upload quick build to pre-release
+        if: env.BUILD_TYPE == 'quick'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="pre-release-$(date +%Y%m%d%H%M%S)"
+          gh release create "$TAG_NAME" \
+            --prerelease \
+            --title "Quick Build $TAG_NAME" \
+            --notes "Automated quick build from $GITHUB_SHA" \
+            dist/*.zip
