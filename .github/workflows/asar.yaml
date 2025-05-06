@@ -1,0 +1,58 @@
+name: Build ASAR
+
+on:
+  push:
+    branches:
+      - master
+  
+  workflow_dispatch:
+
+concurrency:
+  group: build-asar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build app
+        run: |
+          npm install -g typescript tsc-alias asar
+          npm install
+          npm run build
+
+      - name: Build frontend
+        run: |
+          cd front
+          npm install
+          npm run build
+
+      - name: Create ASAR package
+        run: |
+          mkdir -p asar-temp/front
+          cp -r dist asar-temp/dist
+          cp -r front/dist asar-temp/front/dist
+          cp -r public asar-temp/public
+          cp -r package.json asar-temp/package.json
+          cp -r node_modules asar-temp/node_modules
+
+          asar pack asar-temp app.asar
+
+      - name: Generate SHA256
+        run: |
+          sha256sum app.asar | cut -d ' ' -f1 > app.asar.sha256
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: voidtube-asar
+          path: |
+            app.asar
+            app.asar.sha256
