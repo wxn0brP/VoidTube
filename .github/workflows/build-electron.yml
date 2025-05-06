@@ -5,10 +5,10 @@ on:
     branches:
       - master
     paths:
-      - 'package.json'
-      - 'src/app/**/*'
-      - 'front/**/*'
-      - '.github/workflows/electron-build.yml'
+      - "package.json"
+      - "src/app/**/*"
+      - "front/**/*"
+      - ".github/workflows/build-electron.yml"
 
   pull_request:
     branches:
@@ -21,7 +21,7 @@ on:
         options:
           - full
           - quick
-        default: 'quick'
+        default: "quick"
         description: "Select build type"
 
 concurrency:
@@ -39,11 +39,11 @@ jobs:
       - name: 🔧 Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: "22.x"
 
       - name: 📦 Install dependencies
         run: |
-          npm install -g typescript tsc-alias electron-builder
+          npm install -g typescript tsc-alias
           npm install
 
       - name: 🌐 Build frontend
@@ -64,14 +64,12 @@ jobs:
           else
             echo "BUILD_TYPE=${{ github.event.inputs.build-type }}" >> $GITHUB_ENV
           fi
-      - name: 🍷 Install Wine (silent, fast mirror)
+
+      - name: 🍷 Setup Wine & base Linux tools
         run: |
-          sudo sed -i 's|http://.*archive.ubuntu.com|https://mirror.ubuntu.com/ubuntu|g' /etc/apt/sources.list
           sudo dpkg --add-architecture i386
-          sudo apt-get update -qq > /dev/null
-          sudo apt-get install -y --no-install-recommends \
-            wine32 wine64 libarchive-tools \
-            > /dev/null 2>&1
+          sudo apt update
+          sudo apt install -y wine32 wine64 libarchive-tools
 
       - name: 📦 Install pacman/rpm
         if: env.BUILD_TYPE == 'full'
