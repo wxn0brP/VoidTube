@@ -64,34 +64,38 @@
     backdrop-filter: blur(4px);
     background-color: rgba(0, 0, 0, 0.9);
     text-align: center;
+    overflow-y: scroll;
 
     #playlists-modal-container {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 5px;
-        overflow-y: auto;
+        align-items: stretch;
     }
 
-    .playlistCard.hasVideo {
-        .img {
-            position: relative;
+    .playlistCard {
+        min-height: unset;
+    }
 
-            &::after {
-                content: var(--title);
-                color: var(--accent);
-                position: absolute;
-                top: 0;
-                left: 0;
+    .playlistCard.hasVideo .img {
+        position: relative;
 
-                width: 50%;
-                height: 100%;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 1.1rem;
-                font-weight: bold;
+        &::after {
+            content: var(--title);
+            color: var(--accent);
+            position: absolute;
+            top: 0;
+            left: 0;
 
-                background-color: rgba(0, 0, 0, 0.5);
-            }
+            width: 50%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+
+            background-color: rgba(0, 0, 0, 0.5);
         }
     }
 }
