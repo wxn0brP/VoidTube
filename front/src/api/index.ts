@@ -1,4 +1,5 @@
 import loaderView from "#ui/loader";
+import searchBarView from "#ui/searchBar";
 import { mgl } from "../mgl";
 
 const middleTime: number[] = [];
@@ -12,7 +13,14 @@ export async function fetchVQL<T=any>(query: string | object): Promise<T> {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ query })
-    }).then(res => res.json());
+    })
+    .then(res => res.json())
+    .catch(e => {
+        console.error(e);
+        searchBarView.searchInput.value = "Something went wrong. Probably server is down.";
+        throw e;
+    })
+    .finally(() => loaderView.off());
 
     if (response.err) {
         console.error(query, response);
@@ -25,7 +33,6 @@ export async function fetchVQL<T=any>(query: string | object): Promise<T> {
     middleTime.push(time);
 
     console.debug(query, response?.result || response, time);
-    loaderView.off();
 
     return response?.result;
 }
