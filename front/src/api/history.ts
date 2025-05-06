@@ -3,7 +3,7 @@ import { fetchVQL } from ".";
 
 export async function updateVideoHistoryTime(id: string, time: number) {
     if (!id || isNaN(time)) return;
-    await fetchVQL(`user ~history! s._id = ${id} u.time = ${time}`);
+    await fetchVQL(`user ~history! s._id = ${id} u.time = ${time}`, true);
 }
 
 export async function fetchVideoHistoryTime(id: string): Promise<number> {
@@ -13,20 +13,24 @@ export async function fetchVideoHistoryTime(id: string): Promise<number> {
     return res.watched ? res.time : 0;
 }
 
-export async function fetchHistory() {
+export async function fetchHistory(limit = 0) {
     const query = `
 user history
-many: true
 relations:
   info:
     path: [api, video-static]
     select: [title,description]
 
-search: {}
+many: true
+${limit ? `options: 
+  max: ${limit}
+  reverse: true
+` : ""}
+search:
+  watched: true
 select:
   _id: 1
   time: 1
-  watched: 1
   last: 1
   info:
     title: 1

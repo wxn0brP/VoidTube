@@ -5,6 +5,7 @@ import { PlaylistEntry } from "#types/video";
 import { formatTime, updateQueryParam, setTitle } from "#utils";
 import { changeView } from ".";
 import playerView from "./player";
+import { scrollToPlaylistElement } from "./player/audioSync";
 import { loadVideo } from "./player/status";
 
 class PlayListView implements UiComponent {
@@ -27,6 +28,10 @@ class PlayListView implements UiComponent {
             });
             this.element.appendChild(card);
         });
+
+        setTimeout(() => {
+            scrollToPlaylistElement();
+        }, 100);
     }
 
     public async loadPlaylist(id: string, index = 0) {
