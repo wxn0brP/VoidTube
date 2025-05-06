@@ -64,12 +64,14 @@ jobs:
           else
             echo "BUILD_TYPE=${{ github.event.inputs.build-type }}" >> $GITHUB_ENV
           fi
-
-      - name: 🍷 Setup Wine & base Linux tools
+      - name: 🍷 Install Wine (silent, fast mirror)
         run: |
+          sudo sed -i 's|http://.*archive.ubuntu.com|https://mirror.ubuntu.com/ubuntu|g' /etc/apt/sources.list
           sudo dpkg --add-architecture i386
-          sudo apt update
-          sudo apt install -y wine32 wine64 libarchive-tools
+          sudo apt-get update -qq > /dev/null
+          sudo apt-get install -y --no-install-recommends \
+            wine32 wine64 libarchive-tools \
+            > /dev/null 2>&1
 
       - name: 📦 Install pacman/rpm
         if: env.BUILD_TYPE == 'full'
