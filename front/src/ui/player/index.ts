@@ -1,3 +1,4 @@
+import navBarView from "#ui/navBar";
 import { changeView } from "..";
 import { mgl } from "../../mgl";
 import { $store } from "../../store";
@@ -94,6 +95,7 @@ export class PlayerView implements UiComponent {
         setTitle($store.video.get()?.title);
         updateQueryParam("v", $store.videoId.get());
         updateQueryParam("query", undefined);
+        navBarView.save("video");
     }
 }
 

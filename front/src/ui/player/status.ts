@@ -3,6 +3,7 @@ import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { VideoInfo } from "#types/video";
 import historyView from "#ui/history";
+import navBarView from "#ui/navBar";
 import { updateQueryParam } from "#utils";
 import playerView from ".";
 import { changeView } from "..";
@@ -54,6 +55,7 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
     });
     changeView("video");
     updateQueryParam("v", id);
+    navBarView.save("video");
     
     setTimeout(async () => {
         await loadProgress();

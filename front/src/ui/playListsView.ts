@@ -8,6 +8,7 @@ import { formatTime, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
 import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
+import navBarView from "./navBar";
 import playListView from "./playList";
 
 class PlayListsView implements UiComponent {
@@ -160,6 +161,7 @@ class PlayListsView implements UiComponent {
         setTitle("");
         updateQueryParam("v", undefined);
         updateQueryParam("query", undefined);
+        navBarView.save("playlists");
     }
 }
 
