@@ -18,7 +18,7 @@ app.listen(port);
 const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
 if (isDev) console.log("__cwd:", __cwd);
 
-app.use("/css", scssMiddleware);
+app.use("/css", scssMiddleware(__cwd));
 app.static("/", __cwd+"public");
 app.static("/js", __cwd+"front/dist");
 app.static("/src", __cwd+"front/src");
