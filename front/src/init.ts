@@ -1,3 +1,4 @@
+import navBarView from "#ui/navBar";
 import { changeView } from "./ui";
 import playerView from "./ui/player";
 import { loadVideo } from "./ui/player/status";
@@ -33,9 +34,11 @@ function params() {
         setTimeout(() => loadVideo(id), 1000);
         updateQueryParam("v", id);
         changeView("video");
+        navBarView.save("video");
     } else {
         changeView("history");
         setTitle("");
+        navBarView.save("history");
     }
 
     const time = urlParams.get("t");

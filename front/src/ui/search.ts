@@ -5,6 +5,7 @@ import { UiComponent } from "../types/ui";
 import { SearchEntry } from "../types/video";
 import { formatTime, updateQueryParam } from "../utils";
 import metaControlView from "./metaControl";
+import navBarView from "./navBar";
 import playerView from "./player";
 import { loadVideo } from "./player/status";
 
@@ -59,6 +60,7 @@ class SearchView implements UiComponent {
     show() {
         changeView("search");
         updateQueryParam("v", undefined);
+        navBarView.save("search");
     }
 }
 

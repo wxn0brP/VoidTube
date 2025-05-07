@@ -41,10 +41,12 @@ export class VideoFormatsView implements UiComponent {
             $store.selectedVideoUrl.set(this.element.value);
         });
 
-        fetchVQL(`user settings! s._id="prefered-video"`).then(response => {
-            if (!response.result) return;
-            this.prefered.value = response.result.value;
-        });
+        this.prefered.value = "best";
+        setTimeout(() => {
+            fetchVQL(`user settings! s._id="prefered-video"`).then(response => {
+                this.prefered.value = response.value.toString();
+            });
+        }, 100);
     }
 }
 function getPreferredVideoUrl(videoFormats: Format[], preferred: string) {

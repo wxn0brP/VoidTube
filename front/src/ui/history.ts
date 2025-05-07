@@ -10,6 +10,7 @@ import playerView from "./player";
 import { loadVideo } from "./player/status";
 import { fetchHistory } from "#api/history";
 import { fetchVQL } from "#api/index";
+import navBarView from "./navBar";
 
 class HistoryView implements UiComponent {
     element: HTMLDivElement;
@@ -113,6 +114,7 @@ class HistoryView implements UiComponent {
         changeView("history");
         setTitle("");
         updateQueryParam("v", undefined);
+        navBarView.save("history");
     }
 
     filterSeeAll() {

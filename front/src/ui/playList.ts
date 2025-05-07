@@ -4,6 +4,7 @@ import { UiComponent } from "#types/ui";
 import { PlaylistEntry } from "#types/video";
 import { formatTime, updateQueryParam, setTitle } from "#utils";
 import { changeView } from ".";
+import navBarView from "./navBar";
 import playerView from "./player";
 import { scrollToPlaylistElement } from "./player/audioSync";
 import { loadVideo } from "./player/status";
@@ -60,6 +61,7 @@ class PlayListView implements UiComponent {
         const playlistIndex = $store.playlistIndex.get();
         if(playlistId) updateQueryParam("p", playlistId);
         if(playlistIndex) updateQueryParam("pi", playlistIndex.toString());
+        navBarView.save("video");
     }
 
     mount(): void {

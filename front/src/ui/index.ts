@@ -14,6 +14,7 @@ import metaControlView from "./metaControl";
 import { mgl } from "../mgl";
 import playListsModal from "./modal/playlists";
 import asideView from "./aside";
+import navBarView from "./navBar";
 
 export const components = [
     playerView,
@@ -30,6 +31,7 @@ export const components = [
     metaControlView,
     playListsModal,
     asideView,
+    navBarView,
 ]
 
 components.forEach(component => component.mount());
