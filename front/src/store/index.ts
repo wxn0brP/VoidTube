@@ -5,6 +5,7 @@ import { createStore } from "./store";
 const initData = {
     video: null as VideoInfo,
     videoId: "",
+    nextVideoId: "",
     selectedVideoUrl: "",
     selectedAudioUrl: "",
     playlist: [] as string[],

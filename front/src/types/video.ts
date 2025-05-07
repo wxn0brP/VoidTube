@@ -69,3 +69,11 @@ export interface SearchEntry {
     duration: number;
     views: number;
 }
+
+export interface RecommendationEntry {
+    _id: string;
+    title: string;
+    thumbnail: string;
+    duration: number;
+    views: number;
+}

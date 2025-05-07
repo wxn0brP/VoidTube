@@ -130,15 +130,22 @@ export function setupBar() {
 
     const playNextDebounced = debounce(playNext);
     const bufferNextThrottled = throttle(() => {
-        const playlistIndex = $store.playlistIndex.get();
-        if (playlistIndex === undefined) return;
+        let nextVideoId = $store.nextVideoId.get();
 
-        const nextVideoId = $store.playlist.get()[playlistIndex + 1];
+        if ($store.playlistId.get()) {
+            const playlistIndex = $store.playlistIndex.get();
+            if (playlistIndex !== undefined) {
+                const nextVideoIdTemp = $store.playlist.get()[playlistIndex + 1];
+                if (nextVideoIdTemp) nextVideoId = nextVideoIdTemp;
+            }
+        }
+
         if (!nextVideoId) return;
+
         // if server don't have buffered video then fetch it
         fetchVQL(`api video! s.url = ${nextVideoId}`, true);
         console.debug("[player] buffering next video on server", nextVideoId);
-    }, 20_000);
+    }, 25_000);
 
     const updateVideoHistoryTimeToZero = debounce(() => {
         updateVideoHistoryTime($store.videoId.get(), 0);
@@ -166,12 +173,8 @@ export function setupBar() {
             playNextDebounced();
         }
 
-        // if video was watched of last 10 seconds then buffer next (server side)
-        if (
-            playerView.videoEl.currentTime + 10 >= playerView.videoEl.duration &&
-            !playerView.videoEl.loop &&
-            $store.playlistId.get()
-        ) {
+        // if video was watched of last 13 seconds then buffer next (server side)
+        if (playerView.videoEl.currentTime + 13 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
             bufferNextThrottled();
         }
     });
