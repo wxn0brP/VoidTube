@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-  
   workflow_dispatch:
 
 concurrency:
@@ -41,7 +40,7 @@ jobs:
           cp -r front/dist asar-temp/front/dist
           cp -r public asar-temp/public
           cp -r package.json asar-temp/package.json
-          
+
           cd asar-temp
           npm install --omit=dev
           cd ..
@@ -51,6 +50,32 @@ jobs:
       - name: Generate SHA256
         run: |
           sha256sum app.asar | cut -d ' ' -f1 > app.asar.sha256
+
+      - name: Split ASAR into 80MB parts
+        run: |
+          mkdir output
+          split -b 80m app.asar output/part_
+          mv app.asar.sha256 output/
+
+      - name: Generate manifest.json
+        run: |
+          cd output
+          FILE_LIST=$(ls part_* | sort | jq -R . | jq -s .)
+          CHECKSUM=$(cat app.asar.sha256)
+          echo "{\"parts\": $FILE_LIST, \"output\": \"app.asar\", \"sha256\": \"$CHECKSUM\"}" > manifest.json
+
+      - name: Push to dist branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+          git checkout --orphan dist-split
+          git reset -q HEAD --
+
+          git add -f -A output
+
+          git commit -m "Upload split ASAR and manifest [skip ci]" || echo "No changes to commit"
+          git push origin dist-split --force
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
