@@ -1,5 +1,6 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { $store } from "#store";
+import navBarView from "#ui/navBar";
 import playListView from "#ui/playList";
 import { updateQueryParam } from "#utils";
 import playerView from ".";
@@ -83,21 +84,33 @@ export function playNext() {
         updateVideoHistoryTime(oldId, 0);
     }, 3000);
 
+    let nextVideoId = $store.nextVideoId.get();
+
     const playlist = $store.playlist.get();
     const playlistIndex = $store.playlistIndex.get() || 0;
     let nextIndex = playlistIndex + 1;
     if (nextIndex >= playlist.length) {
-        if (playerView.loopPlaylist) {
-            nextIndex = 0;
-        } else return;
+        // if -1 then no loop
+        nextIndex = playerView.loopPlaylist ? 0 : -1;
+    }
+    const nextVideoIdTemp = playlist[nextIndex];
+    if (nextVideoIdTemp) {
+        nextVideoId = nextVideoIdTemp;
+        $store.playlistIndex.set(nextIndex);
+        updateQueryParam("pi", (nextIndex).toString());
+        scrollToPlaylistElement();
     }
 
-    const nextVideoId = playlist[nextIndex];
-    if (!nextVideoId) return;
     loadVideo(nextVideoId, true);
-    $store.playlistIndex.set(nextIndex);
-    updateQueryParam("pi", (nextIndex).toString());
-    scrollToPlaylistElement();
+}
+
+function getPrevVideoIdFromStack(i = navBarView.stack.length - 2) {
+    if (i < 0) return;
+    const item = navBarView.stack[i];
+    if (item.view === "video")
+        return new URL(location.origin + item.search).searchParams.get("v");
+    
+    return getPrevVideoIdFromStack(i - 1);
 }
 
 export function playPrev() {
@@ -106,18 +119,26 @@ export function playPrev() {
         updateVideoHistoryTime(oldId, 0);
     }, 3000);
 
-    const playlist = $store.playlist.get();
-    const playlistIndex = $store.playlistIndex.get() || 0;
-    let nextIndex = playlistIndex - 1;
-    if (nextIndex < 0) nextIndex = 0;
+    let prevVideoId = "";
 
-    const nextVideoId = playlist[nextIndex];
-    if (!nextVideoId) return;
+    if ($store.playlistId.get()) {
+        const playlist = $store.playlist.get();
+        const playlistIndex = $store.playlistIndex.get() || 0;
+        let nextIndex = playlistIndex - 1;
+        if (nextIndex < 0) nextIndex = 0;
+        const nextVideoId = playlist[nextIndex];
+        if (nextVideoId) {
+            prevVideoId = nextVideoId;
+            $store.playlistIndex.set(nextIndex);
+            updateQueryParam("pi", (nextIndex).toString());
+            scrollToPlaylistElement();
+        }
+    }
+        
+    if (!prevVideoId) prevVideoId = getPrevVideoIdFromStack();
+    if (!prevVideoId) return
 
-    loadVideo(nextVideoId, true);
-    $store.playlistIndex.set(nextIndex);
-    updateQueryParam("pi", (nextIndex).toString());
-    scrollToPlaylistElement();
+    loadVideo(prevVideoId, true);
 }
 
 export function scrollToPlaylistElement() {

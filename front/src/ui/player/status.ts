@@ -1,9 +1,10 @@
-import { updateVideoHistoryTime, fetchVideoHistoryTime } from "#api/history";
+import { fetchVideoHistoryTime, updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { VideoInfo } from "#types/video";
+import { RecommendationEntry, VideoInfo } from "#types/video";
 import historyView from "#ui/history";
 import navBarView from "#ui/navBar";
+import playListView from "#ui/playList";
 import { updateQueryParam } from "#utils";
 import playerView from ".";
 import { changeView } from "..";
@@ -56,6 +57,15 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
     changeView("video");
     updateQueryParam("v", id);
     navBarView.save("video");
+
+    $store.nextVideoId.set("");
+    playListView.renderRecommendations([]);
+    if (!$store.playlistId.get()) {
+        fetchVQL<RecommendationEntry[]>("api recommendationsData s.limit = 2 s._id = " + id).then(data => {
+            playListView.renderRecommendations(data);
+            if(data.length) $store.nextVideoId.set(data[0]._id);
+        });
+    }
     
     setTimeout(async () => {
         await loadProgress();

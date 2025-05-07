@@ -2,6 +2,7 @@ import { createValtheraAdapter } from "@wxn0brp/vql";
 import { getPlaylistIds, getVideoInfo, searchVideo } from "../apiBack";
 import db from "../db";
 import executorC from "#db/executor";
+import { getRecomended } from "../getRecomended";
 
 function getTTL() {
     const now = Math.floor(new Date().getTime() / 1000);
@@ -18,6 +19,8 @@ export const YouTubeAdapter = createValtheraAdapter({
 
     async find(collection, search) {
         if (collection === "playlist") return await getPlaylistIds(search.url || search._id);
+        if (collection === "recommendations") return await getRecomended(search.url || search._id);
+        if (collection === "recommendationsData") return await getRecomendedData(search.url || search._id, search.limit || 5);
         return [];
     },
 
@@ -88,4 +91,19 @@ async function clearOldCache() {
             db.cache.remove("video-dynamic", { _id: data._id });
         }
     }
+}
+
+async function getRecomendedData(id: string, limit: number = 5) {
+    const ids = await getRecomended(id);
+    const slied = ids.slice(0, limit);
+    
+    const dataRaw = await Promise.all<any>(slied.map(id => apiGetVideo(id, false)));
+    const data = dataRaw.map((d, i) => ({
+        _id: slied[i],
+        title: d.title,
+        thumbnail: d.thumbnail,
+        duration: d.duration,
+        views: d.views
+    }));
+    return data;
 }
