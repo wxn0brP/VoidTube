@@ -85,7 +85,7 @@ export async function getYtDlpPath(): Promise<string> {
     const binPath = path.join(baseDir, binName);
 
     if (!checkIsFileEmpty(binPath)) return binPath;
-    else unlinkSync(binPath);
+    else if (existsSync(binPath)) unlinkSync(binPath);
 
     const url = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + binName;
 
