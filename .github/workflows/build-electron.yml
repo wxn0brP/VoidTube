@@ -75,6 +75,7 @@ jobs:
       - name: ⚙️ Compile TypeScript
         run: |
           npm run build
+          rm -rf public/scss
 
       - name: 🚀 Full build and publish
         if: env.BUILD_TYPE == 'full'
