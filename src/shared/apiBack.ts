@@ -54,7 +54,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
             formats,
         };
     } catch (error) {
-        console.error('Error while getting video info:', error);
+        console.error("Error while getting video info:", error);
         throw error;
     }
 }
@@ -73,7 +73,7 @@ export async function searchVideo(title: string, size: number) {
             views: entry.view_count,
         }));
     } catch (error) {
-        console.error('Error while searching video:', error);
+        console.error("Error while searching video:", error);
         throw error;
     }
 }
@@ -90,7 +90,38 @@ export async function getPlaylistIds(playlist: string) {
         const result = await wrapper(playlist, opts) as any;
         return result.entries.map(entry => entry.id);
     } catch (error) {
-        console.error('Error while getting playlist ids:', error);
+        console.error("Error while getting playlist ids:", error);
+        throw error;
+    }
+}
+
+export async function download(url: string, format: string, dir: string) {
+    try {
+        if (
+            !url.startsWith("https://www.youtube.com/watch?v=") && !url.startsWith("https://youtu.be/")
+        ) {
+            url = `https://www.youtube.com/watch?v=${url}`;
+        }
+
+        const outputTemplate = dir + '/%(title)s.%(ext)s';
+
+        const opts: string[] = [
+            '--output', "'" + outputTemplate + "'",
+        ]
+        if (format == "mp3") {
+            opts.push('--extract-audio');
+            opts.push('--audio-format', 'mp3');
+            opts.push('--audio-quality', '256K');
+        } else {
+            opts.push('--format', "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4");
+        }
+
+        await wrapper<string>(url, {
+            embedThumbnail: true,
+            addMetadata: true,
+        }, opts);
+    } catch (error) {
+        console.error("Error while downloading video:", error);
         throw error;
     }
 }
