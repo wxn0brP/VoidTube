@@ -62,7 +62,8 @@ jobs:
           cd output
           FILE_LIST=$(ls part_* | sort | jq -R . | jq -s .)
           CHECKSUM=$(cat app.asar.sha256)
-          echo "{\"parts\": $FILE_LIST, \"output\": \"app.asar\", \"sha256\": \"$CHECKSUM\"}" > manifest.json
+          COMMIT=$(git rev-parse HEAD)
+          echo "{\"parts\": $FILE_LIST, \"sha256\": \"$CHECKSUM\", \"commit\": \"$COMMIT\"}" > manifest.json
 
       - name: Push to dist branch
         run: |

@@ -7,5 +7,6 @@ dist
 public/css
 internal-db
 release
+resources
 
 .suglite_history
