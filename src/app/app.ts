@@ -1,5 +1,7 @@
 import { app, BrowserWindow, globalShortcut } from "electron";
 process.env.APP_PATH = app.getAppPath() + "/";
+process.env.IS_ELECTRON = "true";
+process.env.DOWNLOAD_PATH = app.getPath("downloads");
 
 await import("../server/index");
 let mainWindow: BrowserWindow;

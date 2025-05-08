@@ -22,7 +22,7 @@ class MetaControlView implements UiComponent {
 
         this.toggleToPlayListBtn.onclick = () => this.toggleToPlayList();
         this.shareBtn.onclick = () => this.share();
-        this.downloadBtn.onclick = this.download.bind(this);
+        this.downloadBtn.onclick = () => this.download();
     }
 
     public async toggleToPlayList(id = $store.videoId.get()) {
@@ -70,11 +70,25 @@ class MetaControlView implements UiComponent {
             ${f.resolution ? " - " + f.resolution : ""}
             `;
         });
+        options.push("Download as mp3");
+        options.push("Download as mp4");
         options.push("Cancel");
+
         const urls = formats.map(f => f.url);
+        urls.push("mp3");
+        urls.push("mp4");
+        urls.push("");
 
         const url = await uiFunc.selectPrompt<string>("Select format", options, urls);
         if (!url || url === "Cancel") return;
+
+        if (url === "mp3" || url === "mp4") {
+            fetchVQL(`api +download d._id = ${$store.videoId.get()} d.format = ${url}`).then(res => {
+                alert("Downloaded to " + res.path);
+            });
+            return;
+        }
+
         window.open(url, "_blank");
     }
 }

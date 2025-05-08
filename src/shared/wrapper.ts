@@ -24,13 +24,18 @@ function flagsConvert(flags: YtFlags): string[] {
         .map(([key, _]) => `--${camelToKebab(key)}`);
 }
 
-async function wrapper(url: string, flags: YtFlags, unknownFlags?: string[]): Promise<YtResponse> {
+async function wrapper<T = YtResponse>(url: string, flags: YtFlags, unknownFlags?: string[]): Promise<T> {
     return new Promise((resolve, reject) => {
         const cmd = `${ytDlp} ${flagsConvert(flags).join(" ")} ${url}` + (unknownFlags ? " " + unknownFlags.join(" ") : "");
         exec(cmd, { maxBuffer: 1024 * 1024 * 100 }, (error, stdout, stderr) => {
             if (stderr) console.log(stderr);
             if (error) return console.error(error);
-            resolve(JSON.parse(stdout));
+
+            if (flags.dumpJson || flags.dumpSingleJson) {
+                resolve(JSON.parse(stdout));
+            } else {
+                resolve(stdout as T);
+            }
         });
     })
 }

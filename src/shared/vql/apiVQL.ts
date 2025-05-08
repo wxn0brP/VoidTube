@@ -1,8 +1,10 @@
 import { createValtheraAdapter } from "@wxn0brp/vql";
-import { getPlaylistIds, getVideoInfo, searchVideo } from "../apiBack";
+import { download, getPlaylistIds, getVideoInfo, searchVideo } from "../apiBack";
 import db from "../db";
 import executorC from "#db/executor";
 import { getRecomended } from "../getRecomended";
+import { existsSync, mkdirSync } from "fs";
+import { resolve } from "path";
 
 function getTTL() {
     const now = Math.floor(new Date().getTime() / 1000);
@@ -15,6 +17,11 @@ clearOldCache();
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
         return ["video", "playlist", "channel"];
+    },
+
+    async add(collection, data) {
+        if (collection === "download") return await downloadVideo(data);
+        return {};
     },
 
     async find(collection, search) {
@@ -106,4 +113,11 @@ async function getRecomendedData(id: string, limit: number = 5) {
         views: d.views
     }));
     return data;
+}
+
+async function downloadVideo(data: { _id: string, format: "mp3" | "mp4" }) {
+    const downloadDir = process.env.DOWNLOAD_PATH || "./downloads";
+    if (!existsSync(downloadDir)) mkdirSync(downloadDir, { recursive: true });
+    await download(data._id, data.format, downloadDir);
+    return { path: resolve(downloadDir) }
 }
