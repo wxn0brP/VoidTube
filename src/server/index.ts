@@ -1,9 +1,8 @@
-import FalconFrame from "@wxn0brp/falcon-frame";
-import { scssMiddleware } from "./scss";
-import VQL from "../shared/vql";
 import { parseStringQuery } from "#vql/cpu/string/index";
-import { readFileSync } from "fs";
+import FalconFrame from "@wxn0brp/falcon-frame";
 import { LogLevelName } from "@wxn0brp/wts-logger";
+import { existsSync, readFileSync } from "fs";
+import VQL from "../shared/vql";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -18,7 +17,10 @@ app.listen(port);
 const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
 if (isDev) console.log("__cwd:", __cwd);
 
-app.use("/css", scssMiddleware(__cwd));
+if (existsSync(__cwd+"public/scss") && existsSync(__cwd+"node_modules/sass")) {
+    const { scssMiddleware } = await import("./scss");
+    app.use("/css", scssMiddleware(__cwd));
+}
 app.static("/", __cwd+"public");
 app.static("/js", __cwd+"front/dist");
 app.static("/src", __cwd+"front/src");

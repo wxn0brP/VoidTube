@@ -40,6 +40,7 @@ jobs:
           cp -r front/dist asar-temp/front/dist
           cp -r public asar-temp/public
           cp -r package.json asar-temp/package.json
+          rm -rf asar-temp/public/scss
 
           cd asar-temp
           npm install --omit=dev
