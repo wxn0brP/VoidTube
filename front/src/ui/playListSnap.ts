@@ -15,7 +15,7 @@ class PlayListSnapView implements UiComponent {
 
     render(data: PlaylistSnapEntry[]) {
         this.container.innerHTML = "";
-        this.container.classList.toggle("fewItems", clamp(0, data.length, 3) > 0);
+        this.container.classList.toggle("fewItems", clamp(0, data.length, 3) != 0);
 
         if (!data.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No Videos</h1>`;

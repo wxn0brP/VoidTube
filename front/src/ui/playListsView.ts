@@ -20,7 +20,7 @@ class PlayListsView implements UiComponent {
 
     render(playlist: PlaylistsEntry[]) {
         this.container.innerHTML = "";
-        this.container.classList.toggle("fewItems", clamp(0, playlist.length, 3) > 0);
+        this.container.classList.toggle("fewItems", clamp(0, playlist.length, 3) != 0);
 
         if (!playlist.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No Playlists</h1>`;
