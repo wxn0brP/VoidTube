@@ -4,7 +4,7 @@ import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { PlaylistsEntry } from "#types/video";
-import { formatTime, setTitle, updateQueryParam } from "#utils";
+import { clamp, formatTime, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
 import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
@@ -20,6 +20,12 @@ class PlayListsView implements UiComponent {
 
     render(playlist: PlaylistsEntry[]) {
         this.container.innerHTML = "";
+        this.container.classList.toggle("fewItems", clamp(0, playlist.length, 3) > 0);
+
+        if (!playlist.length) {
+            this.container.innerHTML = `<h1 style="text-align: center;">No Playlists</h1>`;
+            return;
+        }
         playlist.sort((a, b) => b.last - a.last).forEach((item) => {
             const card = document.createElement("div");
             card.className = "playlistCard";
