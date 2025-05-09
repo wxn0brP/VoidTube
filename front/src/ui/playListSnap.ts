@@ -2,7 +2,7 @@ import { fetchPlaylistSnap } from "#api/playlist";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { PlaylistSnapEntry } from "#types/video";
-import { clamp, fewItems, formatTime, setTitle, updateQueryParam } from "#utils";
+import { fewItems, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
@@ -29,7 +29,7 @@ class PlayListSnapView implements UiComponent {
                 <div style="background-image: url(${entry.info.thumbnail})" class="img"></div>
                 <h3>${entry.info.title}</h3>
                 ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
-                ${entry.info.views.toLocaleString()} views -
+                ${numToLocale(entry.info.views)} views -
                 <div class="btns">
                     <button button title="Playlist" class="btn" data-id="playlist">📂</button>
                 </div>
