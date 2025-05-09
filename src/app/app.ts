@@ -14,8 +14,9 @@ const createWindow = () => {
         webPreferences: {
             preload: import.meta.dirname + "/preload.js",
             nodeIntegration: true,
-            contextIsolation: false,
-            devTools: true,
+            contextIsolation: true,
+            devTools: true,            
+            backgroundThrottling: false,
         },
         resizable: true,
         title: "VoidTube",
@@ -23,11 +24,6 @@ const createWindow = () => {
     });
 
     mainWindow.loadURL(`http://localhost:${port}`);
-
-    mainWindow.on('minimize', () => {
-        mainWindow.minimize();
-    });
-
     registerShortcut("F12", () => {
         mainWindow.webContents.toggleDevTools();
     });
