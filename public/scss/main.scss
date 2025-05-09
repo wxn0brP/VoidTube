@@ -5,21 +5,14 @@ main {
 }
 
 .view {
-    width: calc(100vw - 60px);
     height: calc(100vh - 70px);
+    flex: 1;
     display: flex;
-}
-
-aside {
-    width: 60px;
-    height: 100%;
-    overflow-y: scroll;
-    float: left;
 }
 
 section {
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #video {
@@ -81,6 +74,8 @@ section {
     align-items: center;
     gap: 1rem;
     padding: 0 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 
     button,
     select {

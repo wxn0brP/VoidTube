@@ -1,5 +1,5 @@
 #playlist {
-    width: 500px;
+    width: 400px;
     background-color: #171717;
 
     .videoCard {
@@ -9,13 +9,31 @@
         margin-bottom: 5px;
 
         div {
-            width: 450px;
-            height: 300px;
+            width: 100%;
+            aspect-ratio: 16/9;
             background-image: url("/favicon.svg");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             margin-bottom: 5px;
         }
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    #playlist {
+        width: 300px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #playlist {
+        width: 250px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    #playlist {
+        display: none;
     }
 }
