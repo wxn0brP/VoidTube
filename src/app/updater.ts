@@ -2,12 +2,10 @@ import fs from "fs";
 import crypto from "crypto";
 import path from "path";
 import ky from "ky";
-import { app } from "electron";
 import nofiter from "node-notifier";
 
 const logPrefix = "[VoidTube-quick-updater]";
-const manifestUrl = "https://raw.githubusercontent.com/wxn0brP/VoidTube/dist-split/output/manifest.json";
-const __dirname = app.getAppPath();
+const manifestUrl = "https://raw.githubusercontent.com/wxn0brP/VoidTube/refs/heads/dist-split/output/manifest.json";
 
 async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
     const manifest = await ky<any>(manifestUrl).json();
