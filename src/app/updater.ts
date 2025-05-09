@@ -67,7 +67,12 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
     return true;
 }
 
-await downloadAndAssemble(manifestUrl, path.join(__dirname, "resources")).then(async update => {
+const resourcesDir =
+    path.dirname(process.argv[0]).includes("electron") ?
+        path.join(import.meta.dirname, "..", "..", "resources") :
+        process.resourcesPath;
+
+await downloadAndAssemble(manifestUrl, resourcesDir).then(async update => {
     if (update) {
         await import("./update");
         process.exit(0);
