@@ -3,7 +3,7 @@ import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { SearchEntry } from "../types/video";
-import { clamp, formatTime, updateQueryParam } from "../utils";
+import { clamp, fewItems, formatTime, updateQueryParam } from "../utils";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
 import playerView from "./player";
@@ -15,7 +15,7 @@ class SearchView implements UiComponent {
 
     render(search: SearchEntry[]) {
         this.container.innerHTML = "";
-        this.container.classList.toggle("fewItems", clamp(0, search.length, 3) != 0);
+        fewItems(this.container, search.length);
 
         if (!search.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No Results</h1>`;

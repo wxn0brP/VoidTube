@@ -2,7 +2,7 @@ import { fetchPlaylistSnap } from "#api/playlist";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { PlaylistSnapEntry } from "#types/video";
-import { clamp, formatTime, setTitle, updateQueryParam } from "#utils";
+import { clamp, fewItems, formatTime, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
@@ -15,7 +15,7 @@ class PlayListSnapView implements UiComponent {
 
     render(data: PlaylistSnapEntry[]) {
         this.container.innerHTML = "";
-        this.container.classList.toggle("fewItems", clamp(0, data.length, 3) != 0);
+        fewItems(this.container, data.length);
 
         if (!data.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No Videos</h1>`;
