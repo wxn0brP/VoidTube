@@ -98,3 +98,7 @@ export function setTitle(title: string) {
 export function fewItems(element: HTMLElement, lenght: number) {
     element.classList.toggle("fewItems", length > 0 && lenght <= 3);
 }
+
+export function numToLocale(num: number) {
+    return (num || 0).toLocaleString();
+}

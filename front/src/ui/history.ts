@@ -1,16 +1,16 @@
-import { changeView } from ".";
+import { fetchHistory } from "#api/history";
+import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { HistoryEntry } from "#types/video";
-import { clamp, fewItems, formatTime, levenshtein, setTitle, updateQueryParam } from "#utils";
+import { fewItems, formatTime, levenshtein, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { changeView } from ".";
 import metaControlView from "./metaControl";
 import uiFunc from "./modal";
+import navBarView from "./navBar";
 import playerView from "./player";
 import { loadVideo } from "./player/status";
-import { fetchHistory } from "#api/history";
-import { fetchVQL } from "#api/index";
-import navBarView from "./navBar";
 
 class HistoryView implements UiComponent {
     element: HTMLDivElement;
@@ -42,7 +42,7 @@ class HistoryView implements UiComponent {
                     <div style="background-image: url(${entry.info.thumbnail})" class="img"></div>
                     <h3>${entry.info.title}</h3>
                     ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
-                    ${entry.info.views.toLocaleString()} views -
+                    ${numToLocale(entry.info.views)} views -
                     ${date}
                     <div class="btns">
                         <button button title="Remove" class="btn rm" data-id="rm">Remove</button>

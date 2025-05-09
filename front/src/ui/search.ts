@@ -3,7 +3,7 @@ import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { SearchEntry } from "../types/video";
-import { clamp, fewItems, formatTime, updateQueryParam } from "../utils";
+import { fewItems, formatTime, numToLocale, updateQueryParam } from "../utils";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
 import playerView from "./player";
@@ -30,7 +30,7 @@ class SearchView implements UiComponent {
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>
                 <h3>${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
-                ${entry.views.toLocaleString()} views
+                ${numToLocale(entry.views)} views
                 <div class="btns">
                     <button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                 </div>
