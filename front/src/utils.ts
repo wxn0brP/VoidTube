@@ -37,7 +37,7 @@ export function clearQueryParams(): void {
 mgl.clearQueryParams = clearQueryParams;
 
 export function formatTime(time: number, hasHours: boolean | null = true): string {
-    if (isNaN(time)) return "00:00:00";
+    if (isNaN(time)) return (hasHours ? "00:" : "") + "00:00";
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = Math.floor(time % 60);

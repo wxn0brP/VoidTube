@@ -78,3 +78,30 @@ export async function fetchPlaylistsContainingVideo(videoId: string) {
     const contains = await Promise.all(containsPromise);
     return contains;
 }
+
+export async function fetchPlaylistSnap(id: string) {
+    const query = `
+playlist ${id}
+relations:
+  info:
+    path: [api, video-static]
+    select: [title,duration,thumbnail,views]
+  history:
+    path: [user, history]
+    select: [time]
+
+many: true
+search: {}
+select:
+  _id: 1
+  info:
+    title: 1
+    duration: 1
+    thumbnail: 1
+    views: 1
+  history:
+    time: 1    
+`
+    const data = await fetchVQL(query);
+    return data;
+}

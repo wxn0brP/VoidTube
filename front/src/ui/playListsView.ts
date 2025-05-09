@@ -10,6 +10,7 @@ import uiFunc from "./modal";
 import playListsModal from "./modal/playlists";
 import navBarView from "./navBar";
 import playListView from "./playList";
+import playListSnapView from "./playListSnap";
 
 class PlayListsView implements UiComponent {
     element: HTMLDivElement;
@@ -27,6 +28,7 @@ class PlayListsView implements UiComponent {
 
             this.container.appendChild(card);
         });
+        this.container.classList.toggle("fewItems", playlist.length <= 3);
     }
 
     renderCard(card: HTMLDivElement, item: PlaylistsEntry) {
@@ -38,10 +40,18 @@ class PlayListsView implements UiComponent {
             <div class="btns">
                 <button class="btn rm" data-id="rm">Delete</button>
                 <button class="btn" data-id="rename">Rename</button>
+                <button class="btn" data-id="play">Play</button>
             </div>
         `;
 
         card.addEventListener("click", () => {
+            playListSnapView.loadPlaylist(item._id);
+            playListSnapView.show();
+        });
+
+        card.querySelector(`[data-id=play]`)!.addEventListener("click", (e) => {
+            e.stopPropagation();
+            e.preventDefault();
             playListView.loadPlaylist(item._id);
             playListView.show();
         });

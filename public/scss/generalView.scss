@@ -1,15 +1,25 @@
 #history-container,
 #playlists-container,
+#playlist-snap-container,
 #search-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 5px;
     overflow-y: auto;
     align-items: stretch;
+
+    &.fewItems {
+        grid-template-columns: repeat(4, 300px);
+
+        &>div {
+            max-width: 300px;
+        }
+    }
 }
 
 .historyCard,
 .playlistCard,
+.playlistSnapCard,
 .searchCard {
     border-radius: 8px;
     padding: 1rem;
@@ -51,7 +61,7 @@
 
     button {
         transform: scale(0.7);
-        transform-origin: right top; 
+        transform-origin: right top;
         cursor: pointer;
 
         &.rm {
@@ -62,6 +72,7 @@
 }
 
 @media (max-width: 1400px) {
+
     .historyCard,
     .playlistCard,
     .searchCard {
