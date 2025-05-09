@@ -1,11 +1,6 @@
-const { ipcRenderer } = require('electron');
+const { app } = require("electron");
 
-// contextBridge.exposeInMainWorld('electronAPI', {
-//     downloadVideo: (url) => ipcRenderer.invoke('download-video', url),
-// });
-
-// console.log("preload.js")
-
-// (window as any).electronAPI = {
-//     downloadVideo: (url) => ipcRenderer.invoke('download-video', url),
-// }
+app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
+app.commandLine.appendSwitch("disable-background-timer-throttling");
+app.commandLine.appendSwitch("disable-renderer-backgrounding");
+app.commandLine.appendSwitch("disable-backgrounding-occluded-windows");
