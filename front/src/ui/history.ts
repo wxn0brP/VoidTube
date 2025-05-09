@@ -101,7 +101,7 @@ class HistoryView implements UiComponent {
 
         // quick load
         setTimeout(() => {
-            this.loadHistory(24);
+            this.loadHistory(128);
         }, 100);
         // load all history
         setTimeout(() => {

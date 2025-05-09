@@ -28,6 +28,7 @@ export const YouTubeAdapter = createValtheraAdapter({
         if (collection === "playlist") return await getPlaylistIds(search.url || search._id);
         if (collection === "recommendations") return await getRecomended(search.url || search._id);
         if (collection === "recommendationsData") return await getRecomendedData(search.url || search._id, search.limit || 5);
+        if (collection === "video-static") return await apiGetVideos(search);
         return [];
     },
 
@@ -39,25 +40,21 @@ export const YouTubeAdapter = createValtheraAdapter({
     }
 });
 
-async function apiGetVideo(url: string, dynamic = true) {
+async function apiGetVideo(url: string, dynamic = true, staticData?: any) {
+    if (staticData !== false) staticData = await db.cache.findOne("video-static", { _id: url });
+    if (!dynamic && staticData) return staticData;
+
     async function fn() {
         const dynamicData = dynamic && await db.cache.findOne("video-dynamic", { _id: url });
-        const staticData = await db.cache.findOne("video-static", { _id: url });
 
-        if (dynamic) {
-            if (staticData && dynamicData) {
-                if (dynamicData.ttl > Math.floor(new Date().getTime() / 1000)) {
-                    const data = { ...staticData, ...dynamicData };
-                    delete data.ttl;
-                    delete data.url;
-                    return data;
-                } else {
-                    db.cache.remove("video-dynamic", { url });
-                }
-            }
-        } else {
-            if (staticData) {
-                return staticData;
+        if (dynamic && staticData && dynamicData) {
+            if (dynamicData.ttl > Math.floor(new Date().getTime() / 1000)) {
+                const data = { ...staticData, ...dynamicData };
+                delete data.ttl;
+                delete data.url;
+                return data;
+            } else {
+                db.cache.remove("video-dynamic", { url });
             }
         }
 
@@ -81,7 +78,7 @@ async function apiGetVideo(url: string, dynamic = true) {
                 formats: data.formats,
                 ttl: getTTL(),
             };
-    
+
             await db.cache.add("video-dynamic", dynamicDataPayload);
         }
 
@@ -103,7 +100,7 @@ async function clearOldCache() {
 async function getRecomendedData(id: string, limit: number = 5) {
     const ids = await getRecomended(id);
     const slied = ids.slice(0, limit);
-    
+
     const dataRaw = await Promise.all<any>(slied.map(id => apiGetVideo(id, false)));
     const data = dataRaw.map((d, i) => ({
         _id: slied[i],
@@ -120,4 +117,19 @@ async function downloadVideo(data: { _id: string, format: "mp3" | "mp4" }) {
     if (!existsSync(downloadDir)) mkdirSync(downloadDir, { recursive: true });
     await download(data._id, data.format, downloadDir);
     return { path: resolve(downloadDir) }
+}
+
+async function apiGetVideos(search: any) {
+    const staticData = await db.cache.find("video-static", search);
+    const ids = search.$in._id;
+
+    if (ids.length !== staticData.length) {
+        const missingIds = ids.filter(id => !staticData.find(d => d._id === id));
+        if (missingIds.length) {
+            const missingData = await Promise.all(missingIds.map(id => apiGetVideo(id, false, false)));
+            staticData.push(...missingData);
+        }
+    }
+
+    return staticData;
 }

@@ -85,7 +85,8 @@ class PlayListsView implements UiComponent {
             (play) => this.render(play),
             (item) => this.renderCard(this.container.querySelector(`#playlist-${item._id}`)!, item)
         );
-        this.render(playlists)
+        this.render(playlists);
+        $store.playlistsCache.set(playlists);
         return playlists;
     }
 
