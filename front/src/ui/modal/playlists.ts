@@ -1,5 +1,6 @@
 import { fetchVQL } from "#api/index";
 import { fetchPlaylists } from "#api/playlist";
+import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { PlaylistsEntry } from "#types/video";
 import playListsView from "#ui/playListsView";
@@ -30,6 +31,7 @@ class PlayListsModal implements UiComponent {
             card.addEventListener("click", () => {
                 this.callback(item._id);
                 this.hide();
+                $store.playlistsCache.set([]);
             });
 
             this.container.appendChild(card);
@@ -67,9 +69,10 @@ class PlayListsModal implements UiComponent {
         this.callback = cfg.callback;
         if (cfg.reRenderCallback) this.reRenderCallback = cfg.reRenderCallback;
 
-        const playlists = cfg.playlists || await fetchPlaylists();
+        const playlists = cfg.playlists || $store.playlistsCache.get() || await fetchPlaylists();
         this.render(playlists);
         this.reRenderCallback?.();
+        $store.playlistsCache.set(playlists);
 
         this.element.fadeIn();
     }

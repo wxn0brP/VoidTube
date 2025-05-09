@@ -1,5 +1,5 @@
 import { mgl } from "../mgl";
-import { VideoCache, VideoInfo } from "../types/video";
+import { PlaylistsEntry, VideoCache, VideoInfo } from "../types/video";
 import { createStore } from "./store";
 
 const initData = {
@@ -18,8 +18,11 @@ const initData = {
         history: false,
         playlists: false,
         search: false,
+        playlistSnap: false,
     },
     loader: 0,
+
+    playlistsCache: [] as PlaylistsEntry[],
 }
 
 export const $store = createStore(initData);
