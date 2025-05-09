@@ -94,3 +94,7 @@ export function setTitle(title: string) {
     if (title && title.trim() !== "") title = " | " + title;
     document.title = baseTitle + (title || "");
 }
+
+export function fewItems(element: HTMLElement, lenght: number) {
+    element.classList.toggle("fewItems", length > 0 && lenght <= 3);
+}

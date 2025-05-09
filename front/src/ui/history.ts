@@ -3,7 +3,7 @@ import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { HistoryEntry } from "#types/video";
-import { clamp, formatTime, levenshtein, setTitle, updateQueryParam } from "#utils";
+import { clamp, fewItems, formatTime, levenshtein, setTitle, updateQueryParam } from "#utils";
 import metaControlView from "./metaControl";
 import uiFunc from "./modal";
 import playerView from "./player";
@@ -19,7 +19,7 @@ class HistoryView implements UiComponent {
 
     render(history: HistoryEntry[]) {
         this.container.innerHTML = "";
-        this.container.classList.toggle("fewItems", clamp(0, history.length, 3) != 0);
+        fewItems(this.container, history.length);
 
         if (!history.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No history</h1>`;
