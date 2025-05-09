@@ -19,6 +19,7 @@ class HistoryView implements UiComponent {
 
     render(history: HistoryEntry[]) {
         this.container.innerHTML = "";
+        this.container.classList.toggle("fewItems", history.length <= 3);
 
         if (!history.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No history</h1>`;
@@ -50,6 +51,11 @@ class HistoryView implements UiComponent {
                 `
 
                 card.addEventListener("click", () => {
+                    $store.playlistId.set("");
+                    $store.playlist.set([]);
+                    $store.playlistIndex.set(0);
+                    updateQueryParam("p", undefined);
+                    updateQueryParam("pi", undefined);
                     loadVideo(entry._id, !playerView.paused);
                 });
 

@@ -31,8 +31,13 @@ class SearchView implements UiComponent {
             `
 
             card.addEventListener("click", () => {
+                $store.playlistId.set("");
+                $store.playlist.set([]);
+                $store.playlistIndex.set(0);
                 updateQueryParam("v", entry.id);
                 updateQueryParam("query", undefined);
+                updateQueryParam("p", undefined);
+                updateQueryParam("pi", undefined);
                 loadVideo(entry.id, !playerView.paused);
             });
 
@@ -44,6 +49,7 @@ class SearchView implements UiComponent {
 
             this.container.appendChild(card);
         });
+        this.container.classList.toggle("fewItems", search.length <= 3);
     }
 
     mount(): void {

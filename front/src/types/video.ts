@@ -77,3 +77,17 @@ export interface RecommendationEntry {
     duration: number;
     views: number;
 }
+
+export interface PlaylistSnapEntry {
+    _id: string;
+    time: number;
+    info: {
+        title: string;
+        duration: number;
+        thumbnail: string;
+        views: number;
+    };
+    history: {
+        time: number;
+    };
+}

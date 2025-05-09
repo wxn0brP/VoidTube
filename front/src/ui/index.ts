@@ -15,6 +15,7 @@ import { mgl } from "../mgl";
 import playListsModal from "./modal/playlists";
 import asideView from "./aside";
 import navBarView from "./navBar";
+import playListSnapView from "./playListSnap";
 
 export const components = [
     playerView,
@@ -32,6 +33,7 @@ export const components = [
     playListsModal,
     asideView,
     navBarView,
+    playListSnapView,
 ]
 
 components.forEach(component => component.mount());
