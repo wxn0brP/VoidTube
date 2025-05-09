@@ -1,83 +1,48 @@
-.lds-ellipsis,
-.lds-ellipsis div {
+.lds-ring,
+.lds-ring div {
     box-sizing: border-box;
 }
 
-.lds-ellipsis {
-    --value: "1";
-    --size: 20px;
+.lds-ring {
     display: inline-block;
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 40px;
+    height: 40px;
+    margin-right: -7px;
+    text-align: center;
 }
 
-.lds-ellipsis div::before {
-    content: var(--value);
-    color: black;
-    font-size: 15px;
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-51%, -51%);
-}
-
-.lds-ellipsis div {
-    position: absolute;
-    top: 33px;
-    width: var(--size);
-    height: var(--size);
+    width: 80%;
+    height: 80%;
+    margin: 4px;
+    border: 3px solid var(--accent);
     border-radius: 50%;
-    background: currentColor;
-    animation-timing-function: ease-in-out;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: var(--accent) transparent transparent transparent;
 }
 
-.lds-ellipsis div:nth-child(1) {
-    left: 8px;
-    animation: lds-ellipsis1 0.6s infinite;
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
 }
 
-.lds-ellipsis div:nth-child(2) {
-    left: 8px;
-    animation: lds-ellipsis2 0.6s infinite;
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
 }
 
-.lds-ellipsis div:nth-child(3) {
-    left: 32px;
-    animation: lds-ellipsis2 0.6s infinite;
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
 }
 
-.lds-ellipsis div:nth-child(4) {
-    left: 56px;
-    animation: lds-ellipsis3 0.6s infinite;
-}
-
-@keyframes lds-ellipsis1 {
+@keyframes lds-ring {
     0% {
-        transform: scale(0);
+        transform: rotate(0deg);
     }
 
     100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes lds-ellipsis3 {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(0);
-    }
-}
-
-@keyframes lds-ellipsis2 {
-    0% {
-        transform: translate(0, 0);
-    }
-
-    100% {
-        transform: translate(24px, 0);
+        transform: rotate(360deg);
     }
 }
