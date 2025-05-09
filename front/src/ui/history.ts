@@ -19,7 +19,7 @@ class HistoryView implements UiComponent {
 
     render(history: HistoryEntry[]) {
         this.container.innerHTML = "";
-        this.container.classList.toggle("fewItems", clamp(0, history.length, 3) > 0);
+        this.container.classList.toggle("fewItems", clamp(0, history.length, 3) != 0);
 
         if (!history.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No history</h1>`;

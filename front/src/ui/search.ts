@@ -15,7 +15,7 @@ class SearchView implements UiComponent {
 
     render(search: SearchEntry[]) {
         this.container.innerHTML = "";
-        this.container.classList.toggle("fewItems", clamp(0, search.length, 3) > 0);
+        this.container.classList.toggle("fewItems", clamp(0, search.length, 3) != 0);
 
         if (!search.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No Results</h1>`;
