@@ -1,8 +1,11 @@
 aside {
-    padding-inline: 1px;
-    overflow-y: scroll;
+    width: 70px;
+    height: 100%;
+    float: left;
+    overflow-y: auto;
     overflow-x: hidden;
     background-color: #0c0c0c;
+
     div {
         padding: 2px;
         cursor: pointer;
