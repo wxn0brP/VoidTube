@@ -1,3 +1,4 @@
+import { fetchVQL } from "#api/index";
 import { UiComponent } from "#types/ui";
 import { changeView } from ".";
 
@@ -21,6 +22,13 @@ class NavBarView implements UiComponent {
 
         this.undoBtn.onclick = () => this.undo();
         this.redoBtn.onclick = () => this.redo();
+
+        this.element.querySelector("b").addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            fetchVQL("api self-version!").then(({ version }) => {
+                alert(`Version: ${version}`);
+            });
+        })
     }
 
     undo() {

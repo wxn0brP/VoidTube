@@ -29,6 +29,7 @@ export const YouTubeAdapter = createValtheraAdapter({
         if (collection === "recommendations") return await getRecomended(search.url || search._id);
         if (collection === "recommendationsData") return await getRecomendedData(search.url || search._id, search.limit || 5);
         if (collection === "video-static") return await apiGetVideos(search);
+        if (collection === "self-version") return { version: process.env.VOIDTUBE_VERSION || "unknown" };
         return [];
     },
 

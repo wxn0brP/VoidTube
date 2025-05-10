@@ -24,6 +24,7 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
         const currentVersion = fs.readFileSync(gitvvPath, "utf-8").trim();
         if (currentVersion === manifest.commit) {
             console.log(logPrefix, `Current version (${currentVersion}) matches manifest. Skipping update.`);
+            process.env.VOIDTUBE_VERSION = currentVersion;
             return false;
         } else {
             console.log(logPrefix, `Local version (${currentVersion}) != remote (${manifest.commit}), updating...`);
