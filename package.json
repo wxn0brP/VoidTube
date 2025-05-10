@@ -32,6 +32,7 @@
         "@wxn0brp/falcon-frame": "github:wxn0brP/FalconFrame#dist",
         "@wxn0brp/vql": "^0.1.6",
         "@wxn0brp/wts-logger": "github:wxn0brP/ts-shared#dist-logger",
+        "ky": "^1.8.1",
         "node-notifier": "^10.0.1"
     },
     "author": {
