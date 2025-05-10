@@ -86,6 +86,11 @@ section {
         cursor: pointer;
         color: var(--txt);
     }
+
+    select option {
+        background-color: var(--bg);
+        color: var(--txt);
+    }
 }
 
 #playlists-view {
