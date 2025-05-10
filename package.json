@@ -32,8 +32,7 @@
         "@wxn0brp/falcon-frame": "github:wxn0brP/FalconFrame#dist",
         "@wxn0brp/vql": "^0.1.6",
         "@wxn0brp/wts-logger": "github:wxn0brP/ts-shared#dist-logger",
-        "node-notifier": "^10.0.1",
-        "puppeteer": "^24.8.2"
+        "node-notifier": "^10.0.1"
     },
     "author": {
         "name": "wxn0brP",
