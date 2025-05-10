@@ -47,6 +47,7 @@ class PlayListsView implements UiComponent {
                 <button class="btn rm" data-id="rm">Delete</button>
                 <button class="btn" data-id="rename">Rename</button>
                 <button class="btn" data-id="play">Play</button>
+                <button class="btn" data-id="export">Export</button>
             </div>
         `;
 
@@ -84,6 +85,18 @@ class PlayListsView implements UiComponent {
             await fetchVQL(`user updateOne playlist s._id = ${item._id} u.name = ${name} u.last = ${Math.floor(Date.now() / 1000)}`);
             await this.loadPlaylists();
         });
+
+        card.querySelector(`[data-id=export]`)!.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            fetchVQL(`playlist ${item._id}`).then((res: { _id: string }[]) => {
+                const ids = res.map(i => i._id);
+                const link = document.createElement("a");
+                link.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(ids))}`;
+                link.download = `${item.name}.json`;
+                link.click();
+            });
+        });
     }
 
     async loadPlaylists() {
@@ -113,7 +126,7 @@ class PlayListsView implements UiComponent {
         this.importPlaylistBtn.onclick = async () => {
             const from = await uiFunc.selectPrompt(
                 "Import playlist from",
-                ["YouTube", "URLs/IDs", "FreeTube", "Cancel"]
+                ["YouTube", "URLs/IDs", "VoidTube", "FreeTube", "Cancel"]
             );
             if (!from || from === "Cancel") return;
 
@@ -131,6 +144,22 @@ class PlayListsView implements UiComponent {
                         .trim()
                         .replace("https://www.youtube.com/watch?v=", "")
                         .replace("https://youtu.be/", "");
+                });
+            } else if (from === "VoidTube") {
+                ids = await new Promise<string[]>(r => {
+                    const fileA = document.createElement("input");
+                    fileA.type = "file";
+                    fileA.accept = ".json,.db";
+                    fileA.click();
+                    fileA.onchange = () => {
+                        const file = fileA.files![0];
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            const data = JSON.parse(reader.result as string);
+                            r(data as string[]);
+                        };
+                        reader.readAsText(file);
+                    };
                 });
             } else if (from === "FreeTube") {
                 ids = await new Promise<string[]>(r => {
