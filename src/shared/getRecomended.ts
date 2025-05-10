@@ -28,7 +28,9 @@ async function dumpPageHTML(url: string) {
         }
     });
 
+    win.webContents.setAudioMuted(true);
     await win.loadURL(url, { userAgent: 'Mozilla/5.0' });
+    win.webContents.setAudioMuted(true);
 
     await new Promise(res => setTimeout(res, 1000));
 
