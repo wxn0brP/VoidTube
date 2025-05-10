@@ -7,9 +7,11 @@ const regexUrl = /https?:\/\/[^\s"']+/g;
 let browserType = process.env.BROWSER as any;
 if (!browserType) {
     browserType = await findChromeExecutable();
+    if (browserType) browserType = "chrome";
 }
 if (!browserType) {
     browserType = await findFirefoxExecutable();
+    if (browserType) browserType = "firefox";
 }
 if (!browserType) {
     browserType = "chrome";
