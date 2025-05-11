@@ -95,8 +95,8 @@ export function setTitle(title: string) {
     document.title = baseTitle + (title || "");
 }
 
-export function fewItems(element: HTMLElement, lenght: number) {
-    element.classList.toggle("fewItems", length > 0 && lenght <= 3);
+export function fewItems(element: HTMLElement, length: number) {
+    element.classList.toggle("fewItems", length > 0 && length <= 3);
 }
 
 export function numToLocale(num: number) {

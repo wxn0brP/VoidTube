@@ -19,7 +19,6 @@ user history
 relations:
   info:
     path: [api, video-static]
-    select: [title,description]
 
 many: true
 ${limit ? `options: 

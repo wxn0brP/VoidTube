@@ -17,7 +17,6 @@ playlist ${playlist._id}
 relations:
   info:
     path: [api, video-static]
-    select: [thumbnail,duration]
 
 many: true
 search: {}

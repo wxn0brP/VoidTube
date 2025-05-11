@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VQL Playground</title>
     <link rel="shortcut icon" href="favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="loader.css">
     <style>
+        :root {
+            --accent: #ff0000;
+        }
         body {
             background: #0e0e0e;
             color: #fff;
@@ -38,6 +42,14 @@
     <br><br>
     <button>Run</button><button>Preview</button>
     <br>
+    <div id="loader" class="lds-ring" style="opacity: 0;">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <span id="loader-value">0</span>
+    </div>
+    <br>
     Res:
     <br>
     <pre id="p1"></pre>
@@ -47,20 +59,33 @@
     <script>
         const title = document.querySelector("title");
         const titleBase = title.textContent;
+        const loader = document.querySelector("#loader");
+        const loaderValue = document.querySelector("#loader-value");
+        let loaderI = 0;
 
         async function fetchVQL(query) {
+            loaderI++;
+            loaderValue.textContent = loaderI;
+            loader.style.opacity = loaderI > 0 ? "1" : "0";
             const start = Date.now();
-            const response = await fetch(`/VQL`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ query })
-            }).then(res => res.json());
+            try {
+                const response = await fetch(`/VQL`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ query })
+                }).then(res => res.json());
 
-            const end = Date.now();
-            title.textContent = `${titleBase} (${end - start}ms)`;
-            return response;
+                const end = Date.now();
+                title.textContent = `${titleBase} (${end - start}ms)`;
+                return response;
+            } catch (e) {
+                console.error(e);
+            } finally {
+                loaderI--;
+                loader.style.opacity = loaderI > 0 ? "1" : "0";
+            }
         }
         async function fetchVQL2(query) {
             const response = await fetch(`/VQL2`, {
@@ -80,12 +105,12 @@
         button.addEventListener("click", async () => {
             pre1.textContent = "";
             const query = textarea.value;
-            const response = await fetchVQL(query);
-            pre1.textContent = JSON.stringify(response, null, 2);
-
-            pre2.textContent = "";
+            
             const response2 = await fetchVQL2(query);
             pre2.textContent = JSON.stringify(response2, null, 2);
+
+            const response = await fetchVQL(query);
+            pre1.textContent = JSON.stringify(response, null, 2);
         });
 
         prev.addEventListener("click", async () => {
