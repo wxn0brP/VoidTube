@@ -89,7 +89,7 @@ export async function getYtDlpPath(): Promise<string> {
 
     const url = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + binName;
 
-    console.log(`Downloading yt-dlp to: ${binPath}`);
+    console.log(`[VoidTube] Downloading yt-dlp to: ${binPath}`);
     await downloadFile(url, binPath);
 
     if (process.platform !== "win32") {

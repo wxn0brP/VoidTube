@@ -9,7 +9,7 @@ export function scssMiddleware(cwd: string): RouteHandler {
         const srcPath = path.join(cwd, "public", req.path.replaceAll("css", "scss"));
 
         if (!existsSync(srcPath)) {
-            console.log("File not found:", srcPath);
+            console.log("[VoidTube-SERVER] File not found:", srcPath);
             return next();
         }
 
