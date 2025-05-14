@@ -3,8 +3,7 @@ import { FFRequest } from "@wxn0brp/falcon-frame/dist/types";
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 
-const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
-const dir = __cwd + "internal-db/avatars";
+const dir = "internal-db/avatars";
 
 if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
 

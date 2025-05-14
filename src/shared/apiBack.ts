@@ -146,7 +146,6 @@ export async function getChannelInfo(channelUrl: string) {
         const opts = Object.assign({}, options, { flatPlaylist: true, });
 
         const result = await wrapper(channelUrl + "/about", opts);
-        writeFileSync("data.json", JSON.stringify(result, null, 2));
         return {
             short_id: result.id,
             id: result.channel_id,
