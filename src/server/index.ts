@@ -8,7 +8,7 @@ import avatarHandler from "./avatar";
 const isDev = process.env.NODE_ENV === "development";
 
 const app = new FalconFrame({
-    loggerName: "void-tube-server",
+    loggerName: "VoidTube-SERVER",
     logLevel: process.env.FALCON_LOG_LEVEL as LogLevelName || isDev ? "INFO" : "ERROR"
 });
 
@@ -16,7 +16,7 @@ const port = parseInt(process.env.PORT) || 29848;
 app.listen(port);
 
 const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
-if (isDev) console.log("__cwd:", __cwd);
+if (isDev) console.log("[VoidTube-SERVER] __cwd:", __cwd);
 
 if (existsSync(__cwd+"public/scss") && existsSync(__cwd+"node_modules/sass")) {
     const { scssMiddleware } = await import("./scss");
@@ -64,7 +64,7 @@ app.post("/VQL2", async (req, res) => {
 
 app.get("/avatar", avatarHandler);
 
-console.log(`Server started on http://localhost:${port}`);
+console.log(`[VoidTube-SERVER] Server started on http://localhost:${port}`);
 
 // process.on("unhandledRejection", (reason, p) => {
 //     console.error("Unhandled Rejection at: Promise", p, "reason:", reason);

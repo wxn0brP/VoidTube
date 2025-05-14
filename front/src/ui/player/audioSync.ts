@@ -57,7 +57,6 @@ export function setupAudioSync() {
             playerView.videoEl.pause();
         });
         navigator.mediaSession.setActionHandler("seekbackward", () => {
-            console.log("seekbackward");
             playerView.videoEl.currentTime = Math.max(0, playerView.videoEl.currentTime - 5);
             playerView.audioEl.currentTime = playerView.videoEl.currentTime;
         });
