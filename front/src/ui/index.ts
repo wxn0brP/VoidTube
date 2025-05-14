@@ -16,6 +16,7 @@ import playListsModal from "./modal/playlists";
 import asideView from "./aside";
 import navBarView from "./navBar";
 import playListSnapView from "./playListSnap";
+import channelView from "./channel";
 
 export const components = [
     playerView,
@@ -34,6 +35,7 @@ export const components = [
     asideView,
     navBarView,
     playListSnapView,
+    channelView,
 ]
 
 components.forEach(component => component.mount());

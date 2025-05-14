@@ -6,6 +6,7 @@ import { UiComponent } from "#types/ui";
 import { HistoryEntry } from "#types/video";
 import { fewItems, formatTime, levenshtein, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
+import channelView from "./channel";
 import metaControlView from "./metaControl";
 import uiFunc from "./modal";
 import navBarView from "./navBar";
@@ -44,6 +45,7 @@ class HistoryView implements UiComponent {
                     ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
                     ${numToLocale(entry.info.views)} views -
                     ${date}
+                    <a href="/?channel=${entry.info.channel}">${entry.info.channel}</a>
                     <div class="btns">
                         <button button title="Remove" class="btn rm" data-id="rm">Remove</button>
                         <button button title="Playlist" class="btn" data-id="playlist">📂</button>
@@ -56,7 +58,18 @@ class HistoryView implements UiComponent {
                     $store.playlistIndex.set(0);
                     updateQueryParam("p", undefined);
                     updateQueryParam("pi", undefined);
-                    loadVideo(entry._id, !playerView.paused);
+                    loadVideo(entry._id, true);
+                });
+
+                card.addEventListener("contextmenu", (e) => {
+                    e.preventDefault();
+                    window.open(window.location.origin + "/?v=" + entry._id);
+                });
+
+                card.querySelector(`a`)!.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    channelView.load(entry.info.channel);
                 });
 
                 card.querySelector(`[data-id=rm]`)!.addEventListener("click", async (e) => {

@@ -129,3 +129,31 @@ section {
 #search-view, #playlist-snap {
     flex-direction: column;
 }
+
+#channel-view {
+    padding: 0 10px;
+    flex-direction: column;
+
+    #channel-banner {
+        width: 100%;
+        max-height: 200px;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    #channel-avatar {
+        width: 100px;
+        height: 100px;
+        padding: 1px solid var(--accent);
+        border-radius: 10%;
+        object-fit: cover;
+    }
+
+    &>div:nth-child(2) {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 15px;
+    }
+}

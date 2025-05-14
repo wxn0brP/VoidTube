@@ -3,6 +3,7 @@ import FalconFrame from "@wxn0brp/falcon-frame";
 import { LogLevelName } from "@wxn0brp/wts-logger";
 import { existsSync, readFileSync } from "fs";
 import VQL from "../shared/vql";
+import avatarHandler from "./avatar";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -60,6 +61,8 @@ app.post("/VQL2", async (req, res) => {
         return { err: true, msg: e.message };
     }
 });
+
+app.get("/avatar", avatarHandler);
 
 console.log(`Server started on http://localhost:${port}`);
 
