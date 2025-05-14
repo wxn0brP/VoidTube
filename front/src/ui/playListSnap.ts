@@ -41,7 +41,12 @@ class PlayListSnapView implements UiComponent {
                 $store.playlistIndex.set(0);
                 updateQueryParam("p", undefined);
                 updateQueryParam("pi", undefined);
-                loadVideo(entry._id, !playerView.paused);
+                loadVideo(entry._id, true);
+            });
+
+            card.addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+                window.open(window.location.origin + "/?v=" + entry._id);
             });
 
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {

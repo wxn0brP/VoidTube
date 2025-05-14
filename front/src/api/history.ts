@@ -37,6 +37,7 @@ select:
     uploadDate: 1
     views: 1
     thumbnail: 1
+    channel: 1
     `.trim();
     return await fetchVQL<HistoryEntry[]>(query);
 }

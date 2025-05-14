@@ -56,6 +56,11 @@ class PlayListsView implements UiComponent {
             playListSnapView.show();
         });
 
+        card.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+            window.open(window.location.origin + "/?p=" + item._id);
+        });
+
         card.querySelector(`[data-id=play]`)!.addEventListener("click", (e) => {
             e.stopPropagation();
             e.preventDefault();

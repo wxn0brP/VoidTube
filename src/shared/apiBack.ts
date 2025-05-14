@@ -1,3 +1,4 @@
+import { writeFileSync } from "fs";
 import { wrapper } from "./wrapper";
 
 const options = {
@@ -8,6 +9,7 @@ const options = {
 
 export async function getVideoInfo(videoUrl: string, withFormats: boolean = false) {
     try {
+        if (videoUrl === "undefined") throw new Error("Unknown video");
         if (
             !videoUrl.startsWith("https://www.youtube.com/watch?v=") && !videoUrl.startsWith("https://youtu.be/")
         ) {
@@ -31,6 +33,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
             uploadDate: result.upload_date,
             views: result.view_count,
             likes: result.like_count,
+            channel: result.channel_id,
         };
 
         if (!withFormats) return baseInfo;
@@ -61,6 +64,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
 
 export async function searchVideo(title: string, size: number) {
     try {
+        if (title === "undefined") throw new Error("Unknown video");
         const opts = Object.assign({}, options, {
             flatPlaylist: true,
         })
@@ -71,6 +75,7 @@ export async function searchVideo(title: string, size: number) {
             thumbnail: entry.thumbnails[entry.thumbnails.length - 1].url,
             duration: entry.duration,
             views: entry.view_count,
+            channel: entry.channel_id,
         }));
     } catch (error) {
         console.error("Error while searching video:", error);
@@ -80,6 +85,7 @@ export async function searchVideo(title: string, size: number) {
 
 export async function getPlaylistIds(playlist: string) {
     try {
+        if (playlist === "undefined") throw new Error("Unknown playlist");
         if (!playlist.startsWith("https://www.youtube.com/playlist?list=")) {
             playlist = `https://www.youtube.com/playlist?list=${playlist}`;
         }
@@ -97,6 +103,7 @@ export async function getPlaylistIds(playlist: string) {
 
 export async function download(url: string, format: string, dir: string) {
     try {
+        if (url === "undefined") throw new Error("Unknown video");
         if (
             !url.startsWith("https://www.youtube.com/watch?v=") && !url.startsWith("https://youtu.be/")
         ) {
@@ -126,6 +133,36 @@ export async function download(url: string, format: string, dir: string) {
     }
 }
 
+export async function getChannelInfo(channelUrl: string) {
+    try {
+        if (channelUrl === "undefined") throw new Error("Unknown channel");
+        if (channelUrl.startsWith("@")) {
+            channelUrl = `https://www.youtube.com/${channelUrl}`;
+        }
+        if (!channelUrl.startsWith("https://www.youtube.com/")) {
+            channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
+        }
+
+        const opts = Object.assign({}, options, { flatPlaylist: true, });
+
+        const result = await wrapper(channelUrl + "/about", opts);
+        writeFileSync("data.json", JSON.stringify(result, null, 2));
+        return {
+            short_id: result.id,
+            id: result.channel_id,
+            name: result.title,
+            description: result.description,
+            thumbnails: result.thumbnails,
+            // @ts-ignore
+            subscribers: result.channel_subscribers_count || result.channel_follower_count,
+
+        };
+    } catch (error) {
+        console.error('Error while fetching channel info:', error);
+        throw error;
+    }
+}
+
 // export async function getPlaylistInfo(playlistUrl: string) {
 //     try {
 //         const opts = Object.assign({}, options, { flatPlaylist: true, });
@@ -150,27 +187,27 @@ export async function download(url: string, format: string, dir: string) {
 //     }
 // }
 
-// export async function getChannelVideos(channelUrl: string) {
-//     try {
-//         const opts = Object.assign({}, options, { flatPlaylist: true, });
+export async function getChannelVideos(channelUrl: string) {
+    try {
+        if (channelUrl === "undefined") throw new Error("Unknown channel");
+        const opts = Object.assign({}, options, { flatPlaylist: true, });
 
-//         if (!channelUrl.startsWith("https://www.youtube.com/channel/")) {
-//             channelUrl = `https://www.youtube.com/channel/${channelUrl}/videos`;
-//         }
+        if (!channelUrl.startsWith("https://www.youtube.com/")) {
+            channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
+        }
 
-//         const result = await wrapper(channelUrl, opts);
+        const result = await wrapper(channelUrl + "/videos", opts);
 
-//         // @ts-ignore
-//         return result.entries.map(entry => ({
-//             title: entry.title,
-//             url: entry.url,
-//             thumbnail: entry.thumbnail,
-//             duration: entry.duration,
-//             uploadDate: entry.upload_date,
-//             views: entry.view_count,
-//         }));
-//     } catch (error) {
-//         console.error('Error while fetching channel videos:', error);
-//         throw error;
-//     }
-// }
+        // @ts-ignore
+        return result.entries.map(entry => ({
+            title: entry.title,
+            id: entry.id,
+            thumbnail: entry.thumbnails[entry.thumbnails.length - 1].url,
+            duration: entry.duration,
+            views: entry.view_count,
+        }));
+    } catch (error) {
+        console.error('Error while fetching channel videos:', error);
+        throw error;
+    }
+}

@@ -19,6 +19,7 @@ const initData = {
         playlists: false,
         search: false,
         playlistSnap: false,
+        channel: false
     },
     loader: 0,
 

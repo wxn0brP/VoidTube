@@ -40,6 +40,7 @@ export interface HistoryEntry {
         uploadDate: string;
         views: number;
         thumbnail: string;
+        channel: string;
     };
 }
 

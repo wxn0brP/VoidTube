@@ -47,6 +47,11 @@ class SearchView implements UiComponent {
                 loadVideo(entry.id, !playerView.paused);
             });
 
+            card.addEventListener("contextmenu", (e) => {
+                e.preventDefault();
+                window.open(window.location.origin + "/?v=" + entry.id);
+            });
+
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
