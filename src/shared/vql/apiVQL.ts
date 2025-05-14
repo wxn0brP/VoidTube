@@ -157,8 +157,7 @@ async function channelInfo(_id: string) {
     }
 
     const data = await getChannelInfo(_id);
-    await db.cache.add("channel", {
-        _id,
+    await db.cache.updateOneOrAdd("channel", { _id }, {
         ttl: getTTL(),
         ...data
     });
