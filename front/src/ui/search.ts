@@ -3,10 +3,10 @@ import { mgl } from "../mgl";
 import { $store } from "../store";
 import { UiComponent } from "../types/ui";
 import { SearchEntry } from "../types/video";
-import { fewItems, formatTime, numToLocale, updateQueryParam } from "../utils";
+import { clearQueryParams, fewItems, formatTime, numToLocale, updateQueryParam } from "../utils";
+import channelView from "./channel";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
-import playerView from "./player";
 import { loadVideo } from "./player/status";
 
 class SearchView implements UiComponent {
@@ -31,6 +31,10 @@ class SearchView implements UiComponent {
                 <h3>${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
                 ${numToLocale(entry.views)} views
+                <div class="author">
+                    <img src="${"/avatarTry?id=" + entry.channel}" class="avatar">
+                    <a href="/?channel=${entry.channel}">${entry.channelName}</a>
+                </div>
                 <div class="btns">
                     <button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                 </div>
@@ -40,11 +44,9 @@ class SearchView implements UiComponent {
                 $store.playlistId.set("");
                 $store.playlist.set([]);
                 $store.playlistIndex.set(0);
+                clearQueryParams();
                 updateQueryParam("v", entry.id);
-                updateQueryParam("query", undefined);
-                updateQueryParam("p", undefined);
-                updateQueryParam("pi", undefined);
-                loadVideo(entry.id, !playerView.paused);
+                loadVideo(entry.id, true);
             });
 
             card.addEventListener("contextmenu", (e) => {
@@ -52,10 +54,20 @@ class SearchView implements UiComponent {
                 window.open(window.location.origin + "/?v=" + entry.id);
             });
 
+            card.querySelector(`.author`)!.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                channelView.load(entry.channel);
+            });
+
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 metaControlView.toggleToPlayList(entry.id);
+            });
+
+            card.querySelector(`img`).addEventListener("error", () => {
+                card.querySelector(`img`).style.display = "none";
             });
 
             this.container.appendChild(card);

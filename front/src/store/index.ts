@@ -24,6 +24,7 @@ const initData = {
     loader: 0,
 
     playlistsCache: [] as PlaylistsEntry[],
+    channelId: "",
 }
 
 export const $store = createStore(initData);

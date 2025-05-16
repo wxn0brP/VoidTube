@@ -16,7 +16,7 @@ clearOldCache();
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
-        return ["video", "playlist", "channel"];
+        return ["video", "playlist", "channel", "download", "search", "video-static", "channelVideos", "recommendations", "recommendationsData", "self-version", "channelInfo"];
     },
 
     async add(collection, data) {
@@ -34,7 +34,8 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "recommendations") return await getRecommended(search.url || search._id);
             if (collection === "recommendationsData") return await getRecommendedData(search.url || search._id, search.limit || 5);
             if (collection === "video-static") return await apiGetVideos(search);
-            if (collection === "channelVideos") return await getChannelVideos(search.url || search._id);
+            if (collection === "channelVideos") return await getChannelVideos(search.url || search._id, search.flat ?? true);
+            if (collection === "channelInfo") return [await channelInfo(search?.$in?.id?.[0])];
         } catch (e) {
             console.error(e);
         }
@@ -47,7 +48,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "video-static") return await apiGetVideo(search.url || search._id, false);
             if (collection === "search") return await searchVideo(search.q || search.query, search.size || 10);
             if (collection === "self-version") return { version: process.env.VOIDTUBE_VERSION || "unknown" };
-            if (collection === "channelInfo") return await channelInfo(search.url || search._id);
+            if (collection === "channelInfo") return await channelInfo(search.url || search._id, search.update || false);
         } catch (e) {
             console.error(e);
         }
@@ -73,7 +74,13 @@ async function apiGetVideo(url: string, dynamic = true, staticData?: any) {
             }
         }
 
-        const data = await getVideoInfo(url, dynamic);
+        let data: Awaited<ReturnType<typeof getVideoInfo>>;
+        try {
+            data = await getVideoInfo(url, dynamic);
+        } catch {
+            console.error("Failed to get video info:", url);
+            return null;
+        }
 
         const staticDataPayload = {
             _id: url,
@@ -88,7 +95,7 @@ async function apiGetVideo(url: string, dynamic = true, staticData?: any) {
         };
         await db.cache.updateOneOrAdd("video-static", { url }, staticDataPayload);
 
-        if ("formats" in data) {
+        if ("formats" in data && data.formats.length) {
             const dynamicDataPayload = {
                 _id: url,
                 formats: data.formats,
@@ -118,7 +125,7 @@ async function getRecommendedData(id: string, limit: number = 5) {
     const sliced = ids.slice(0, limit);
 
     const dataRaw = await Promise.all<any>(sliced.map(id => apiGetVideo(id, false)));
-    const data = dataRaw.map((d, i) => ({
+    const data = dataRaw.filter(Boolean).map((d, i) => ({
         _id: sliced[i],
         title: d.title,
         thumbnail: d.thumbnail,
@@ -150,17 +157,23 @@ async function apiGetVideos(search: any) {
     return staticData;
 }
 
-async function channelInfo(_id: string) {
-    const channel = await db.cache.findOne("channel", { _id });
-    if (channel) {
-        if (channel.ttl > Math.floor(new Date().getTime() / 1000)) return channel;
+async function channelInfo(id: string, update = false) {
+    if (!id) return {};
+    const channel = await db.cache.findOne("channel", { id });
+
+    if (!update) {
+        if (channel) return channel;
+    } else {
+        if (channel && channel.ttl > Math.floor(Date.now() / 1000)) {
+            return channel;
+        }
     }
 
-    const data = await getChannelInfo(_id);
-    await db.cache.updateOneOrAdd("channel", { _id }, {
+    const data = await getChannelInfo(id);
+    await db.cache.updateOneOrAdd("channel", { id }, {
         ttl: getTTL(),
         ...data
-    });
+    }, {}, {}, false);
 
     return data;
 }

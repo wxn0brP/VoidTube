@@ -19,6 +19,11 @@ user history
 relations:
   info:
     path: [api, video-static]
+    relations:
+      channelData:
+        path: [api, channelInfo]
+        pk: channel
+        fk: id
 
 many: true
 ${limit ? `options: 
@@ -38,6 +43,9 @@ select:
     views: 1
     thumbnail: 1
     channel: 1
+    channelData:
+      name: 1
+      avatar: 1
     `.trim();
     return await fetchVQL<HistoryEntry[]>(query);
 }

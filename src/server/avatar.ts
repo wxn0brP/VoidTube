@@ -3,28 +3,41 @@ import { FFRequest } from "@wxn0brp/falcon-frame/dist/types";
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { getExternalResourcePath } from "../shared/path";
+import db from "../shared/db";
 
 const dir = getExternalResourcePath("internal-db", "avatars");
 
 if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
 
-export default function avatarHandler(req: FFRequest, res: FFResponse) {
+export function avatarHandler(req: FFRequest, res: FFResponse) {
     const link = req.query.link as string;
-    if (!link)
+    if (!link || link === "undefined")
         return res.status(404).end();
 
-    const url = new URL(link);
-    const id = (url.pathname.slice(1)).replaceAll("/", "___");
+    try {
+        const url = new URL(link);
+        const id = (url.pathname.slice(1)).replaceAll("/", "___");
 
-    if (!existsSync(dir + "/" + id)) {
-        try {
+        if (!existsSync(dir + "/" + id)) {
             execSync(`curl -o ${dir}/${id} ${link}`);
-        } catch (e) {
-            console.error(e);
-            return res.status(500).end();
         }
-    }
 
-    res.writeHead(200, { "Content-Type": "image/png" });
-    res.end(readFileSync(dir + "/" + id));
+        res.writeHead(200, { "Content-Type": "image/png" });
+        res.end(readFileSync(dir + "/" + id));
+    } catch (e) {
+        console.error("[VoidTube-SERVER] Avatar error:", e);
+        return res.status(500).end();
+    }
+}
+
+export async function avatarTryHandler(req: FFRequest, res: FFResponse) {
+    const channel_id = req.query.id as string;
+    if (!channel_id || channel_id === "undefined")
+        return res.status(404).end();
+
+    const hasCache = await db.cache.findOne("channel", { id: channel_id });
+    if (!hasCache) return res.status(404).end();
+
+    req.query.link = hasCache.avatar;
+    avatarHandler(req, res);
 }

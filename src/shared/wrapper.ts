@@ -28,8 +28,8 @@ async function wrapper<T = YtResponse>(url: string, flags: YtFlags, unknownFlags
     return new Promise((resolve, reject) => {
         const cmd = `${ytDlp} ${flagsConvert(flags).join(" ")} ${url}` + (unknownFlags ? " " + unknownFlags.join(" ") : "");
         exec(cmd, { maxBuffer: 1024 * 1024 * 100 }, (error, stdout, stderr) => {
-            if (stderr) console.log(stderr);
-            if (error) return console.error(error);
+            if (stderr) console.log("[VoidTube] Wrapper error:" + stderr);
+            if (error) return reject(error);
 
             if (flags.dumpJson || flags.dumpSingleJson) {
                 resolve(JSON.parse(stdout));

@@ -1,3 +1,4 @@
+import channelView from "#ui/channel";
 import navBarView from "#ui/navBar";
 import { changeView } from "./ui";
 import playerView from "./ui/player";
@@ -16,6 +17,14 @@ function params() {
         setTimeout(() => {
             searchBarView.searchInput.value = decodeURIComponent(query).replaceAll("+", " ");
             searchBarView.search();
+        }, 1000);
+        return;
+    }
+
+    const channel = urlParams.get("channel");
+    if (channel) {
+        setTimeout(() => {
+            channelView.load(channel);
         }, 1000);
         return;
     }

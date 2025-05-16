@@ -1,4 +1,3 @@
-import { writeFileSync } from "fs";
 import { wrapper } from "./wrapper";
 
 const options = {
@@ -15,6 +14,8 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
         ) {
             videoUrl = `https://www.youtube.com/watch?v=${videoUrl}`;
         }
+
+        console.log("[VoidTube-SCRAPER] getVideoInfo\t", videoUrl, withFormats);
 
         const opts = Object.assign({}, options, {
             preferFreeFormats: true,
@@ -57,7 +58,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
             formats,
         };
     } catch (error) {
-        console.error("Error while getting video info:", error);
+        console.error("Error while getting video info:", error.message);
         throw error;
     }
 }
@@ -65,6 +66,8 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
 export async function searchVideo(title: string, size: number) {
     try {
         if (title === "undefined") throw new Error("Unknown video");
+        console.log("[VoidTube-SCRAPER] searchVideo\t", title);
+
         const opts = Object.assign({}, options, {
             flatPlaylist: true,
         })
@@ -76,9 +79,10 @@ export async function searchVideo(title: string, size: number) {
             duration: entry.duration,
             views: entry.view_count,
             channel: entry.channel_id,
+            channelName: entry.channel || entry.uploader
         }));
     } catch (error) {
-        console.error("Error while searching video:", error);
+        console.error("Error while searching video:", error.message);
         throw error;
     }
 }
@@ -89,6 +93,7 @@ export async function getPlaylistIds(playlist: string) {
         if (!playlist.startsWith("https://www.youtube.com/playlist?list=")) {
             playlist = `https://www.youtube.com/playlist?list=${playlist}`;
         }
+        console.log("[VoidTube-SCRAPER] getPL_Ids\t", playlist);
 
         const opts = Object.assign({}, options, {
             flatPlaylist: true,
@@ -96,7 +101,7 @@ export async function getPlaylistIds(playlist: string) {
         const result = await wrapper(playlist, opts) as any;
         return result.entries.map(entry => entry.id);
     } catch (error) {
-        console.error("Error while getting playlist ids:", error);
+        console.error("Error while getting playlist ids:", error.message);
         throw error;
     }
 }
@@ -109,6 +114,8 @@ export async function download(url: string, format: string, dir: string) {
         ) {
             url = `https://www.youtube.com/watch?v=${url}`;
         }
+
+        console.log("[VoidTube-SCRAPER] download\t", url);
 
         const outputTemplate = dir + '/%(title)s.%(ext)s';
 
@@ -128,7 +135,7 @@ export async function download(url: string, format: string, dir: string) {
             addMetadata: true,
         }, opts);
     } catch (error) {
-        console.error("Error while downloading video:", error);
+        console.error("Error while downloading video:", error.message);
         throw error;
     }
 }
@@ -143,21 +150,27 @@ export async function getChannelInfo(channelUrl: string) {
             channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
         }
 
+        console.log("[VoidTube-SCRAPER] getChnlInfo\t", channelUrl);
+
         const opts = Object.assign({}, options, { flatPlaylist: true, });
 
         const result = await wrapper(channelUrl + "/about", opts);
+
+        const avatar = result.thumbnails.find(t => t.id == "avatar_uncropped")?.url || result.thumbnails[result.thumbnails.length - 1]?.url;
+        const banner = result.thumbnails.find(t => t.id == "banner_uncropped")?.url;
         return {
             short_id: result.id,
             id: result.channel_id,
-            name: result.title,
+            // @ts-ignore
+            name: result.title || result.name,
             description: result.description,
-            thumbnails: result.thumbnails,
+            avatar,
+            banner,
             // @ts-ignore
             subscribers: result.channel_subscribers_count || result.channel_follower_count,
-
         };
     } catch (error) {
-        console.error('Error while fetching channel info:', error);
+        console.error('Error while fetching channel info:', error.message);
         throw error;
     }
 }
@@ -181,19 +194,21 @@ export async function getChannelInfo(channelUrl: string) {
 //             duration: entry.duration,
 //         }));
 //     } catch (error) {
-//         console.error('Error while fetching playlist info:', error);
+//         console.error('Error while fetching playlist info:', error.message);
 //         throw error;
 //     }
 // }
 
-export async function getChannelVideos(channelUrl: string) {
+export async function getChannelVideos(channelUrl: string, flat: boolean = true) {
     try {
         if (channelUrl === "undefined") throw new Error("Unknown channel");
-        const opts = Object.assign({}, options, { flatPlaylist: true, });
+        const opts = Object.assign({}, options, { flatPlaylist: flat, });
 
         if (!channelUrl.startsWith("https://www.youtube.com/")) {
             channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
         }
+
+        console.log("[VoidTube-SCRAPER] getChnlVid\t", channelUrl);
 
         const result = await wrapper(channelUrl + "/videos", opts);
 
@@ -206,7 +221,7 @@ export async function getChannelVideos(channelUrl: string) {
             views: entry.view_count,
         }));
     } catch (error) {
-        console.error('Error while fetching channel videos:', error);
+        console.error('Error while fetching channel videos:', error.message);
         throw error;
     }
 }

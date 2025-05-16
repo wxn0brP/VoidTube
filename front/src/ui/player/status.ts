@@ -1,6 +1,7 @@
 import { fetchVideoHistoryTime, updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
+import { ChannelInfo } from "#types/channel";
 import { RecommendationEntry, VideoInfo } from "#types/video";
 import historyView from "#ui/history";
 import navBarView from "#ui/navBar";
@@ -67,8 +68,8 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
         });
     }
     
-    setTimeout(async () => {
+    playerView.videoEl.addEventListener("loadedmetadata", async () => {
         await loadProgress();
         if (autoPlay) playerView.videoEl.play();
-    }, 1000);
+    }, { once: true });
 }
