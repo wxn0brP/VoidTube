@@ -8,6 +8,7 @@ import { clearQueryParams, debounce, setTitle, updateQueryParam } from "../../ut
 import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
+import { loadMediaSession } from "./status";
 
 export class PlayerView implements UiComponent {
     public element: HTMLDivElement;
@@ -101,19 +102,6 @@ export class PlayerView implements UiComponent {
         playListView.queryParams();
         navBarView.save("video");
     }
-}
-
-function loadMediaSession() {
-    const video = $store.video.get();
-    if (!video) return;
-    navigator.mediaSession.metadata = new MediaMetadata({
-        title: video.title,
-        // artist: video.channel,
-        // album: 'Album',
-        artwork: [
-            { src: video.thumbnail, sizes: '480x360', type: 'image/png' }
-        ]
-    });
 }
 
 const playerView = new PlayerView();

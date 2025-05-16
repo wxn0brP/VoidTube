@@ -2,6 +2,7 @@ import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { ChannelInfo } from "#types/channel";
 import channelView, { followsFormatter, thumbnailMiddle } from "#ui/channel";
+import { loadMediaSession } from "./status";
 
 export function setupChannelInfo() {
     const playerInfoDiv = document.querySelector("#video-channel-info");
@@ -11,9 +12,11 @@ export function setupChannelInfo() {
 
     $store.video.subscribe(async video => {
         const channelData = await fetchVQL<ChannelInfo>("api channelInfo! s._id = " + video.channel);
+        $store.videoChannelName.set(channelData.name);
         img.src = thumbnailMiddle + channelData.avatar;
         name.innerHTML = channelData.name;
         subs.innerHTML = followsFormatter.format(channelData.subscribers) + " subscribers";
+        loadMediaSession();
     });
 
     playerInfoDiv.addEventListener("click", () => {
