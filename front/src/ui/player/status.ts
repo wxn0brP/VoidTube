@@ -73,3 +73,17 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
         if (autoPlay) playerView.videoEl.play();
     }, { once: true });
 }
+
+
+export function loadMediaSession() {
+    const video = $store.video.get();
+    if (!video) return;
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: video.title,
+        artist: $store.videoChannelName.get() || "Unknown",
+        // album: 'Album',
+        artwork: [
+            { src: video.thumbnail, sizes: '480x360', type: 'image/png' }
+        ]
+    });
+}

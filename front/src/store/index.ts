@@ -8,6 +8,7 @@ const initData = {
     nextVideoId: "",
     selectedVideoUrl: "",
     selectedAudioUrl: "",
+    videoChannelName: "",
     playlist: [] as string[],
     playlistIndex: 0,
     playlistId: "",
