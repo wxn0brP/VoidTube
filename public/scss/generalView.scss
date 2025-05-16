@@ -27,11 +27,6 @@
     padding: 1rem;
     transition: transform 0.2s ease;
     cursor: pointer;
-    min-height: 300px;
-    max-height: fit-content;
-    max-width: 450px;
-    height: auto;
-    overflow: hidden;
 
     font-size: 0.7em;
     position: relative;
@@ -69,14 +64,5 @@
             color: red;
             cursor: not-allowed;
         }
-    }
-}
-
-@media (max-width: 1400px) {
-
-    .historyCard,
-    .playlistCard,
-    .searchCard {
-        min-height: 350px;
     }
 }

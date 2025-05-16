@@ -69,6 +69,25 @@ section {
     padding: 15px 25px;
 }
 
+#video-channel-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-align: left;
+    width: 100%;
+    padding-inline: 25px;
+    padding-top: 15px;
+    margin-bottom: -5px;
+    cursor: pointer;
+
+    img {
+        width: 64px;
+        height: 64px;
+        border-radius: 20%;
+        object-fit: cover;
+    }
+}
+
 #meta-control-bar {
     display: flex;
     align-items: center;
@@ -126,7 +145,8 @@ section {
     }
 }
 
-#search-view, #playlist-snap {
+#search-view,
+#playlist-snap {
     flex-direction: column;
 }
 
@@ -155,5 +175,34 @@ section {
         align-items: center;
         gap: 1rem;
         margin-bottom: 15px;
+    }
+}
+
+#channel-videos {
+    margin-top: 5px;
+}
+
+.historyCard,
+.searchCard {
+    .author {
+        margin-top: 5px;
+        margin-bottom: 2px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 20%;
+        }
+
+        a {
+            text-decoration: underline;
+            cursor: pointer;
+            color: var(--txt);
+            font-size: 1.2em;
+        }
     }
 }

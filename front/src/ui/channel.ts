@@ -2,14 +2,19 @@ import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { ChannelInfo } from "#types/channel";
 import { UiComponent } from "#types/ui";
-import { formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { clearQueryParams, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
-import playerView from "./player";
 import { loadVideo } from "./player/status";
 
-const thumbnailMiddle = "/avatar?link="
+export const thumbnailMiddle = "/avatar?link=";
+
+export const followsFormatter = new Intl.NumberFormat(undefined, {
+    notation: "compact",
+    compactDisplay: "short",
+    maximumFractionDigits: 1,
+});
 
 class ChannelView implements UiComponent {
     element: HTMLDivElement;
@@ -22,17 +27,14 @@ class ChannelView implements UiComponent {
     loadVideosButton: HTMLButtonElement;
 
     render(data: ChannelInfo) {
-        const avatar = data.thumbnails.find(t => t.id == "avatar_uncropped");
-        const banner = data.thumbnails.find(t => t.id == "banner_uncropped");
-
         this.name.innerHTML = data.name;
-        this.subscriptions.innerHTML = `${data.subscribers} subscribers`;
-        this.info.innerHTML = `<p>${data.description}</p>`;
+        this.subscriptions.innerHTML = `${followsFormatter.format(data.subscribers || 0)} subscribers`;
+        this.info.innerHTML = `<p>${data.description.replace(/\n/g, "<br>")}</p>`;
         this.videos.innerHTML = "";
 
-        this.avatar.src = avatar ? thumbnailMiddle + avatar.url : "/favicon.svg";
-        this.banner.src = banner ? thumbnailMiddle + banner.url : "/favicon.svg";
-        this.banner.style.display = banner ? "" : "none";
+        this.avatar.src = data.avatar ? thumbnailMiddle + data.avatar : "/favicon.svg";
+        this.banner.src = data.banner ? thumbnailMiddle + data.banner : "/favicon.svg";
+        this.banner.style.display = data.banner ? "" : "none";
     }
 
     mount(): void {
@@ -55,22 +57,26 @@ class ChannelView implements UiComponent {
     show() {
         changeView("channel");
         setTitle("");
-        updateQueryParam("v", undefined);
+        clearQueryParams();
+        updateQueryParam("channel", $store.channelId.get());
         navBarView.save("channel");
     }
 
     async load(id: string) {
-        const data = await fetchVQL<ChannelInfo>("api channelInfo! s._id = " + id);
+        $store.channelId.set(id);
+        const data = await fetchVQL<ChannelInfo>("api channelInfo! s._id = " + id + " s.update = true");
         this.render(data);
-        this.loadVideosButton.onclick = () => this.loadVideos(id);
+        setTimeout(() => this.loadVideos(id), 100);
+        this.loadVideosButton.addEventListener("click", () => this.loadVideos(id, false));
         this.show();
     }
 
-    async loadVideos(id: string) {
+    async loadVideos(id: string, flat = true) {
         const data = await fetchVQL(`
 api channelVideos
 search:
   _id: ${id}
+  flat: ${flat}
 many: true
 relations:
   history:
@@ -97,8 +103,7 @@ relations:
                 $store.playlistId.set("");
                 $store.playlist.set([]);
                 $store.playlistIndex.set(0);
-                updateQueryParam("p", undefined);
-                updateQueryParam("pi", undefined);
+                clearQueryParams();
                 loadVideo(entry._id, true);
             });
 

@@ -4,14 +4,14 @@ import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { HistoryEntry } from "#types/video";
-import { fewItems, formatTime, levenshtein, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { clearQueryParams, fewItems, formatTime, levenshtein, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
-import channelView from "./channel";
+import channelView, { thumbnailMiddle } from "./channel";
 import metaControlView from "./metaControl";
 import uiFunc from "./modal";
 import navBarView from "./navBar";
-import playerView from "./player";
 import { loadVideo } from "./player/status";
+import playListView from "./playList";
 
 class HistoryView implements UiComponent {
     element: HTMLDivElement;
@@ -45,7 +45,10 @@ class HistoryView implements UiComponent {
                     ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
                     ${numToLocale(entry.info.views)} views -
                     ${date}
-                    <a href="/?channel=${entry.info.channel}">${entry.info.channel}</a>
+                    <div class="author">
+                        <img src="${thumbnailMiddle + entry.info.channelData.avatar}" class="avatar">
+                        <a href="/?channel=${entry.info.channel}">${entry.info.channelData.name}</a>
+                    </div>
                     <div class="btns">
                         <button button title="Remove" class="btn rm" data-id="rm">Remove</button>
                         <button button title="Playlist" class="btn" data-id="playlist">📂</button>
@@ -56,8 +59,7 @@ class HistoryView implements UiComponent {
                     $store.playlistId.set("");
                     $store.playlist.set([]);
                     $store.playlistIndex.set(0);
-                    updateQueryParam("p", undefined);
-                    updateQueryParam("pi", undefined);
+                    clearQueryParams();
                     loadVideo(entry._id, true);
                 });
 
@@ -66,7 +68,7 @@ class HistoryView implements UiComponent {
                     window.open(window.location.origin + "/?v=" + entry._id);
                 });
 
-                card.querySelector(`a`)!.addEventListener("click", (e) => {
+                card.querySelector(`.author`)!.addEventListener("click", (e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     channelView.load(entry.info.channel);
@@ -118,7 +120,7 @@ class HistoryView implements UiComponent {
         }, 100);
         // load all history
         setTimeout(() => {
-            this.loadHistory(); 
+            this.loadHistory();
         }, window.location.search.length > 0 ? 7_000 : 2_000);
 
         this.searchInput.oninput = () => {
@@ -132,7 +134,8 @@ class HistoryView implements UiComponent {
     show() {
         changeView("history");
         setTitle("");
-        updateQueryParam("v", undefined);
+        clearQueryParams();
+        playListView.queryParams();
         navBarView.save("history");
     }
 

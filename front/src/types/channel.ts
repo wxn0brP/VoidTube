@@ -3,9 +3,7 @@ export interface ChannelInfo {
     short_id: string;
     name: string;
     description: string;
-    thumbnails: {
-        id: string,
-        url: string,
-    }[];
+    avatar: string;
+    banner: string;
     subscribers: number;
 }

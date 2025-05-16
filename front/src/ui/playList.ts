@@ -2,7 +2,7 @@ import { fetchPlaylistInfo } from "#api/playlist";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { PlaylistEntry, RecommendationEntry } from "#types/video";
-import { formatTime, updateQueryParam, setTitle } from "#utils";
+import { formatTime, updateQueryParam, setTitle, clearQueryParams } from "#utils";
 import { changeView } from ".";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
@@ -89,13 +89,17 @@ class PlayListView implements UiComponent {
     public show() {
         changeView("video");
         setTitle($store.video.get()?.title);
+        clearQueryParams();
         updateQueryParam("v", $store.videoId.get() || undefined);
-        updateQueryParam("query", undefined);
+        this.queryParams();
+        navBarView.save("video");
+    }
+
+    public queryParams() {
         const playlistId = $store.playlistId.get();
         const playlistIndex = $store.playlistIndex.get();
         if(playlistId) updateQueryParam("p", playlistId);
         if(playlistIndex) updateQueryParam("pi", playlistIndex.toString());
-        navBarView.save("video");
     }
 
     mount(): void {

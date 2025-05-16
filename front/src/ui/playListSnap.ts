@@ -2,7 +2,7 @@ import { fetchPlaylistSnap } from "#api/playlist";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
 import { PlaylistSnapEntry } from "#types/video";
-import { fewItems, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { clearQueryParams, fewItems, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
 import metaControlView from "./metaControl";
 import navBarView from "./navBar";
@@ -39,8 +39,7 @@ class PlayListSnapView implements UiComponent {
                 $store.playlistId.set("");
                 $store.playlist.set([]);
                 $store.playlistIndex.set(0);
-                updateQueryParam("p", undefined);
-                updateQueryParam("pi", undefined);
+                clearQueryParams();
                 loadVideo(entry._id, true);
             });
 

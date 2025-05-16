@@ -1,11 +1,13 @@
 import navBarView from "#ui/navBar";
+import playListView from "#ui/playList";
 import { changeView } from "..";
 import { mgl } from "../../mgl";
 import { $store } from "../../store";
 import { UiComponent } from "../../types/ui";
-import { debounce, setTitle, updateQueryParam } from "../../utils";
+import { clearQueryParams, debounce, setTitle, updateQueryParam } from "../../utils";
 import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
+import { setupChannelInfo } from "./channelInfo";
 
 export class PlayerView implements UiComponent {
     public element: HTMLDivElement;
@@ -83,6 +85,7 @@ export class PlayerView implements UiComponent {
 
         setupAudioSync();
         setupBar();
+        setupChannelInfo();
 
         window.addEventListener("beforeunload", () => {
             localStorage.setItem("cache.progress", JSON.stringify({ id: $store.videoId.get(), time: Math.floor(this.videoEl.currentTime) }));
@@ -93,8 +96,9 @@ export class PlayerView implements UiComponent {
         if (!$store.videoId.get()) return;
         changeView("video");
         setTitle($store.video.get()?.title);
+        clearQueryParams();
         updateQueryParam("v", $store.videoId.get());
-        updateQueryParam("query", undefined);
+        playListView.queryParams();
         navBarView.save("video");
     }
 }

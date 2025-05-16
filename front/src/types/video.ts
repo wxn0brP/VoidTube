@@ -18,6 +18,7 @@ export interface VideoInfo {
     views: number;
     likes: number;
     formats: Format[];
+    channel: string;
 }
 
 export interface VideoCache {
@@ -41,6 +42,10 @@ export interface HistoryEntry {
         views: number;
         thumbnail: string;
         channel: string;
+        channelData: {
+            name: string;
+            avatar: string;
+        }
     };
 }
 
@@ -69,6 +74,8 @@ export interface SearchEntry {
     thumbnail: string;
     duration: number;
     views: number;
+    channel: string;
+    channelName: string;
 }
 
 export interface RecommendationEntry {
