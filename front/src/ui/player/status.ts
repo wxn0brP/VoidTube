@@ -62,9 +62,9 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
     $store.nextVideoId.set("");
     playListView.renderRecommendations([]);
     if (!$store.playlistId.get()) {
-        fetchVQL<RecommendationEntry[]>("api recommendationsData s.limit = 2 s._id = " + id).then(data => {
-            playListView.renderRecommendations(data);
+        fetchVQL<RecommendationEntry[]>("api recommendationsData s.limit = 4 s._id = " + id).then(data => {
             if(data.length) $store.nextVideoId.set(data[0]._id);
+            playListView.renderRecommendations(data);
         });
     }
     

@@ -44,6 +44,8 @@ class PlayListView implements UiComponent {
 
     renderRecommendations(videos: RecommendationEntry[]) {
         this.recommendationsContainer.innerHTML = "";
+        const next: HTMLSpanElement[] = [];
+        const nextVideoId = $store.nextVideoId.get();
         videos.forEach(item => {
             const card = document.createElement("div");
             card.className = "videoCard";
@@ -51,7 +53,11 @@ class PlayListView implements UiComponent {
                 <div style="background-image: url(${item.thumbnail})"></div>
                 <h3>${item.title}</h3>
                 ${formatTime(item.duration, null)}
-                <button class="btn" data-id="play">Playlist 📂</button>
+                <button class="btn" data-id="play-next-btn">
+                    Play next
+                    <span data-id="play-next">${item._id === nextVideoId ? "✅" : "❌"}</span>
+                </button>
+                <button class="btn" data-id="playlist">Playlist 📂</button>
             `;
             card.addEventListener("click", () => {
                 loadVideo(item._id);
@@ -60,11 +66,19 @@ class PlayListView implements UiComponent {
                 e.preventDefault();
                 window.open(window.location.origin + "/?v=" + item._id);
             });
-            card.querySelector(`[data-id=play]`)!.addEventListener("click", async (e) => {
+            card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 metaControlView.toggleToPlayList(item._id);
             });
+            card.querySelector(`[data-id=play-next-btn]`)!.addEventListener("click", async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                next.forEach(item => item.innerHTML = "❌");
+                card.querySelector(`[data-id=play-next]`).innerHTML = "✅";
+                $store.nextVideoId.set(item._id);
+            });
+            next.push(card.querySelector("[data-id=play-next]"));
             this.recommendationsContainer.appendChild(card);
         });
     }
