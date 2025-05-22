@@ -138,9 +138,17 @@ class PlayListsView implements UiComponent {
             let ids = [];
 
             if (from === "YouTube") {
-                const playlistUrl = await uiFunc.prompt("Playlist URL");
+                let playlistUrl = await uiFunc.prompt("Playlist URL");
                 if (!playlistUrl) return;
-                ids = await fetchVQL<string[]>(`api playlist s._id = ${playlistUrl}`);
+
+                if (!playlistUrl.startsWith("https://www.youtube.com/playlist?list=")) {
+                    playlistUrl = `https://www.youtube.com/playlist?list=${playlistUrl}`;
+                }
+
+                const url = new URL(playlistUrl);
+                const listId = url.searchParams.get("list");
+
+                ids = await fetchVQL<string[]>(`api playlist s._id = ${listId}`);
             } else if (from === "URLs/IDs") {
                 const playlistUrls = await uiFunc.prompt("Playlist URLs/IDs");
                 if (!playlistUrls) return;
