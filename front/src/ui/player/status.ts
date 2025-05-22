@@ -47,10 +47,13 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
     
     const data = await fetchVQL<VideoInfo>(`api video! s.url = ${id}`);
 
+    if(!data.formats?.length) return alert("Failed to load video");
+
     $store.video.set(data);
     $store.videoId.set(id);
     playerView.paused = true;
     playerView.videoEl.currentTime = 0;
+
 
     fetchVQL(`user updateOneOrAdd history s._id=${id} u.watched=true u.last=${Math.floor(Date.now() / 1000)}`).then(() => {
         historyView.loadHistory(); // refresh history
