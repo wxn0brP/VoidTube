@@ -103,6 +103,8 @@ async function apiGetVideo(url: string, dynamic = true, staticData?: any) {
             };
 
             await db.cache.add("video-dynamic", dynamicDataPayload);
+        } else if (dynamic) {
+            console.error("[API-VQL] Failed to get video formats:", url);
         }
 
         return data;
