@@ -12,7 +12,7 @@ try {
 } catch (e) {
     console.error("Error while getting yt-dlp path:", e);
 }
-if (process.env.NODE_ENV === "development") console.log(`yt-dlp path: ${ytDlp}`);
+if (process.env.NODE_ENV === "development") console.log(`[VoidTube] yt-dlp path: ${ytDlp}`);
 
 function camelToKebab(str: string): string {
     return str.replace(/([A-Z])/g, "-$1").toLowerCase();

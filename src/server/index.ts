@@ -11,6 +11,7 @@ const app = new FalconFrame({
     loggerName: "VoidTube-SERVER",
     logLevel: process.env.FALCON_LOG_LEVEL as LogLevelName || isDev ? "INFO" : "ERROR"
 });
+if (isDev) console.log("[VoidTube-SERVER] FalconFrame started with", app.logger.logLevel);
 
 const port = parseInt(process.env.PORT) || 29848;
 app.listen(port);
