@@ -8,7 +8,12 @@ const options = {
 
 export async function getVideoInfo(videoUrl: string, withFormats: boolean = false) {
     try {
-        if (videoUrl === "undefined") throw new Error("Unknown video");
+        if (
+            typeof videoUrl !== "string" ||
+            videoUrl.trim() === "" ||
+            videoUrl === "null" ||
+            videoUrl === "undefined"
+        ) throw new Error("Unknown video");
         if (
             !videoUrl.startsWith("https://www.youtube.com/watch?v=") && !videoUrl.startsWith("https://youtu.be/")
         ) {
