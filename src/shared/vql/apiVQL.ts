@@ -31,8 +31,7 @@ export const YouTubeAdapter = createValtheraAdapter({
     async find(collection, search) {
         try {
             if (collection === "playlist") return await getPlaylistIds(search.url || search._id);
-            if (collection === "recommendations") return await getRecommended(search.url || search._id);
-            if (collection === "recommendationsData") return await getRecommendedData(search.url || search._id, search.limit || 5);
+            if (collection === "recommendations") return await getRecommended(search.url || search._id, search.limit || 10);
             if (collection === "video-static") return await apiGetVideos(search);
             if (collection === "channelVideos") return await getChannelVideos(search.url || search._id, search.flat ?? true);
             if (collection === "channelInfo") return [await channelInfo(search?.$in?.id?.[0])];
@@ -120,21 +119,6 @@ async function clearOldCache() {
             db.cache.remove("video-dynamic", { _id: data._id });
         }
     }
-}
-
-async function getRecommendedData(id: string, limit: number = 5) {
-    const ids = await getRecommended(id);
-    const sliced = ids.slice(0, limit);
-
-    const dataRaw = await Promise.all<any>(sliced.map(id => apiGetVideo(id, false)));
-    const data = dataRaw.filter(Boolean).map((d, i) => ({
-        _id: sliced[i],
-        title: d.title,
-        thumbnail: d.thumbnail,
-        duration: d.duration,
-        views: d.views
-    }));
-    return data;
 }
 
 async function downloadVideo(data: { _id: string, format: "mp3" | "mp4" }) {

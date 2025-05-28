@@ -1,8 +1,7 @@
 import { fetchVideoHistoryTime, updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { ChannelInfo } from "#types/channel";
-import { RecommendationEntry, VideoInfo } from "#types/video";
+import { VideoInfo } from "#types/video";
 import historyView from "#ui/history";
 import navBarView from "#ui/navBar";
 import playListView from "#ui/playList";
@@ -54,7 +53,6 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
     playerView.paused = true;
     playerView.videoEl.currentTime = 0;
 
-
     fetchVQL(`user updateOneOrAdd history s._id=${id} u.watched=true u.last=${Math.floor(Date.now() / 1000)}`).then(() => {
         historyView.loadHistory(); // refresh history
     });
@@ -65,8 +63,8 @@ export async function loadVideo(id: string, autoPlay: boolean = false, saveProgr
     $store.nextVideoId.set("");
     playListView.renderRecommendations([]);
     if (!$store.playlistId.get()) {
-        fetchVQL<RecommendationEntry[]>("api recommendationsData s.limit = 4 s._id = " + id).then(data => {
-            if(data.length) $store.nextVideoId.set(data[0]._id);
+        fetchVQL<string[]>("api recommendations s._id = " + id).then(data => {
+            if(data.length) $store.nextVideoId.set(data[0]);
             playListView.renderRecommendations(data);
         });
     }

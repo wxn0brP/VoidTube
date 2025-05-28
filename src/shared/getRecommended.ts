@@ -3,7 +3,7 @@ import ky from "ky";
 const regexVi = /\/vi\/([^/]+)/;
 const regexUrl = /https?:\/\/[^\s"']+/g;
 
-export async function getRecommended(id: string) {
+export async function getRecommended(id: string, limit: number = 10) {
     const html = await ky.get<string>(`https://www.youtube.com/watch?v=${id}`).text();
 
     const linksRaw = [...new Set(html.match(regexUrl))];
@@ -16,5 +16,5 @@ export async function getRecommended(id: string) {
 
     const idsUnique = [...new Set(ids)];
 
-    return idsUnique;
+    return idsUnique.slice(0, limit);
 }

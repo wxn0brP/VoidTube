@@ -78,14 +78,6 @@ export interface SearchEntry {
     channelName: string;
 }
 
-export interface RecommendationEntry {
-    _id: string;
-    title: string;
-    thumbnail: string;
-    duration: number;
-    views: number;
-}
-
 export interface PlaylistSnapEntry {
     _id: string;
     time: number;
