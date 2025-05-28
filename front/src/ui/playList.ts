@@ -15,6 +15,7 @@ class PlayListView implements UiComponent {
     element: HTMLDivElement;
     container: HTMLDivElement;
     recommendationsContainer: HTMLDivElement;
+    recommendations: [string, HTMLSpanElement][] = [];
 
     render(playlist: PlaylistEntry[]) {
         this.container.innerHTML = "";
@@ -45,13 +46,13 @@ class PlayListView implements UiComponent {
 
     renderRecommendations(videos: string[]) {
         this.recommendationsContainer.innerHTML = "";
-        const next: HTMLSpanElement[] = [];
+        this.recommendations = [];
         const nextVideoId = $store.nextVideoId.get();
 
         videos.forEach(async (_id, i) => {
             const card = document.createElement("div");
             card.className = "videoCard";
-            
+
             function html(item: Omit<VideoInfo, "formats">) {
                 card.innerHTML = `
                     <div style="background-image: url(${item.thumbnail || "/favicon.svg"})"></div>
@@ -63,31 +64,31 @@ class PlayListView implements UiComponent {
                     </button>
                     <button class="btn" data-id="playlist">Playlist 📂</button>
                 `;
+
+                card.addEventListener("click", () => {
+                    loadVideo(_id);
+                });
+                card.addEventListener("contextmenu", (e) => {
+                    e.preventDefault();
+                    window.open(window.location.origin + "/?v=" + _id);
+                });
+                card.querySelector(`[data-id=playlist]`)!.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    metaControlView.toggleToPlayList(_id);
+                });
+                card.querySelector(`[data-id=play-next-btn]`)!.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    $store.nextVideoId.set(_id);
+                });
+
+                const playNext = card.querySelector<HTMLSpanElement>("[data-id=play-next]");
+                playListView.recommendations[i] = [_id, playNext];
             }
+            this.recommendationsContainer.appendChild(card);
             html({} as any);
             setTimeout(() => fetchVQL(`api video-static! s._id = ${_id}`).then(html), i * 10);
-
-            card.addEventListener("click", () => {
-                loadVideo(_id);
-            });
-            card.addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-                window.open(window.location.origin + "/?v=" + _id);
-            });
-            card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                metaControlView.toggleToPlayList(_id);
-            });
-            card.querySelector(`[data-id=play-next-btn]`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                next.forEach(item => item.innerHTML = "❌");
-                card.querySelector(`[data-id=play-next]`).innerHTML = "✅";
-                $store.nextVideoId.set(_id);
-            });
-            next.push(card.querySelector("[data-id=play-next]"));
-            this.recommendationsContainer.appendChild(card);
         });
     }
 
@@ -120,14 +121,21 @@ class PlayListView implements UiComponent {
     public queryParams() {
         const playlistId = $store.playlistId.get();
         const playlistIndex = $store.playlistIndex.get();
-        if(playlistId) updateQueryParam("p", playlistId);
-        if(playlistIndex) updateQueryParam("pi", playlistIndex.toString());
+        if (playlistId) updateQueryParam("p", playlistId);
+        if (playlistIndex) updateQueryParam("pi", playlistIndex.toString());
     }
 
     mount(): void {
         this.element = document.querySelector("#playlist");
         this.container = this.element.querySelector("#playlist-container")!;
         this.recommendationsContainer = this.element.querySelector("#recommendations")!;
+
+        $store.nextVideoId.subscribe(id => {
+            this.recommendations.forEach(item => {
+                if (!item || item.length < 2) return;
+                item[1].innerHTML = id === item[0] ? "✅" : "❌";
+            });
+        });
     }
 }
 
