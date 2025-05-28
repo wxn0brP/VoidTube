@@ -19,19 +19,19 @@
         "electron:dist": "electron-packager ."
     },
     "devDependencies": {
-        "@types/node": "^22.15.18",
+        "@types/node": "^22.15.24",
         "@types/node-notifier": "^8.0.5",
-        "electron": "^36.2.1",
+        "electron": "^36.3.1",
         "electron-builder": "^26.0.12",
         "sass": "^1.89.0",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/db": "^0.7.5",
+        "@wxn0brp/db": "^0.7.6",
         "@wxn0brp/falcon-frame": "^0.0.4",
         "@wxn0brp/lucerna-log": "^0.1.1",
-        "@wxn0brp/vql": "^0.1.13",
+        "@wxn0brp/vql": "^0.3.0",
         "ky": "^1.8.1",
         "node-notifier": "^10.0.1"
     },

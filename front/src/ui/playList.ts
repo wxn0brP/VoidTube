@@ -1,7 +1,8 @@
+import { fetchVQL } from "#api/index";
 import { fetchPlaylistInfo } from "#api/playlist";
 import { $store } from "#store";
 import { UiComponent } from "#types/ui";
-import { PlaylistEntry, RecommendationEntry } from "#types/video";
+import { PlaylistEntry, VideoInfo } from "#types/video";
 import { formatTime, updateQueryParam, setTitle, clearQueryParams } from "#utils";
 import { changeView } from ".";
 import metaControlView from "./metaControl";
@@ -42,41 +43,48 @@ class PlayListView implements UiComponent {
         }, 100);
     }
 
-    renderRecommendations(videos: RecommendationEntry[]) {
+    renderRecommendations(videos: string[]) {
         this.recommendationsContainer.innerHTML = "";
         const next: HTMLSpanElement[] = [];
         const nextVideoId = $store.nextVideoId.get();
-        videos.forEach(item => {
+
+        videos.forEach(async (_id, i) => {
             const card = document.createElement("div");
             card.className = "videoCard";
-            card.innerHTML = `
-                <div style="background-image: url(${item.thumbnail})"></div>
-                <h3>${item.title}</h3>
-                ${formatTime(item.duration, null)}
-                <button class="btn" data-id="play-next-btn">
-                    Play next
-                    <span data-id="play-next">${item._id === nextVideoId ? "✅" : "❌"}</span>
-                </button>
-                <button class="btn" data-id="playlist">Playlist 📂</button>
-            `;
+            
+            function html(item: Omit<VideoInfo, "formats">) {
+                card.innerHTML = `
+                    <div style="background-image: url(${item.thumbnail || "/favicon.svg"})"></div>
+                    <h3>${item.title || "Loading..."}</h3>
+                    ${formatTime(item.duration, null)}
+                    <button class="btn" data-id="play-next-btn">
+                        Play next
+                        <span data-id="play-next">${_id === nextVideoId ? "✅" : "❌"}</span>
+                    </button>
+                    <button class="btn" data-id="playlist">Playlist 📂</button>
+                `;
+            }
+            html({} as any);
+            setTimeout(() => fetchVQL(`api video-static! s._id = ${_id}`).then(html), i * 10);
+
             card.addEventListener("click", () => {
-                loadVideo(item._id);
+                loadVideo(_id);
             });
             card.addEventListener("contextmenu", (e) => {
                 e.preventDefault();
-                window.open(window.location.origin + "/?v=" + item._id);
+                window.open(window.location.origin + "/?v=" + _id);
             });
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                metaControlView.toggleToPlayList(item._id);
+                metaControlView.toggleToPlayList(_id);
             });
             card.querySelector(`[data-id=play-next-btn]`)!.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
                 next.forEach(item => item.innerHTML = "❌");
                 card.querySelector(`[data-id=play-next]`).innerHTML = "✅";
-                $store.nextVideoId.set(item._id);
+                $store.nextVideoId.set(_id);
             });
             next.push(card.querySelector("[data-id=play-next]"));
             this.recommendationsContainer.appendChild(card);
