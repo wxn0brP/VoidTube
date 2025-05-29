@@ -6,7 +6,7 @@ VoidTube is an alternative, independent YouTube client.
 No ads. No tracking. No algorithmic noise.  
 A modular interface to the video netherworld — powered by `yt-dlp`, local memory, and minimal UI.
 
-<img src="https://private-user-images.githubusercontent.com/105448874/440462178-217e228d-7ac7-4013-913d-bd3da920d592.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NDY0NjQzNjksIm5iZiI6MTc0NjQ2NDA2OSwicGF0aCI6Ii8xMDU0NDg4NzQvNDQwNDYyMTc4LTIxN2UyMjhkLTdhYzctNDAxMy05MTNkLWJkM2RhOTIwZDU5Mi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBVkNPRFlMU0E1M1BRSzRaQSUyRjIwMjUwNTA1JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDI1MDUwNVQxNjU0MjlaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lZDZlNTU1NzAyNjczOGJkOTFkNjMwZjg5NmQ0MjNkYjhiMGZlMzQ0N2IwYjFjOGQzZjNkMmM3NWE5M2JiNjMzJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCJ9.qXECqr_UAfMNC_MsOshSKOtWN4SsI8ZYuPxx2EOdBtc">
+<a href="https://ibb.co/23sX3scR"><img src="https://i.ibb.co/r2cn2c5q/Screenshot-20250529-205957.png" alt="Screenshot-20250529-205957" border="0"></a>
 
 ## ✦ Features
 
