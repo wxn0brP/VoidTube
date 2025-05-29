@@ -1,6 +1,6 @@
 import VQLProcessor, { VQLConfig } from "@wxn0brp/vql";
 import db from "../db";
-import { YouTubeAdapter } from "./apiVQL";
+import { YouTubeAdapter } from "./apiVQL.interface";
 
 VQLConfig.noCheckPermissions = true;
 VQLConfig.strictSelect = false;
