@@ -13,6 +13,7 @@ export function changePlay() {
     playerView.paused = !playerView.paused;
     playerView.paused ? playerView.videoEl.pause() : playerView.videoEl.play();
     playerView.controls.playPauseBtn.textContent = playerView.paused ? "▶️" : "⏸️";
+    if (playerView.paused) saveProgress();
 }
 
 export function toggleFullscreen() {
@@ -40,7 +41,7 @@ export async function loadProgress() {
     }
 }
 
-export async function loadVideo(id: string, autoPlay: boolean = false, saveProgressOpt: boolean = true) {
+export async function loadVideo(id: string, autoPlay: boolean = true, saveProgressOpt: boolean = true) {
     if (saveProgressOpt) saveProgress();
     if (!id) return console.error("No video id provided");
     

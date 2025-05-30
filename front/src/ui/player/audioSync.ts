@@ -100,7 +100,7 @@ export function playNext() {
         scrollToPlaylistElement();
     }
 
-    loadVideo(nextVideoId, true);
+    loadVideo(nextVideoId);
 }
 
 function getPrevVideoIdFromStack(i = navBarView.stack.length - 2) {
@@ -137,7 +137,7 @@ export function playPrev() {
     if (!prevVideoId) prevVideoId = getPrevVideoIdFromStack();
     if (!prevVideoId) return
 
-    loadVideo(prevVideoId, true);
+    loadVideo(prevVideoId);
 }
 
 export function scrollToPlaylistElement() {

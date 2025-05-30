@@ -105,7 +105,7 @@ class PlayListView implements UiComponent {
 
         const videoId = playlist[index]._id;
         $store.videoId.set(videoId);
-        loadVideo(videoId, !playerView.paused, false);
+        loadVideo(videoId, true, false);
         updateQueryParam("pi", index.toString());
     }
 
