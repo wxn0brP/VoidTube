@@ -46,7 +46,7 @@ class SearchView implements UiComponent {
                 $store.playlistIndex.set(0);
                 clearQueryParams();
                 updateQueryParam("v", entry.id);
-                loadVideo(entry.id, true);
+                loadVideo(entry.id);
             });
 
             card.addEventListener("contextmenu", (e) => {

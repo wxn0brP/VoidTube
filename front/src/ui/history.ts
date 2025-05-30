@@ -60,7 +60,7 @@ class HistoryView implements UiComponent {
                     $store.playlist.set([]);
                     $store.playlistIndex.set(0);
                     clearQueryParams();
-                    loadVideo(entry._id, true);
+                    loadVideo(entry._id);
                 });
 
                 card.addEventListener("contextmenu", (e) => {
