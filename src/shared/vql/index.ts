@@ -2,8 +2,10 @@ import VQLProcessor, { VQLConfig } from "@wxn0brp/vql";
 import db from "../db";
 import { YouTubeAdapter } from "./apiVQL.interface";
 
-VQLConfig.noCheckPermissions = true;
-VQLConfig.strictSelect = false;
+const vqlConfig = new VQLConfig({
+    noCheckPermissions: true,
+    strictSelect: false
+});
 
 const vqlDb = Object.assign(
     {},
@@ -13,6 +15,6 @@ const vqlDb = Object.assign(
     }
 );
 
-const VQL = new VQLProcessor(vqlDb, null as any);
+const VQL = new VQLProcessor(vqlDb, null as any, vqlConfig);
 
 export default VQL;
