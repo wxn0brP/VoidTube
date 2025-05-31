@@ -157,6 +157,7 @@ section {
 #channel-view {
     padding: 0 10px;
     flex-direction: column;
+    overflow-y: auto;
 
     #channel-banner {
         width: 100%;
@@ -184,6 +185,7 @@ section {
 
 #channel-videos {
     margin-top: 5px;
+    overflow-y: unset;
 }
 
 .historyCard,

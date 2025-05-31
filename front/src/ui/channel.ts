@@ -1,6 +1,6 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { ChannelInfo } from "#types/channel";
+import { ChannelInfo, ChannelVideo } from "#types/channel";
 import { UiComponent } from "#types/ui";
 import { clearQueryParams, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from ".";
@@ -72,7 +72,7 @@ class ChannelView implements UiComponent {
     }
 
     async loadVideos(id: string, flat = true) {
-        const data = await fetchVQL(`
+        const data = await fetchVQL<ChannelVideo[]>(`
 api channelVideos
 search:
   _id: ${id}
@@ -104,18 +104,18 @@ relations:
                 $store.playlist.set([]);
                 $store.playlistIndex.set(0);
                 clearQueryParams();
-                loadVideo(entry._id);
+                loadVideo(entry.id);
             });
 
             card.addEventListener("contextmenu", (e) => {
                 e.preventDefault();
-                window.open(window.location.origin + "/?v=" + entry._id);
+                window.open(window.location.origin + "/?v=" + entry.id);
             });
 
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                metaControlView.toggleToPlayList(entry._id);
+                metaControlView.toggleToPlayList(entry.id);
             });
 
             this.videos.appendChild(card);

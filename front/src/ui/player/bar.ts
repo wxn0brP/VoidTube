@@ -8,16 +8,18 @@ import { changePlay, toggleFullscreen } from "./status";
 
 export function setupBar() {
     let hasHours = false;
-    const playPauseBtn = playerView.bar.querySelector(".play-pause-btn") as HTMLButtonElement;
-    const timeSpan = playerView.bar.querySelector(".time") as HTMLSpanElement;
+    const playPauseBtn = playerView.bar.querySelector<HTMLButtonElement>(".play-pause-btn");
+    const timeSpan = playerView.bar.querySelector<HTMLSpanElement>(".time");
 
     playerView.bufferedRange = playerView.bar.querySelector(".buffered-range")!;
     playerView.playedRange = playerView.bar.querySelector(".played-range")!;
-    playerView.progressInput = playerView.bar.querySelector(".progress") as HTMLInputElement;
+    playerView.progressInput = playerView.bar.querySelector<HTMLInputElement>(".progress");
 
-    const volume = playerView.bar.querySelector(".volume") as HTMLInputElement;
-    const fullscreenBtn = playerView.bar.querySelector(".fullscreen-btn") as HTMLButtonElement;
-    const loopPlaylist = playerView.bar.querySelector("#loopPlaylist") as HTMLInputElement;
+    const loopInput = playerView.bar.querySelector<HTMLInputElement>("#loop")
+
+    const volume = playerView.bar.querySelector<HTMLInputElement>(".volume");
+    const fullscreenBtn = playerView.bar.querySelector<HTMLButtonElement>(".fullscreen-btn");
+    const loopPlaylist = playerView.bar.querySelector<HTMLInputElement>("#loopPlaylist");
     playerView.loopPlaylist = loopPlaylist.checked;
 
     playerView.controls = {
@@ -78,6 +80,11 @@ export function setupBar() {
             const time = clamp(0, playerView.videoEl.duration * (value / 100), playerView.videoEl.duration);
             playerView.videoEl.currentTime = playerView.audioEl.currentTime = time;
         }
+
+        if (e.key === "l") {
+            loopInput.checked = !loopInput.checked;
+            loopInput.dispatchEvent(new Event("change"));
+        }
     });
 
     let full_timeout: NodeJS.Timeout;
@@ -111,14 +118,13 @@ export function setupBar() {
 
     fullscreenBtn.addEventListener("click", toggleFullscreen);
 
-    playerView.bar.querySelector<HTMLInputElement>("#loop")!.addEventListener("change", (e) => {
+    loopInput.addEventListener("change", (e) => {
         const loop = (e.target as any).checked;
         playerView.videoEl.loop = loop;
     });
 
     setTimeout(() => {
-        const loop = playerView.bar.querySelector<HTMLInputElement>("#loop")!.checked;
-        playerView.videoEl.loop = loop;
+        playerView.videoEl.loop = loopInput.checked;
     }, 100);
 
     // UI sync
