@@ -7,3 +7,15 @@ export interface ChannelInfo {
     banner: string;
     subscribers: number;
 }
+
+export interface ChannelVideo {
+    title: string;
+    id: string;
+    thumbnail: string;
+    duration: number;
+    views: number;
+    history?: {
+        time: number;
+        _id: string;
+    }
+}
