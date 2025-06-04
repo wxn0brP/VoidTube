@@ -1,3 +1,13 @@
+@use "aside";
+@use "bar";
+@use "generalView";
+@use "main";
+@use "nav";
+@use "playlist";
+@use "popup";
+@use "scroll";
+
+
 * {
     margin: 0;
     padding: 0;
