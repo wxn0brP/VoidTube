@@ -37,6 +37,7 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
 
     try {
         const png = import.meta.dirname + "/../../public/favicon.png";
+        console.log(logPrefix, "Updating icon:", png);
         nofiter.notify({
             title: "VoidTube",
             message: "Downloading update...",
@@ -48,7 +49,6 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
         console.error(err);
     }
 
-    const hash = crypto.createHash("sha256");
     const output = fs.createWriteStream(outputFile);
 
     for (const partName of manifest.parts) {
@@ -57,19 +57,20 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
         const res = await ky.get(url).arrayBuffer();
         const buf = Buffer.from(res);
         output.write(buf);
-        hash.update(buf);
     }
 
     output.end();
     await new Promise<void>(resolve => output.on("finish", resolve));
 
     console.log(logPrefix, `Checking checksum: ${manifest.sha256}.`);
+    const hash = crypto.createHash("sha256");
+    hash.update(fs.readFileSync(outputFile));
     const digest = hash.digest("hex");
     if (digest !== manifest.sha256) {
         throw new Error(`Checksum mismatch: expected ${manifest.sha256}, got ${digest}`);
     }
 
-    console.log(logPrefix, `Wrote ${manifest.sha256} with valid checksum.`);
+    console.log(logPrefix, `Successfully downloaded and assembled ${outputFile} with valid checksum.`);
 
     // Save new git commit hash
     fs.writeFileSync(gitvvPath, manifest.commit, "utf-8");
