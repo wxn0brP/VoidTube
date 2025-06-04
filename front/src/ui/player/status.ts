@@ -5,7 +5,7 @@ import { VideoInfo } from "#types/video";
 import historyView from "#ui/history";
 import navBarView from "#ui/navBar";
 import playListView from "#ui/playList";
-import { updateQueryParam } from "#utils";
+import { debounce, updateQueryParam } from "#utils";
 import playerView from ".";
 import { changeView } from "..";
 
@@ -41,10 +41,11 @@ export async function loadProgress() {
     }
 }
 
-export async function loadVideo(id: string, autoPlay: boolean = true, saveProgressOpt: boolean = true) {
+async function loadVideoFn(id: string, autoPlay: boolean = true, saveProgressOpt: boolean = true) {
     if (saveProgressOpt) saveProgress();
     if (!id) return console.error("No video id provided");
     
+    fetchVQL("api -video-load s.id=0"); // cancel previous load
     const data = await fetchVQL<VideoInfo>(`api video! s.url = ${id}`);
 
     if(!data.formats?.length) return alert("Failed to load video");
@@ -76,6 +77,7 @@ export async function loadVideo(id: string, autoPlay: boolean = true, saveProgre
     }, { once: true });
 }
 
+export const loadVideo = debounce<typeof loadVideoFn>(loadVideoFn, 200);
 
 export function loadMediaSession() {
     const video = $store.video.get();
