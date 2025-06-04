@@ -33,7 +33,10 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
 
     nofiter.notify({
         title: "VoidTube",
-        message: "Downloading update..."
+        message: "Downloading update...",
+        contentImage: app.getAppPath() + "/public/favicon.png",
+        subtitle: "Please wait...",
+        icon: app.getAppPath() + "/public/favicon.png",
     });
 
     const hash = crypto.createHash("sha256");

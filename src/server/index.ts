@@ -1,7 +1,6 @@
 import { parseStringQuery } from "#vql/cpu/string/index";
 import FalconFrame from "@wxn0brp/falcon-frame";
 import { LogLevelName } from "@wxn0brp/lucerna-log";
-import { existsSync, readFileSync } from "fs";
 import VQL from "../shared/vql";
 import { avatarHandler, avatarTryHandler } from "./avatar";
 
@@ -19,26 +18,13 @@ app.listen(port);
 const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
 if (isDev) console.log("[VoidTube-SERVER] __cwd:", __cwd);
 
-if (existsSync(__cwd + "public/scss") && existsSync(__cwd + "node_modules/sass")) {
-    const { scssMiddleware } = await import("./scss");
-    app.use("/css", scssMiddleware(__cwd));
-}
+app.get("/", (req, res) => {
+    res.render(__cwd + "public/index.html", {});
+});
+
 app.static("/", __cwd + "public");
 app.static("/js", __cwd + "front/dist");
 app.static("/src", __cwd + "front/src");
-
-app.get("/", (req, res) => {
-    let html = "";
-    html += readFileSync(__cwd + "public/header.html", "utf-8");
-
-    html += readFileSync(__cwd + "public/nav.html", "utf-8");
-    html += readFileSync(__cwd + "public/app.html", "utf-8");
-
-    html += readFileSync(__cwd + "public/footer.html", "utf-8");
-
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(html);
-});
 
 app.post("/VQL", async (req, res) => {
     try {

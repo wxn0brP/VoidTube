@@ -23,13 +23,12 @@
         "@types/node-notifier": "^8.0.5",
         "electron": "^36.3.2",
         "electron-builder": "^26.0.12",
-        "sass": "^1.89.1",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/db": "^0.7.6",
-        "@wxn0brp/falcon-frame": "^0.0.4",
+        "@wxn0brp/db": "^0.8.0",
+        "@wxn0brp/falcon-frame": "^0.0.5",
         "@wxn0brp/lucerna-log": "^0.1.1",
         "@wxn0brp/vql": "^0.3.3",
         "ky": "^1.8.1",

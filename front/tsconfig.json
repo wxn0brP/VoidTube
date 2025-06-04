@@ -7,6 +7,7 @@
             "#api/*": ["./src/api/*"],
             "#ui/*": ["./src/ui/*"],
             "#types/*": ["./src/types/*"],
+            "#css/*": ["./src/scss/*"],
 
             "#mgl": ["./src/mgl"],
             "#store": ["./src/store"],
@@ -15,7 +16,10 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "outDir": "./dist",
-        "inlineSourceMap": true
+        "inlineSourceMap": true,
+        "types": [
+            "esbuild-style-plugin"
+        ]
     },
     "include": [
        "./src"
