@@ -8,7 +8,11 @@ const logPrefix = "[VoidTube-quick-updater]";
 const manifestUrl = "https://raw.githubusercontent.com/wxn0brP/VoidTube/refs/heads/dist-split/output/manifest.json";
 
 async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
-    const manifest = await ky<any>(manifestUrl).json();
+    const manifest = await ky<{
+        parts: string[];
+        sha256: string;
+        commit: string;
+    }>(manifestUrl).json();
     console.log(logPrefix, `Retrieved manifest from ${manifestUrl}`);
 
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
@@ -59,13 +63,13 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
     output.end();
     await new Promise<void>(resolve => output.on("finish", resolve));
 
-    console.log(logPrefix, `Checking checksum: ${manifest.output}.`);
+    console.log(logPrefix, `Checking checksum: ${manifest.sha256}.`);
     const digest = hash.digest("hex");
     if (digest !== manifest.sha256) {
         throw new Error(`Checksum mismatch: expected ${manifest.sha256}, got ${digest}`);
     }
 
-    console.log(logPrefix, `Wrote ${manifest.output} with valid checksum.`);
+    console.log(logPrefix, `Wrote ${manifest.sha256} with valid checksum.`);
 
     // Save new git commit hash
     fs.writeFileSync(gitvvPath, manifest.commit, "utf-8");
