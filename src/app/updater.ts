@@ -31,13 +31,18 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
         }
     }
 
-    nofiter.notify({
-        title: "VoidTube",
-        message: "Downloading update...",
-        contentImage: app.getAppPath() + "/public/favicon.png",
-        subtitle: "Please wait...",
-        icon: app.getAppPath() + "/public/favicon.png",
-    });
+    try {
+        const png = import.meta.dirname + "/../../public/favicon.png";
+        nofiter.notify({
+            title: "VoidTube",
+            message: "Downloading update...",
+            contentImage: png,
+            subtitle: "Please wait...",
+            icon: png,
+        });
+    } catch (err) {
+        console.error(err);
+    }
 
     const hash = crypto.createHash("sha256");
     const output = fs.createWriteStream(outputFile);
@@ -65,6 +70,7 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
     // Save new git commit hash
     fs.writeFileSync(gitvvPath, manifest.commit, "utf-8");
     console.log(logPrefix, `Updated version to ${manifest.commit}.`);
+    process.env.VOIDTUBE_VERSION = manifest.commit;
 
     return true;
 }
