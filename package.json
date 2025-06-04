@@ -6,7 +6,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "tsc && tsc-alias && node build.js",
+        "build": "tsc && tsc-alias",
         "start:server": "node dist/server/index.js",
         "start:client": "electron .",
         "electron:build": "electron-builder",
