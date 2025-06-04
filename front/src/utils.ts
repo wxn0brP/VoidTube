@@ -1,12 +1,14 @@
 import { mgl } from "./mgl";
 
-export function debounce(func: Function, timeout: number = 300) {
+export function debounce<T=Function>(func: Function, timeout: number = 300) {
     let timer: NodeJS.Timeout;
-    return (...args: any) => {
+    const fn = (...args: any) => {
         clearTimeout(timer);
         timer = setTimeout(() => { func.apply(this, args); }, timeout);
     }
+    return fn as T;
 }
+
 export function throttle(fn: Function, delay = 5000) {
     let lastCall = 0;
 

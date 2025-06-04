@@ -1,7 +1,7 @@
 import { createValtheraAdapter } from "@wxn0brp/vql";
 import { getChannelVideos, getPlaylistIds, searchVideo } from "../apiBack";
 import { getRecommended } from "../getRecommended";
-import { downloadVideo, apiGetVideos, channelInfo, apiGetVideo } from "./apiVQL.logic";
+import { downloadVideo, apiGetVideos, channelInfo, apiGetVideo, apiExecutor } from "./apiVQL.logic";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
@@ -41,5 +41,23 @@ export const YouTubeAdapter = createValtheraAdapter({
             console.error(e);
         }
         return null;
-    }
+    },
+
+    async removeOne(collection, search) {
+        try {
+            if (collection === "video-load") return apiExecutor.cancel(search.id || search._id || search.url);
+        } catch (e) {
+            console.error(e);
+        }
+        return false;
+    },
+
+    async remove(collection, search) {
+        try {
+            if (collection === "video-load") return apiExecutor.cancelAll();
+        } catch (e) {
+            console.error(e);
+        }
+        return false;
+    },
 });

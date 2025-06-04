@@ -1,15 +1,15 @@
-import executorC from "#db/helpers/executor";
 import { existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 import { download, getChannelInfo, getVideoInfo } from "../apiBack";
 import db from "../db";
+import Executor from "../executor";
 
 function getTTL() {
     const now = Math.floor(new Date().getTime() / 1000);
     return now + (3600 * 5); // 5 hours
 }
 
-const apiExecutor = new executorC();
+export const apiExecutor = new Executor();
 clearOldCache();
 
 export async function apiGetVideo(url: string, dynamic = true, staticData?: any) {
@@ -33,7 +33,8 @@ export async function apiGetVideo(url: string, dynamic = true, staticData?: any)
         let data: Awaited<ReturnType<typeof getVideoInfo>>;
         try {
             data = await getVideoInfo(url, dynamic);
-        } catch {
+        } catch (e) {
+            if (e.message == "Task canceled") return null;
             console.error("Failed to get video info:", url);
             return null;
         }
@@ -66,7 +67,7 @@ export async function apiGetVideo(url: string, dynamic = true, staticData?: any)
         return data;
     }
 
-    return await apiExecutor.addOp(fn);
+    return await apiExecutor.add(url, fn, dynamic ? 1 : 0);
 }
 
 export async function clearOldCache() {

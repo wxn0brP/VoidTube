@@ -60,3 +60,4 @@ function params() {
 }
 
 params();
+await import("./store/registers");
