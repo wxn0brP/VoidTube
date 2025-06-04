@@ -75,7 +75,10 @@
             "provider": "github",
             "owner": "wxn0brP",
             "repo": "VoidTube"
-        }
+        },
+        "asarUnpack": [
+            "public/favicon-notifier.png"
+        ]
     },
     "engines": {
         "node": ">=22.0.0"

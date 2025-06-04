@@ -36,7 +36,9 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
     }
 
     try {
-        const png = import.meta.dirname + "/../../public/favicon.png";
+        let png = import.meta.dirname + "/../../public/favicon-notifier.png";
+        if (!fs.existsSync(png)) png = path.join(process.resourcesPath, "app.asar.unpacked", "public", "favicon-notifier.png");
+
         console.log(logPrefix, "Updating icon:", png);
         nofiter.notify({
             title: "VoidTube",
