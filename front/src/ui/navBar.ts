@@ -25,7 +25,7 @@ class NavBarView implements UiComponent {
 
         this.element.querySelector("b").addEventListener("contextmenu", (e) => {
             e.preventDefault();
-            fetchVQL("api self-version!").then(({ version }) => {
+            fetchVQL("api self-version! s.id=0").then(({ version }) => {
                 alert(`Version: ${version}`);
             });
         })
