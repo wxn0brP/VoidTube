@@ -54,6 +54,12 @@ class PlayListView implements UiComponent {
             card.className = "videoCard";
 
             function html(item: Omit<VideoInfo, "formats">) {
+                if (!item) {
+                    item = { title: "Error loading video" } as any;
+                    setTimeout(() => {
+                        card.remove();
+                    }, 5000);
+                }
                 card.innerHTML = `
                     <div style="background-image: url(${item.thumbnail || "/favicon.svg"})"></div>
                     <h3>${item.title || "Loading..."}</h3>
