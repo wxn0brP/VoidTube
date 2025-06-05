@@ -18,3 +18,9 @@ const vqlDb = Object.assign(
 const VQL = new VQLProcessor(vqlDb, null as any, vqlConfig);
 
 export default VQL;
+
+export async function fetchVQL<T=any>(query: string) {
+    const res = await VQL.execute(query, {});
+    if (res.err) throw new Error(res.err);
+    return res as T;
+}

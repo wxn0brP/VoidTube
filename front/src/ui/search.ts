@@ -1,13 +1,13 @@
+import { UiComponent } from "@wxn0brp/flanker-ui";
 import { changeView } from ".";
 import { mgl } from "../mgl";
 import { $store } from "../store";
-import { UiComponent } from "../types/ui";
 import { SearchEntry } from "../types/video";
 import { clearQueryParams, fewItems, formatTime, numToLocale, updateQueryParam } from "../utils";
-import channelView from "./channel";
-import metaControlView from "./metaControl";
 import navBarView from "./navBar";
-import { loadVideo } from "./player/status";
+import metaControlView from "./video/metaControl";
+import { loadVideo } from "./video/player/status";
+import channelView from "./view/channel";
 
 class SearchView implements UiComponent {
     element: HTMLDivElement;

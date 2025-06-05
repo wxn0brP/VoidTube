@@ -1,26 +1,5 @@
 import { mgl } from "./mgl";
 
-export function debounce<T=Function>(func: Function, timeout: number = 300) {
-    let timer: NodeJS.Timeout;
-    const fn = (...args: any) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => { func.apply(this, args); }, timeout);
-    }
-    return fn as T;
-}
-
-export function throttle(fn: Function, delay = 5000) {
-    let lastCall = 0;
-
-    return function (this: any, ...args: any[]) {
-        const now = Date.now();
-        if (now - lastCall >= delay) {
-            fn.apply(this, args);
-            lastCall = now;
-        }
-    };
-}
-
 export function updateQueryParam(key: string, value: string | undefined): void {
     const url = new URL(window.location.href);
 

@@ -1,7 +1,7 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { ChannelInfo } from "#types/channel";
-import channelView, { followsFormatter, thumbnailMiddle } from "#ui/channel";
+import channelView, { followsFormatter, thumbnailMiddle } from "#ui/view/channel";
 import { loadMediaSession } from "./status";
 
 export function setupChannelInfo() {
@@ -9,6 +9,7 @@ export function setupChannelInfo() {
     const img = playerInfoDiv.querySelector("img");
     const name = playerInfoDiv.querySelector("#video-channel-name");
     const subs = playerInfoDiv.querySelector("#video-channel-subscriptions");
+    const subscribeBtn = playerInfoDiv.querySelector("#video-channel-subscribe");
 
     $store.video.subscribe(async video => {
         const channelData = await fetchVQL<ChannelInfo>("api channelInfo! s._id = " + video.channel);
@@ -19,6 +20,12 @@ export function setupChannelInfo() {
         loadMediaSession();
     });
 
+    $store.video.subscribe(async ({ channel }) => {
+        const res = await fetchVQL("user subs! s._id = " + channel);
+        subscribeBtn.innerHTML = !!res ? "Subscribed" : "Subscribe";
+        subscribeBtn.classList.toggle("subscribed", !!res);
+    });
+
     playerInfoDiv.addEventListener("click", () => {
         channelView.load($store.video.get().channel);
     });
@@ -26,5 +33,19 @@ export function setupChannelInfo() {
     playerInfoDiv.addEventListener("contextmenu", (e) => {
         e.preventDefault();
         window.open(window.location.origin + "/?channel=" + $store.video.get().channel, "_blank");
+    });
+
+    subscribeBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = $store.video.get().channel;
+        const res = await fetchVQL("user subs! s._id = " + id);
+        const q = !!res ? 
+            "user -subs! s._id = " + id :
+            "user updateOneOrAdd subs s._id = " + id + " u.time=" + Math.floor(Date.now() / 1000);
+
+        await fetchVQL(q);
+        subscribeBtn.innerHTML = !!res ? "Subscribe" : "Subscribed";
+        subscribeBtn.classList.toggle("subscribed", !(!!res));
     });
 }

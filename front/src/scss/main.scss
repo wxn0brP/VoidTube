@@ -89,6 +89,10 @@ section {
             border-radius: 20%;
             object-fit: cover;
         }
+
+        button.subscribed {
+            border-color: green;
+        }
     }
 }
 
@@ -150,7 +154,8 @@ section {
 }
 
 #search-view,
-#playlist-snap {
+#playlist-snap,
+#feed-view {
     flex-direction: column;
 }
 
@@ -181,6 +186,10 @@ section {
         gap: 1rem;
         margin-bottom: 15px;
     }
+
+    button.subscribed {
+        border-color: green;
+    }
 }
 
 #channel-videos {
@@ -189,7 +198,8 @@ section {
 }
 
 .historyCard,
-.searchCard {
+.searchCard,
+.feedCard {
     .author {
         margin-top: 5px;
         margin-bottom: 2px;

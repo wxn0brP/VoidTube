@@ -1,22 +1,23 @@
+import { mgl } from "../mgl";
 import { $store } from "../store";
-import audioFormatsView from "./audioFormat";
-import historyView from "./history";
-import playerView from "./player";
-import playListView from "./playList";
-import playListsView from "./playListsView";
+import asideView from "./aside";
+import playListsModal from "./modal/playlists";
+import playListSnapView from "./modal/playListSnap";
+import navBarView from "./navBar";
 import searchView from "./search";
 import searchBarView from "./searchBar";
-import videoFormatsView from "./videoFormat";
-import videoInfoView from "./videoInfo";
-import videoView from "./videoView";
-import loaderView from "./loader";
-import metaControlView from "./metaControl";
-import { mgl } from "../mgl";
-import playListsModal from "./modal/playlists";
-import asideView from "./aside";
-import navBarView from "./navBar";
-import playListSnapView from "./playListSnap";
-import channelView from "./channel";
+import loaderView from "./small/loader";
+import audioFormatsView from "./video/audioFormat";
+import metaControlView from "./video/metaControl";
+import playerView from "./video/player";
+import videoFormatsView from "./video/videoFormat";
+import videoInfoView from "./video/videoInfo";
+import channelView from "./view/channel";
+import feedView from "./view/feed";
+import historyView from "./view/history";
+import playListView from "./view/playList";
+import playListsView from "./view/playListsView";
+import videoView from "./view/videoView";
 
 export const components = [
     playerView,
@@ -36,6 +37,7 @@ export const components = [
     navBarView,
     playListSnapView,
     channelView,
+    feedView,
 ]
 
 components.forEach(component => component.mount());

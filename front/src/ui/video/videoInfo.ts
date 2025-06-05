@@ -1,6 +1,6 @@
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
-import { VideoInfo } from "../types/video";
+import { $store } from "#store";
+import { VideoInfo } from "#types/video";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 
 class VideoInfoView implements UiComponent {
     element: HTMLElement;

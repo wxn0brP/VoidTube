@@ -1,10 +1,10 @@
 import { fetchVQL } from "#api/index";
 import { fetchPlaylistsContainingVideo } from "#api/playlist";
 import { $store } from "#store";
-import { UiComponent } from "#types/ui";
-import uiFunc from "./modal";
-import playListsModal from "./modal/playlists";
-import playListsView from "./playListsView";
+import { UiComponent } from "@wxn0brp/flanker-ui";
+import playListsView from "#ui/view/playListsView";
+import uiFunc from "../modal";
+import playListsModal from "../modal/playlists";
 
 class MetaControlView implements UiComponent {
     element: HTMLDivElement;

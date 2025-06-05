@@ -1,13 +1,12 @@
 import { fetchPlaylistSnap } from "#api/playlist";
 import { $store } from "#store";
-import { UiComponent } from "#types/ui";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 import { PlaylistSnapEntry } from "#types/video";
 import { clearQueryParams, fewItems, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
-import { changeView } from ".";
-import metaControlView from "./metaControl";
-import navBarView from "./navBar";
-import playerView from "./player";
-import { loadVideo } from "./player/status";
+import { changeView } from "..";
+import metaControlView from "../video/metaControl";
+import navBarView from "../navBar";
+import { loadVideo } from "#ui/video/player/status";
 
 class PlayListSnapView implements UiComponent {
     element: HTMLDivElement;

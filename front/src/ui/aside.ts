@@ -1,6 +1,6 @@
-import { UiComponent } from "../types/ui";
-import historyView from "./history";
-import playListsView from "./playListsView";
+import { UiComponent } from "@wxn0brp/flanker-ui";
+import historyView from "./view/history";
+import playListsView from "./view/playListsView";
 
 class AsideView implements UiComponent {
     element: HTMLDivElement;

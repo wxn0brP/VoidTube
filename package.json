@@ -21,7 +21,7 @@
     "devDependencies": {
         "@types/node": "^22.15.29",
         "@types/node-notifier": "^8.0.5",
-        "electron": "^36.3.2",
+        "electron": "^36.4.0",
         "electron-builder": "^26.0.12",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
@@ -30,9 +30,10 @@
         "@wxn0brp/db": "^0.8.0",
         "@wxn0brp/falcon-frame": "^0.0.6",
         "@wxn0brp/lucerna-log": "^0.1.1",
-        "@wxn0brp/vql": "^0.3.3",
+        "@wxn0brp/vql": "^0.3.4",
         "ky": "^1.8.1",
-        "node-notifier": "^10.0.1"
+        "node-notifier": "^10.0.1",
+        "rss-parser": "^3.13.0"
     },
     "author": {
         "name": "wxn0brP",

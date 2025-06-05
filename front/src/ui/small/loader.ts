@@ -1,5 +1,5 @@
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
+import { $store } from "#store";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 
 class LoaderView implements UiComponent {
     element: HTMLDivElement;

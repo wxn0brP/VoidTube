@@ -1,7 +1,7 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { $store } from "#store";
 import navBarView from "#ui/navBar";
-import playListView from "#ui/playList";
+import playListView from "#ui/view/playList";
 import { updateQueryParam } from "#utils";
 import playerView from ".";
 import { loadVideo } from "./status";

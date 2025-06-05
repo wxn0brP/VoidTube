@@ -2,7 +2,8 @@
 #playlists-container,
 #playlist-snap-container,
 #search-container,
-#channel-videos {
+#channel-videos,
+#feed-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 5px;
@@ -22,7 +23,8 @@
 .playlistCard,
 .playlistSnapCard,
 .searchCard,
-.channelVideoCard {
+.channelVideoCard,
+.feedCard {
     border-radius: 8px;
     padding: 1rem;
     transition: transform 0.2s ease;

@@ -1,15 +1,14 @@
 import { fetchVQL } from "#api/index";
 import { fetchPlaylistInfo } from "#api/playlist";
 import { $store } from "#store";
-import { UiComponent } from "#types/ui";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 import { PlaylistEntry, VideoInfo } from "#types/video";
-import { formatTime, updateQueryParam, setTitle, clearQueryParams } from "#utils";
-import { changeView } from ".";
-import metaControlView from "./metaControl";
-import navBarView from "./navBar";
-import playerView from "./player";
-import { scrollToPlaylistElement } from "./player/audioSync";
-import { loadVideo } from "./player/status";
+import { scrollToPlaylistElement } from "#ui/video/player/audioSync";
+import { loadVideo } from "#ui/video/player/status";
+import { clearQueryParams, formatTime, setTitle, updateQueryParam } from "#utils";
+import { changeView } from "..";
+import navBarView from "../navBar";
+import metaControlView from "../video/metaControl";
 
 class PlayListView implements UiComponent {
     element: HTMLDivElement;

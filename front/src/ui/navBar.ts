@@ -1,5 +1,5 @@
 import { fetchVQL } from "#api/index";
-import { UiComponent } from "#types/ui";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 import { changeView } from ".";
 
 interface StackItem {
