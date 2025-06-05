@@ -28,7 +28,7 @@
     },
     "dependencies": {
         "@wxn0brp/db": "^0.8.0",
-        "@wxn0brp/falcon-frame": "^0.0.5",
+        "@wxn0brp/falcon-frame": "^0.0.6",
         "@wxn0brp/lucerna-log": "^0.1.1",
         "@wxn0brp/vql": "^0.3.3",
         "ky": "^1.8.1",
