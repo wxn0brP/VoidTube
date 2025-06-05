@@ -1,5 +1,5 @@
-import loaderView from "#ui/loader";
 import searchBarView from "#ui/searchBar";
+import loaderView from "#ui/small/loader";
 import { mgl } from "../mgl";
 
 const middleTime: number[] = [];

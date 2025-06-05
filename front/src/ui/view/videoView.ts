@@ -1,5 +1,5 @@
-import { $store } from "../store";
-import { UiComponent } from "../types/ui";
+import { $store } from "../../store";
+import { UiComponent } from "../../types/ui";
 
 class VideoView implements UiComponent {
     element: HTMLElement;

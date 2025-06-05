@@ -2,12 +2,13 @@ import { fetchVideoHistoryTime, updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { VideoInfo } from "#types/video";
-import historyView from "#ui/history";
+import { changeView } from "#ui/index";
 import navBarView from "#ui/navBar";
-import playListView from "#ui/playList";
-import { debounce, updateQueryParam } from "#utils";
+import historyView from "#ui/view/history";
+import playListView from "#ui/view/playList";
+import { updateQueryParam } from "#utils";
+import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
-import { changeView } from "..";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
@@ -77,7 +78,7 @@ async function loadVideoFn(id: string, autoPlay: boolean = true, saveProgressOpt
     }, { once: true });
 }
 
-export const loadVideo = debounce<typeof loadVideoFn>(loadVideoFn, 200);
+export const loadVideo = utils.debounce<typeof loadVideoFn>(loadVideoFn, 200);
 
 export function loadMediaSession() {
     const video = $store.video.get();

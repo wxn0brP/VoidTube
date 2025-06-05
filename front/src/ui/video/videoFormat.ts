@@ -1,6 +1,6 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { UiComponent } from "#types/ui";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 import { Format } from "#types/video";
 
 export class VideoFormatsView implements UiComponent {

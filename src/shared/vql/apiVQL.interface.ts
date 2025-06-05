@@ -2,6 +2,7 @@ import { createValtheraAdapter } from "@wxn0brp/vql";
 import { getChannelVideos, getPlaylistIds, searchVideo } from "../apiBack";
 import { getRecommended } from "../getRecommended";
 import { downloadVideo, apiGetVideos, channelInfo, apiGetVideo, apiExecutor } from "./apiVQL.logic";
+import { getFeed, getQuickFeed } from "../feed";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
@@ -24,6 +25,8 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "video-static") return await apiGetVideos(search);
             if (collection === "channelVideos") return await getChannelVideos(search.url || search._id, search.flat ?? true);
             if (collection === "channelInfo") return [await channelInfo(search?.$in?.id?.[0])];
+            if (collection === "channelFeed") return await getFeed(search.url || search._id);
+            if (collection === "quickFeed") return await getQuickFeed();
         } catch (e) {
             console.error(e);
         }

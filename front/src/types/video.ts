@@ -91,3 +91,19 @@ export interface PlaylistSnapEntry {
         time: number;
     };
 }
+
+export interface FeedEntry {
+    title: string;
+    link: string;
+    pubDate: string;
+    author: string;
+    id: string;
+    isoDate: string;
+    channelId: string;
+    channel: {
+        avatar: string;
+    };
+    history: {
+        time: number;
+    };
+}

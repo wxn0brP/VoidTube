@@ -1,11 +1,11 @@
-import channelView from "#ui/channel";
+import channelView from "#ui/view/channel";
 import navBarView from "#ui/navBar";
 import { changeView } from "./ui";
-import playerView from "./ui/player";
-import { loadVideo } from "./ui/player/status";
-import playListView from "./ui/playList";
+import playListView from "./ui/view/playList";
 import searchBarView from "./ui/searchBar";
 import { getYouTubeVideoId, setTitle, updateQueryParam } from "./utils";
+import { loadVideo } from "#ui/video/player/status";
+import playerView from "#ui/video/player";
 
 await new Promise(r => setTimeout(r, 100)); // wait for ui to mount
 

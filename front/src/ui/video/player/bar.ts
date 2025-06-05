@@ -1,7 +1,8 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { clamp, debounce, formatTime, throttle } from "#utils";
+import { clamp, formatTime } from "#utils";
+import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
 import { playNext } from "./audioSync";
 import { changePlay, toggleFullscreen } from "./status";
@@ -134,8 +135,8 @@ export function setupBar() {
         updateProgressBars();
     });
 
-    const playNextDebounced = debounce(playNext);
-    const bufferNextThrottled = throttle(() => {
+    const playNextDebounced = utils.debounce(playNext);
+    const bufferNextThrottled = utils.throttle(() => {
         let nextVideoId = $store.nextVideoId.get();
 
         if ($store.playlistId.get()) {
@@ -153,7 +154,7 @@ export function setupBar() {
         console.debug("[player] buffering next video on server", nextVideoId);
     }, 25_000);
 
-    const updateVideoHistoryTimeToZero = debounce(() => {
+    const updateVideoHistoryTimeToZero = utils.debounce(() => {
         updateVideoHistoryTime($store.videoId.get(), 0);
     });
 

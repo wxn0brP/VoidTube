@@ -12,6 +12,10 @@
             📂
             <div>Playlists</div>
         </div>
+        <div id="show-feed-button" onclick="mgl.feedShow()">
+            📰
+            <div>Feed</div>
+        </div>
     </aside>
     <div id="video-view" class="view">
         <section id="video">
@@ -69,6 +73,7 @@
                     <div>
                         <h1 id="video-channel-name"></h1>
                         <p id="video-channel-subscriptions"></p>
+                        <button id="video-channel-subscribe" class="btn">Subscribe</button>
                     </div>
                 </div>
             </div>
@@ -107,6 +112,7 @@
             <div>
                 <h1 id="channel-name"></h1>
                 <p id="channel-subscriptions"></p>
+                <button id="channel-subscribe" class="btn">Subscribe</button>
             </div>
         </div>
         <div id="channel-info"></div>
@@ -114,6 +120,9 @@
             <button id="load-channel-videos" class="btn">See all videos (Probably slow)</button>
         </div>
         <div id="channel-videos"></div>
+    </div>
+    <div id="feed-view" class="view">
+        <div id="feed-container"></div>
     </div>
 </main>
 

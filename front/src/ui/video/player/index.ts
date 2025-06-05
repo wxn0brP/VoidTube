@@ -1,10 +1,10 @@
+import { mgl } from "#mgl";
+import { $store } from "#store";
+import { changeView } from "#ui/index";
 import navBarView from "#ui/navBar";
-import playListView from "#ui/playList";
-import { changeView } from "..";
-import { mgl } from "../../mgl";
-import { $store } from "../../store";
-import { UiComponent } from "../../types/ui";
-import { clearQueryParams, debounce, setTitle, updateQueryParam } from "../../utils";
+import playListView from "#ui/view/playList";
+import { clearQueryParams, setTitle, updateQueryParam } from "#utils";
+import utils, { UiComponent } from "@wxn0brp/flanker-ui";
 import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
@@ -80,7 +80,7 @@ export class PlayerView implements UiComponent {
             if (!this.paused) this.videoEl.play();
         });
 
-        const loadMediaDebounce = debounce(loadMedia, 100);
+        const loadMediaDebounce = utils.debounce(loadMedia, 100);
         $store.selectedVideoUrl.subscribe(() => loadMediaDebounce());
         $store.selectedAudioUrl.subscribe(() => loadMediaDebounce());
 

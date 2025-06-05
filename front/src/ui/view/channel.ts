@@ -1,12 +1,12 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { ChannelInfo, ChannelVideo } from "#types/channel";
-import { UiComponent } from "#types/ui";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 import { clearQueryParams, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
-import { changeView } from ".";
-import metaControlView from "./metaControl";
-import navBarView from "./navBar";
-import { loadVideo } from "./player/status";
+import { changeView } from "..";
+import metaControlView from "../video/metaControl";
+import navBarView from "../navBar";
+import { loadVideo } from "#ui/video/player/status";
 
 export const thumbnailMiddle = "/avatar?link=";
 
@@ -25,6 +25,7 @@ class ChannelView implements UiComponent {
     avatar: HTMLImageElement;
     banner: HTMLImageElement;
     loadVideosButton: HTMLButtonElement;
+    channelSubscribeBtn: HTMLButtonElement;
 
     render(data: ChannelInfo) {
         this.name.innerHTML = data.name;
@@ -35,6 +36,10 @@ class ChannelView implements UiComponent {
         this.avatar.src = data.avatar ? thumbnailMiddle + data.avatar : "/favicon.svg";
         this.banner.src = data.banner ? thumbnailMiddle + data.banner : "/favicon.svg";
         this.banner.style.display = data.banner ? "" : "none";
+        fetchVQL(`user subs! s._id = ${data.id}`).then(res => {
+            this.channelSubscribeBtn.innerHTML = !!res ? "Subscribed" : "Subscribe";
+            this.channelSubscribeBtn.classList.toggle("subscribed", !!res);
+        });
     }
 
     mount(): void {
@@ -46,12 +51,25 @@ class ChannelView implements UiComponent {
         this.avatar = this.element.querySelector("#channel-avatar");
         this.banner = this.element.querySelector("#channel-banner");
         this.loadVideosButton = this.element.querySelector("#load-channel-videos")!;
+        this.channelSubscribeBtn = this.element.querySelector("#channel-subscribe")!;
 
         $store.view.channel.subscribe((open) => {
             this.element.style.display = open ? "" : "none";
         });
 
         $store.view.channel.set(false);
+
+        this.channelSubscribeBtn.addEventListener("click", async () => {
+            const id = $store.channelId.get();
+            const res = await fetchVQL("user subs! s._id = " + id);
+            const q = !!res ? 
+                "user -subs! s._id = " + id :
+                "user updateOneOrAdd subs s._id = " + id + " u.last=" + Math.floor(Date.now() / 1000);
+
+            await fetchVQL(q);
+            this.channelSubscribeBtn.innerHTML = !!res ? "Subscribe" : "Subscribed";
+            this.channelSubscribeBtn.classList.toggle("subscribed", !(!!res));
+        })
     }
 
     show() {

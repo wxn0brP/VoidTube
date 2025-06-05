@@ -2,15 +2,15 @@ import { fetchVQL } from "#api/index";
 import { fetchPlaylists } from "#api/playlist";
 import { mgl } from "#mgl";
 import { $store } from "#store";
-import { UiComponent } from "#types/ui";
 import { PlaylistsEntry } from "#types/video";
-import { clamp, fewItems, formatTime, setTitle, updateQueryParam } from "#utils";
-import { changeView } from ".";
-import uiFunc from "./modal";
-import playListsModal from "./modal/playlists";
-import navBarView from "./navBar";
+import uiFunc from "#ui/modal";
+import playListsModal from "#ui/modal/playlists";
+import playListSnapView from "#ui/modal/playListSnap";
+import navBarView from "#ui/navBar";
+import { fewItems, formatTime, setTitle, updateQueryParam } from "#utils";
+import { UiComponent } from "@wxn0brp/flanker-ui";
+import { changeView } from "..";
 import playListView from "./playList";
-import playListSnapView from "./playListSnap";
 
 class PlayListsView implements UiComponent {
     element: HTMLDivElement;

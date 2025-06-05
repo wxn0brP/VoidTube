@@ -1,6 +1,6 @@
+import { createStore } from "@wxn0brp/flanker-ui";
 import { mgl } from "../mgl";
 import { PlaylistsEntry, VideoCache, VideoInfo } from "../types/video";
-import { createStore } from "./store";
 
 const initData = {
     video: null as VideoInfo,
@@ -20,7 +20,8 @@ const initData = {
         playlists: false,
         search: false,
         playlistSnap: false,
-        channel: false
+        channel: false,
+        feed: false,
     },
     loader: 0,
 

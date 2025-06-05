@@ -1,10 +1,10 @@
 import { fetchVQL } from "#api/index";
 import { fetchPlaylists } from "#api/playlist";
 import { $store } from "#store";
-import { UiComponent } from "#types/ui";
 import { PlaylistsEntry } from "#types/video";
-import playListsView from "#ui/playListsView";
+import playListsView from "#ui/view/playListsView";
 import { formatTime } from "#utils";
+import { UiComponent } from "@wxn0brp/flanker-ui";
 import uiFunc from ".";
 
 class PlayListsModal implements UiComponent {
