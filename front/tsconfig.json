@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "ES2022",
         "target": "ES2022",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "paths": {
             "#api/*": ["./src/api/*"],
             "#ui/*": ["./src/ui/*"],
