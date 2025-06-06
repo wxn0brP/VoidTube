@@ -5,7 +5,7 @@ import { $store } from "#store";
 import { PlaylistsEntry } from "#types/video";
 import uiFunc from "#ui/modal";
 import playListsModal from "#ui/modal/playlists";
-import playListSnapView from "#ui/modal/playListSnap";
+import playListSnapView from "#ui/view/playListSnap";
 import navBarView from "#ui/navBar";
 import { fewItems, formatTime, setTitle, updateQueryParam } from "#utils";
 import { UiComponent } from "@wxn0brp/flanker-ui";

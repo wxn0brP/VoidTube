@@ -41,6 +41,8 @@ jobs:
           cp -r public asar-temp/public
           cp -r package.json asar-temp/package.json
           rm -rf asar-temp/public/scss
+          # remove source maps
+          find asar-temp -type f -name "*.map" -exec rm -f {} \;
 
           cd asar-temp
           npm install --omit=dev

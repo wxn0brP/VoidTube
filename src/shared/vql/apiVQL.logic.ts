@@ -52,7 +52,7 @@ export async function apiGetVideo(url: string, dynamic = true, staticData?: any)
         };
         await db.cache.updateOneOrAdd("video-static", { url }, staticDataPayload);
 
-        if ("formats" in data && data.formats.length) {
+        if ("formats" in data && data.formats.length > 3) {
             const dynamicDataPayload = {
                 _id: url,
                 formats: data.formats,
