@@ -1,7 +1,7 @@
 {
     "name": "void-tube",
     "version": "0.0.4",
-    "main": "dist/index.js",
+    "main": "dist/app/index.js",
     "license": "MIT",
     "private": true,
     "type": "module",
@@ -19,17 +19,17 @@
         "electron:dist": "electron-packager ."
     },
     "devDependencies": {
-        "@types/node": "^22.15.29",
+        "@types/node": "^22.15.30",
         "@types/node-notifier": "^8.0.5",
         "electron": "^36.4.0",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/db": "^0.8.0",
+        "@wxn0brp/db": "^0.8.1",
         "@wxn0brp/falcon-frame": "^0.0.6",
         "@wxn0brp/lucerna-log": "^0.1.1",
-        "@wxn0brp/vql": "^0.3.4",
+        "@wxn0brp/vql": "^0.3.5",
         "ky": "^1.8.1",
         "node-notifier": "^10.0.1",
         "rss-parser": "^3.13.0"
