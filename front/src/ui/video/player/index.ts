@@ -8,7 +8,8 @@ import utils, { UiComponent } from "@wxn0brp/flanker-ui";
 import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
-import { loadMediaSession } from "./status";
+import { loadMediaSession, loadVideo } from "./status";
+import { fetchVQL } from "#api/index";
 
 export class PlayerView implements UiComponent {
     public element: HTMLDivElement;
@@ -50,7 +51,16 @@ export class PlayerView implements UiComponent {
             const videoUrl = $store.selectedVideoUrl.get();
             const audioUrl = $store.selectedAudioUrl.get();
 
-            if (!videoUrl || !audioUrl) return;
+            if (!videoUrl || !audioUrl) {
+                console.error("No video or audio url", videoUrl, audioUrl);
+                fetchVQL("cache -video-dynamic! s._id = " + $store.videoId.get()).then(() => {
+                    loadVideo($store.videoId.get());
+                    setTimeout(() => {
+                        alert("Failed to load video. Trying again...");
+                    }, 100);
+                });
+                return;
+            }
 
             try {
                 this.savedTime = this.videoEl.currentTime;

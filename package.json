@@ -1,7 +1,7 @@
 {
     "name": "void-tube",
     "version": "0.0.4",
-    "main": "dist/app/index.js",
+    "main": "dist/index.js",
     "license": "MIT",
     "private": true,
     "type": "module",
@@ -22,7 +22,6 @@
         "@types/node": "^22.15.29",
         "@types/node-notifier": "^8.0.5",
         "electron": "^36.4.0",
-        "electron-builder": "^26.0.12",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
     },

@@ -2,7 +2,7 @@ import { mgl } from "../mgl";
 import { $store } from "../store";
 import asideView from "./aside";
 import playListsModal from "./modal/playlists";
-import playListSnapView from "./modal/playListSnap";
+import playListSnapView from "./view/playListSnap";
 import navBarView from "./navBar";
 import searchView from "./search";
 import searchBarView from "./searchBar";
