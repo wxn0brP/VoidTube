@@ -2,7 +2,7 @@ import fs from "fs";
 import crypto from "crypto";
 import path from "path";
 import ky from "ky";
-import nofiter from "node-notifier";
+import { showNotification } from "../shared/notification";
 
 const logPrefix = "[VoidTube-quick-updater]";
 const manifestUrl = "https://raw.githubusercontent.com/wxn0brP/VoidTube/refs/heads/dist-split/output/manifest.json";
@@ -36,17 +36,7 @@ async function downloadAndAssemble(manifestUrl: string, outputDir: string) {
     }
 
     try {
-        let png = import.meta.dirname + "/../../public/favicon-notifier.png";
-        if (!fs.existsSync(png)) png = path.join(process.resourcesPath, "app.asar.unpacked", "public", "favicon-notifier.png");
-
-        console.log(logPrefix, "Updating icon:", png);
-        nofiter.notify({
-            title: "VoidTube",
-            message: "Downloading update...",
-            contentImage: png,
-            subtitle: "Please wait...",
-            icon: png,
-        });
+        showNotification("VoidTube", "Downloading update...");
     } catch (err) {
         console.error(err);
     }

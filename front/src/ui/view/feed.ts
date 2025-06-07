@@ -28,7 +28,7 @@ class FeedView implements UiComponent {
             .map(entry => {
                 return {
                     ...entry,
-                    last: new Date(entry.isoDate).getTime()
+                    last: new Date(entry.pubDate).getTime()
                 }
             })
             .sort((a, b) => b.last - a.last)
@@ -40,10 +40,10 @@ class FeedView implements UiComponent {
                 card.innerHTML = `
                     <div style="background-image: url(https://i3.ytimg.com/vi/${id}/maxresdefault.jpg)" class="img"></div>
                     <h3>${entry.title}</h3>
-                    <p>${new Date(entry.isoDate).toLocaleString()}</p>
+                    <p>${new Date(entry.pubDate).toLocaleString()}</p>
                     <div class="author">
                         <img src="${"/avatar?link=" + entry.channel.avatar}" class="avatar">
-                        <a href="/?channel=${entry.channelId}">${entry.author}</a>
+                        <a href="/?channel=${entry.authorId}">${entry.author}</a>
                     </div>
                     <div class="btns">
                         <button button title="Add to playlist" class="btn" data-id="playlist">📂</button>
@@ -66,7 +66,7 @@ class FeedView implements UiComponent {
                 card.querySelector(`.author`)!.addEventListener("click", (e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    channelView.load(entry.channelId);
+                    channelView.load(entry.authorId);
                 });
 
                 card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
@@ -88,7 +88,7 @@ relations:
   channel:
     path: [api, channelInfo]
     fk: id
-    pk: channelId
+    pk: authorId
     select: [avatar,id]
 
 many: true
