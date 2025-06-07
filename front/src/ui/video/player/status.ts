@@ -66,8 +66,10 @@ async function loadVideoFn(id: string, autoPlay: boolean = true, saveProgressOpt
 
     $store.nextVideoId.set("");
     playListView.renderRecommendations([]);
-    if (!$store.playlistId.get()) {
-        fetchVQL<string[]>("api recommendations s._id = " + id).then(data => {
+    const recommendationsCount = +$store.settings.recommendations.get();
+    if (!$store.playlistId.get() && recommendationsCount > 0) {
+        const query = `api recommendations s._id = ${id} s.limit = ${recommendationsCount}`;
+        fetchVQL<string[]>(query).then(data => {
             if(data.length) $store.nextVideoId.set(data[0]);
             playListView.renderRecommendations(data);
         });

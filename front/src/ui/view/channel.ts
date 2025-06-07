@@ -1,7 +1,7 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { ChannelInfo, ChannelVideo } from "#types/channel";
-import { UiComponent } from "@wxn0brp/flanker-ui";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { clearQueryParams, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from "..";
 import metaControlView from "../video/metaControl";
@@ -55,10 +55,7 @@ class ChannelView implements UiComponent {
         this.channelSubscribeBtn = this.element.querySelector("#channel-subscribe")!;
         this.channelShareBtn = this.element.querySelector("#channel-share")!;
 
-        $store.view.channel.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.channel);
         $store.view.channel.set(false);
 
         this.channelSubscribeBtn.addEventListener("click", async () => {

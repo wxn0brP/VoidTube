@@ -22,11 +22,17 @@ const initData = {
         playlistSnap: false,
         channel: false,
         feed: false,
+        settings: false,
     },
     loader: 0,
 
     playlistsCache: [] as PlaylistsEntry[],
     channelId: "",
+
+    settings: {
+        quality: "best",
+        recommendations: "10"
+    }
 }
 
 export const $store = createStore(initData);

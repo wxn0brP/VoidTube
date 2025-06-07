@@ -1,7 +1,7 @@
 import { $store } from "#store";
 import { FeedEntry } from "#types/video";
 import { clearQueryParams, fewItems, setTitle } from "#utils";
-import { UiComponent } from "@wxn0brp/flanker-ui";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import navBarView from "../navBar";
 import playListView from "./playList";
@@ -101,10 +101,7 @@ many: true
         this.element = document.querySelector("#feed-view");
         this.container = this.element.querySelector("#feed-container")!;
 
-        $store.view.feed.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.feed);
         $store.view.feed.set(false);
 
         setTimeout(() => this.loadFeed(), window.location.search.length > 0 ? 5_000 : 10);
