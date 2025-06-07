@@ -26,6 +26,7 @@ class ChannelView implements UiComponent {
     banner: HTMLImageElement;
     loadVideosButton: HTMLButtonElement;
     channelSubscribeBtn: HTMLButtonElement;
+    channelShareBtn: HTMLButtonElement;
 
     render(data: ChannelInfo) {
         this.name.innerHTML = data.name;
@@ -52,6 +53,7 @@ class ChannelView implements UiComponent {
         this.banner = this.element.querySelector("#channel-banner");
         this.loadVideosButton = this.element.querySelector("#load-channel-videos")!;
         this.channelSubscribeBtn = this.element.querySelector("#channel-subscribe")!;
+        this.channelShareBtn = this.element.querySelector("#channel-share")!;
 
         $store.view.channel.subscribe((open) => {
             this.element.style.display = open ? "" : "none";
@@ -62,14 +64,19 @@ class ChannelView implements UiComponent {
         this.channelSubscribeBtn.addEventListener("click", async () => {
             const id = $store.channelId.get();
             const res = await fetchVQL("user subs! s._id = " + id);
-            const q = !!res ? 
+            const q = !!res ?
                 "user -subs! s._id = " + id :
                 "user updateOneOrAdd subs s._id = " + id + " u.last=" + Math.floor(Date.now() / 1000);
 
             await fetchVQL(q);
             this.channelSubscribeBtn.innerHTML = !!res ? "Subscribe" : "Subscribed";
             this.channelSubscribeBtn.classList.toggle("subscribed", !(!!res));
-        })
+        });
+
+        this.channelShareBtn.addEventListener("click", () => {
+            navigator.clipboard.writeText("https://youtube.com/channel/" + $store.channelId.get());
+            alert("Link copied to clipboard");
+        });
     }
 
     show() {

@@ -1,0 +1,67 @@
+<div id="video-view" class="view">
+    <section id="video">
+        <div id="player">
+            <video id="player-video"></video>
+            <div id="player-bar">
+                <div class="custom-progress-container">
+                    <div class="buffered-range"></div>
+                    <div class="played-range"></div>
+                    <input type="range" class="progress" min="0" max="100" value="0" />
+                </div>
+
+                <div class="control-bar">
+                    <div class="left-bar">
+                        <button class="play-pause-btn" title="Play / Pause">▶️</button>
+                        <label>
+                            Loop
+                            <input type="checkbox" id="loop" title="Loop">
+                        </label>
+                        <label>
+                            Loop Playlist
+                            <input type="checkbox" id="loopPlaylist" title="Loop Playlist">
+                        </label>
+                        <input type="range" class="volume" title="Volume" min="0" max="1" step="0.01" value="1" />
+                    </div>
+
+                    <div class="right-bar">
+                        <span class="time">00:00 / 00:00</span>
+                        <button class="fullscreen-btn" title="Fullscreen">⛶</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="meta-control-bar">
+            <select id="audio-formats"></select>
+            <select id="video-formats"></select>
+            <select id="preferred-video" title="Preferred video quality">
+                <option value="144">144p</option>
+                <option value="240">240p</option>
+                <option value="360">360p</option>
+                <option value="480">480p</option>
+                <option value="720">720p</option>
+                <option value="1080">1080p</option>
+                <option value="best">best quality</option>
+            </select>
+            <button id="toggle-to-playlist">Playlist 📂</button>
+            <button id="share">Share 📤</button>
+            <button id="download">Download ⬇️</button>
+        </div>
+        <div id="video-channel-container">
+            <div id="video-channel-info">
+                <div>
+                    <img src="/favicon.png" alt="" id="video-channel-avatar">
+                </div>
+                <div>
+                    <h1 id="video-channel-name"></h1>
+                    <p id="video-channel-subscriptions"></p>
+                    <button id="video-channel-subscribe" class="btn">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div id="video-info"></div>
+    </section>
+    <section id="playlist">
+        <div id="playlist-container"></div>
+        <div id="recommendations"></div>
+    </section>
+</div>
