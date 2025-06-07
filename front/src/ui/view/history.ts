@@ -2,9 +2,9 @@ import { fetchHistory } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
-import { UiComponent } from "@wxn0brp/flanker-ui";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { HistoryEntry } from "#types/video";
-import { clearQueryParams, fewItems, formatTime, levenshtein, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { clearQueryParams, fewItems, formatTime, levenshtein, numToLocale, setTitle } from "#utils";
 import { changeView } from "..";
 import channelView, { thumbnailMiddle } from "./channel";
 import metaControlView from "../video/metaControl";
@@ -108,10 +108,7 @@ class HistoryView implements UiComponent {
         this.searchInput = document.querySelector("#history-search")!;
         this.searchInput.style.display = "none";
 
-        $store.view.history.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.history);
         $store.view.history.set(false);
 
         // quick load

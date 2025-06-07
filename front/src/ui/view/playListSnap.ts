@@ -1,6 +1,6 @@
 import { fetchPlaylistSnap } from "#api/playlist";
 import { $store } from "#store";
-import { UiComponent } from "@wxn0brp/flanker-ui";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { PlaylistSnapEntry } from "#types/video";
 import { clearQueryParams, fewItems, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from "..";
@@ -62,11 +62,7 @@ class PlayListSnapView implements UiComponent {
     mount(): void {
         this.element = document.querySelector("#playlist-snap")!;
         this.container = this.element.querySelector("#playlist-snap-container")!;
-
-        $store.view.playlistSnap.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.playlistSnap);
         $store.view.playlistSnap.set(false);
     }
 

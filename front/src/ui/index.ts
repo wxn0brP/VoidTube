@@ -18,6 +18,7 @@ import historyView from "./view/history";
 import playListView from "./view/playList";
 import playListsView from "./view/playListsView";
 import videoView from "./view/videoView";
+import settingsView from "./view/settings";
 
 export const components = [
     playerView,
@@ -38,6 +39,7 @@ export const components = [
     playListSnapView,
     channelView,
     feedView,
+    settingsView,
 ]
 
 components.forEach(component => component.mount());

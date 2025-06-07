@@ -1,19 +1,12 @@
-import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import { Format } from "#types/video";
 
 export class VideoFormatsView implements UiComponent {
     element: HTMLSelectElement;
-    prefered: HTMLSelectElement;
 
     mount(): void {
         this.element = document.querySelector("#video-formats")!;
-        this.prefered = document.querySelector("#preferred-video")!;
-
-        this.prefered.onchange = () => {
-            fetchVQL(`user updateOneOrAdd settings s._id="prefered-video" u.value=${this.prefered.value}`);
-        }
 
         $store.video.subscribe(video => {
             if (!video) return;
@@ -30,8 +23,8 @@ export class VideoFormatsView implements UiComponent {
             });
 
             if (videoFormats.length === 0) return;
-        
-            const prefered = this.prefered.value;
+            
+            const prefered = $store.settings.quality.get();
             const url = getPreferredVideoUrl(videoFormats, prefered);
             this.element.value = url;
             $store.selectedVideoUrl.set(url);
@@ -40,13 +33,6 @@ export class VideoFormatsView implements UiComponent {
         this.element.addEventListener("change", () => {
             $store.selectedVideoUrl.set(this.element.value);
         });
-
-        this.prefered.value = "best";
-        setTimeout(() => {
-            fetchVQL(`user settings! s._id="prefered-video"`).then(response => {
-                this.prefered.value = response.value.toString();
-            });
-        }, 100);
     }
 }
 function getPreferredVideoUrl(videoFormats: Format[], preferred: string) {

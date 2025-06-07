@@ -1,16 +1,12 @@
-import { $store } from "../../store";
-import { UiComponent } from "../../types/ui";
+import { $store } from "#store";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 
 class VideoView implements UiComponent {
     element: HTMLElement;
 
     mount(): void {
         this.element = document.querySelector("#video-view");
-
-        $store.view.video.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.video);
         $store.view.video.set(false);
     }
 }
