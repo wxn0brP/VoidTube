@@ -46,7 +46,8 @@ async function loadVideoFn(id: string, autoPlay: boolean = true, saveProgressOpt
     if (saveProgressOpt) saveProgress();
     if (!id) return console.error("No video id provided");
     
-    fetchVQL("api -video-load s.id=0"); // cancel previous load
+    await fetchVQL("api -video-load s.id=0"); // cancel previous load
+    await utils.delay(100);
     const data = await fetchVQL<VideoInfo>(`api video! s.url = ${id}`);
 
     if(!data.formats?.length) return alert("Failed to load video");
