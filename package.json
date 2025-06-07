@@ -20,7 +20,6 @@
     },
     "devDependencies": {
         "@types/node": "^22.15.30",
-        "@types/node-notifier": "^8.0.5",
         "electron": "^36.4.0",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
@@ -29,10 +28,9 @@
         "@wxn0brp/db": "^0.8.1",
         "@wxn0brp/falcon-frame": "^0.0.6",
         "@wxn0brp/lucerna-log": "^0.1.1",
-        "@wxn0brp/vql": "^0.3.5",
-        "ky": "^1.8.1",
-        "node-notifier": "^10.0.1",
-        "rss-parser": "^3.13.0"
+        "@wxn0brp/vql": "^0.3.6",
+        "fast-xml-parser": "^5.2.4",
+        "ky": "^1.8.1"
     },
     "author": {
         "name": "wxn0brP",
@@ -75,10 +73,7 @@
             "provider": "github",
             "owner": "wxn0brP",
             "repo": "VoidTube"
-        },
-        "asarUnpack": [
-            "public/favicon-notifier.png"
-        ]
+        }
     },
     "engines": {
         "node": ">=22.0.0"

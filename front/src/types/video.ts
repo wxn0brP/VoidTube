@@ -94,12 +94,10 @@ export interface PlaylistSnapEntry {
 
 export interface FeedEntry {
     title: string;
-    link: string;
     pubDate: string;
     author: string;
+    authorId: string;
     id: string;
-    isoDate: string;
-    channelId: string;
     channel: {
         avatar: string;
     };
