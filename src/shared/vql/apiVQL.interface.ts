@@ -6,7 +6,7 @@ import { getFeed, getQuickFeed } from "../feed";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
-        return ["video", "playlist", "channel", "download", "search", "video-static", "channelVideos", "recommendations", "recommendationsData", "self-version", "channelInfo"];
+        return ["video", "playlist", "channel", "download", "search", "video-static", "channelVideos", "recommendations", "recommendationsData", "self-version", "channelInfo", "video-load", "channelFeed", "quickFeed"];
     },
 
     async add(collection, data) {
@@ -24,7 +24,6 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "recommendations") return await getRecommended(search.url || search._id, search.limit || 10);
             if (collection === "video-static") return await apiGetVideos(search);
             if (collection === "channelVideos") return await getChannelVideos(search.url || search._id, search.flat ?? true);
-            if (collection === "channelInfo") return [await channelInfo(search?.$in?.id?.[0])];
             if (collection === "channelFeed") return await getFeed(search.url || search._id);
             if (collection === "quickFeed") return await getQuickFeed();
         } catch (e) {
@@ -39,7 +38,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "video-static") return await apiGetVideo(search.url || search._id, false);
             if (collection === "search") return await searchVideo(search.q || search.query, search.size || 10);
             if (collection === "self-version") return { version: process.env.VOIDTUBE_VERSION || "unknown" };
-            if (collection === "channelInfo") return await channelInfo(search.url || search._id, search.update || false);
+            if (collection === "channelInfo") return await channelInfo(search.url || search._id || search.id, search.update || false);
         } catch (e) {
             console.error(e);
         }

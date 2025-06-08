@@ -24,6 +24,7 @@ relations:
         path: [api, channelInfo]
         pk: channel
         fk: id
+        type: "11"
 
 many: true
 ${limit ? `options: 
