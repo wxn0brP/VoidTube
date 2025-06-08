@@ -56,10 +56,10 @@ export const YouTubeAdapter = createValtheraAdapter({
 
     async remove(collection, search) {
         try {
-            if (collection === "video-load") return apiExecutor.cancelAll();
+            if (collection === "video-load") return apiExecutor.cancelLevel(0);
         } catch (e) {
             console.error(e);
         }
         return false;
     },
-});
+}, true);

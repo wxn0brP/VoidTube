@@ -7,6 +7,25 @@ interface Task {
     reject: (reason?: any) => void;
 }
 
+/**
+ * Executes a single task and resolves or rejects its Promise
+ */
+async function executeTask(task: Task): Promise<void> {
+    try {
+        const result = await task.func(...task.param);
+        task.resolve(result);
+    } catch (error) {
+        task.reject(error);
+    }
+}
+
+/**
+ * Helper function to wait for a certain amount of time
+ */
+function sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 class Executor {
     private queue: Task[] = [];
     private activeTasks = new Set<string>(); // IDs of currently running tasks
@@ -61,6 +80,15 @@ class Executor {
         return true;
     }
 
+    cancelLevel(level: number) {
+        this.queue = this.queue.filter(task => {
+            const cancel = task.priority <= level;
+            if (cancel) task.reject("Task canceled");
+            return cancel;
+        });
+        return true;
+    }
+
     /**
      * Runs tasks according to the concurrency limit
      */
@@ -78,36 +106,17 @@ class Executor {
                 this.activeTasks.add(task.id);
                 this.activeCount++;
 
-                this.executeTask(task).finally(() => {
+                executeTask(task).finally(() => {
                     this.activeTasks.delete(task.id);
                     this.activeCount--;
                     this.run(); // Continue after one task has finished
                 });
             }
 
-            await this.sleep(50); // short pause to not overload CPU
+            await sleep(50); // short pause to not overload CPU
         }
 
         this.isRunning = false;
-    }
-
-    /**
-     * Executes a single task and resolves or rejects its Promise
-     */
-    private async executeTask(task: Task): Promise<void> {
-        try {
-            const result = await task.func(...task.param);
-            task.resolve(result);
-        } catch (error) {
-            task.reject(error);
-        }
-    }
-
-    /**
-     * Helper function to wait for a certain amount of time
-     */
-    private sleep(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 }
 

@@ -16,7 +16,7 @@ export async function apiGetVideo(url: string, dynamic = true, staticData?: any)
     if (staticData !== false) staticData = await db.cache.findOne("video-static", { _id: url });
     if (!dynamic && staticData) return staticData;
 
-    async function fn() {
+    async function fn(i = 0) {
         const dynamicData = dynamic && await db.cache.findOne("video-dynamic", { _id: url });
 
         if (dynamic && staticData && dynamicData) {
@@ -62,6 +62,11 @@ export async function apiGetVideo(url: string, dynamic = true, staticData?: any)
             await db.cache.add("video-dynamic", dynamicDataPayload);
         } else if (dynamic) {
             console.error("[API-VQL] Failed to get video formats:", url);
+            if (i < 3) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                console.log("[API-VQL] Retrying get video formats... (" + (i + 1) + " / 3)");
+                return fn(i + 1);
+            }
         }
 
         return data;
