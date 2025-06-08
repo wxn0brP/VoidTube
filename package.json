@@ -25,11 +25,11 @@
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/db": "^0.8.1",
+        "@wxn0brp/db": "^0.8.2",
         "@wxn0brp/falcon-frame": "^0.0.6",
         "@wxn0brp/lucerna-log": "^0.1.1",
-        "@wxn0brp/vql": "^0.3.6",
-        "fast-xml-parser": "^5.2.4",
+        "@wxn0brp/vql": "^0.3.8",
+        "fast-xml-parser": "^5.2.5",
         "ky": "^1.8.1"
     },
     "author": {
