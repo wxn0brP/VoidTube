@@ -19,6 +19,7 @@ import playListView from "./view/playList";
 import playListsView from "./view/playListsView";
 import videoView from "./view/videoView";
 import settingsView from "./view/settings";
+import messageView from "./modal/message";
 
 export const components = [
     playerView,
@@ -40,6 +41,7 @@ export const components = [
     channelView,
     feedView,
     settingsView,
+    messageView,
 ]
 
 components.forEach(component => component.mount());

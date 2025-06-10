@@ -9,6 +9,7 @@ import playListView from "#ui/view/playList";
 import { updateQueryParam } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
+import { uiMsg } from "#ui/modal/message";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
@@ -50,7 +51,7 @@ async function loadVideoFn(id: string, autoPlay: boolean = true, saveProgressOpt
     await utils.delay(100);
     const data = await fetchVQL<VideoInfo>(`api video! s.url = ${id}`);
 
-    if(!data.formats?.length) return alert("Failed to load video");
+    if(!data.formats?.length) return uiMsg("Failed to load video");
 
     $store.video.set(data);
     $store.videoId.set(id);

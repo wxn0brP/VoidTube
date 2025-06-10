@@ -1,4 +1,4 @@
-import searchBarView from "#ui/searchBar";
+import { uiMsg } from "#ui/modal/message";
 import loaderView from "#ui/small/loader";
 import { mgl } from "../mgl";
 
@@ -17,7 +17,7 @@ export async function fetchVQL<T=any>(query: string | object, silent: boolean = 
     .then(res => res.json())
     .catch(e => {
         console.error(e);
-        searchBarView.searchInput.value = "Something went wrong. Probably server is down.";
+        uiMsg("Something went wrong. Probably server is down.");
         throw e;
     })
     .finally(() => !silent && loaderView.off());

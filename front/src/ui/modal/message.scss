@@ -1,0 +1,28 @@
+#err div {
+    position: fixed;
+    max-width: 70%;
+    top: -10rem;
+    left: 50%;
+    transition: .7s ease;
+    font-size: 1.6rem;
+    border-radius: 1rem;
+    letter-spacing: 2px;
+    padding: 7px 12px;
+    transform: translateX(-50%);
+    z-index: 99;
+    cursor: pointer;
+}
+
+.uiMsgClass {
+    backdrop-filter: blur(5px);
+    background-color: rgba(0, 0, 0, .2);
+    border: 2px solid var(--accent);
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, .5);
+}
+
+@media screen and (max-width: 800px) {
+    #err div {
+        width: 90vw;
+        max-width: none;
+    }
+}
