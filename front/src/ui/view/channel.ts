@@ -7,6 +7,7 @@ import { changeView } from "..";
 import metaControlView from "../video/metaControl";
 import navBarView from "../navBar";
 import { loadVideo } from "#ui/video/player/status";
+import { uiMsg } from "#ui/modal/message";
 
 export const thumbnailMiddle = "/avatar?link=";
 
@@ -72,7 +73,7 @@ class ChannelView implements UiComponent {
 
         this.channelShareBtn.addEventListener("click", () => {
             navigator.clipboard.writeText("https://youtube.com/channel/" + $store.channelId.get());
-            alert("Link copied to clipboard");
+            uiMsg("Link copied to clipboard");
         });
     }
 

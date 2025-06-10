@@ -10,6 +10,7 @@ import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
 import { loadMediaSession, loadVideo } from "./status";
 import { fetchVQL } from "#api/index";
+import { uiMsg } from "#ui/modal/message";
 
 export class PlayerView implements UiComponent {
     public element: HTMLDivElement;
@@ -56,7 +57,7 @@ export class PlayerView implements UiComponent {
                 fetchVQL("cache -video-dynamic! s._id = " + $store.videoId.get()).then(() => {
                     loadVideo($store.videoId.get());
                     setTimeout(() => {
-                        alert("Failed to load video. Trying again...");
+                        uiMsg("Failed to load video. Trying again...");
                     }, 100);
                 });
                 return;
@@ -75,7 +76,7 @@ export class PlayerView implements UiComponent {
 
                 loadMediaSession();
             } catch (err) {
-                alert("Failed to load video: " + err.message);
+                uiMsg("Failed to load video: " + err.message);
             }
         };
 

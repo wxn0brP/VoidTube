@@ -5,6 +5,7 @@ import { UiComponent } from "@wxn0brp/flanker-ui";
 import playListsView from "#ui/view/playListsView";
 import uiFunc from "../modal";
 import playListsModal from "../modal/playlists";
+import { uiMsg } from "#ui/modal/message";
 
 class MetaControlView implements UiComponent {
     element: HTMLDivElement;
@@ -54,7 +55,7 @@ class MetaControlView implements UiComponent {
 
     public share(id = $store.videoId.get()) {
         navigator.clipboard.writeText("https://youtube.com/watch?v=" + id);
-        alert("Link copied to clipboard");
+        uiMsg("Link copied to clipboard");
     }
 
     public async download() {
@@ -84,7 +85,7 @@ class MetaControlView implements UiComponent {
 
         if (url === "mp3" || url === "mp4") {
             fetchVQL(`api +download d._id = ${$store.videoId.get()} d.format = ${url}`).then(res => {
-                alert("Downloaded to " + res.path);
+                uiMsg("Downloaded to " + res.path);
             });
             return;
         }

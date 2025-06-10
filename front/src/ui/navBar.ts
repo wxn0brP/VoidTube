@@ -1,6 +1,7 @@
 import { fetchVQL } from "#api/index";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import { changeView } from ".";
+import { uiMsg } from "./modal/message";
 
 interface StackItem {
     view: string;
@@ -26,7 +27,7 @@ class NavBarView implements UiComponent {
         this.element.querySelector("b").addEventListener("contextmenu", (e) => {
             e.preventDefault();
             fetchVQL("api self-version! s.id=0").then(({ version }) => {
-                alert(`Version: ${version}`);
+                uiMsg(`Version: ${version}`);
             });
         })
     }
