@@ -16,6 +16,5 @@ export interface ChannelVideo {
     views: number;
     history?: {
         time: number;
-        _id: string;
     }
 }

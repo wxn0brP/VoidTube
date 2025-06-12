@@ -89,7 +89,7 @@ relations:
     path: [api, channelInfo]
     fk: id
     pk: authorId
-    select: [avatar,id]
+    select: [avatar]
     type: "11"
 
 many: true
