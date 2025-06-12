@@ -105,7 +105,7 @@ relations:
   history:
     path: [user, history]
     pk: id
-    select: [time,_id]
+    select: [time]
 `);
         this.videos.innerHTML = "";
         for (const entry of data) {
