@@ -90,10 +90,6 @@ class AlgView implements UiComponent {
         });
 
         $store.view.alg.set(false);
-
-        setTimeout(() => {
-            fetchVQL(`api algCfg! s._id=1`);
-        }, 3000);
     }
 
     show() {

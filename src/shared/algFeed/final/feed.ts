@@ -39,6 +39,7 @@ export function injectNoise(candidates: SearchEntry[], scored: Map<string, numbe
         scored.set(v.id, config.noiseBoost);
     }
 }
+
 export function scoreVideo(video: SearchEntry, interest: Map<string, number>): number {
     // const tokens = [...video.tags, ...tokenize(video.title), ...tokenize(video.description)];
     const tokens = tokenize(video.title);

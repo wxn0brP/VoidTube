@@ -98,12 +98,3 @@ const searchView = new SearchView();
 export default searchView;
 
 mgl.searchShow = searchView.show;
-
-mgl.searchFeed = async () => {
-    await fetchVQL(`api algCfg! s._id=1`);
-    await fetchVQL(`api algRun! s._id=1`);
-    const feed = await fetchVQL(`cache searchRes! s._id = feed`);
-    if (!feed || !feed.data.length) return;
-    searchView.render(feed.data);
-    searchView.show();
-}
