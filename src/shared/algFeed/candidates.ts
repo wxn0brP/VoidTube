@@ -54,6 +54,7 @@ export function getTopKeywordsFromHistory(history: Video[], config: Config): str
 
     return [...freq.entries()]
         .filter(([_, count]) => count >= config.keywordMinFreq)
+        .filter(([word]) => !config.irrelevant.includes(word))
         .sort((a, b) => b[1] - a[1])
         .slice(0, config.maxKeywords)
         .map(([word]) => word);

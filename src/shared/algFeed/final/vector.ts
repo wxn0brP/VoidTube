@@ -23,7 +23,7 @@ export function buildInterestVector(history: Video[], config: Config, feedback: 
     }
 
     if (config.userTags) {
-        for (const [tag, weight] of config.userTags.entries()) {
+        for (const [tag, weight] of config.userTags) {
             interestVector.set(tag, (interestVector.get(tag) ?? 0) + weight);
         }
     }

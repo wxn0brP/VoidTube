@@ -11,8 +11,8 @@ export interface Config {
     keywordMinFreq: number;         // eg. 7
     noisePercent: number;           // eg. 10%
     noiseBoost: number;             // eg. 15
-    userTags?: Map<string, number>; // user-defined boost for each tag
-    configArray?: [string, number][];
+    userTags: [string, number][];
+    irrelevant: string[];           // ignore [the, a, an]
 };
 
 export type FeedbackMap = Map<string, number>; // tag => score

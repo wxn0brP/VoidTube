@@ -16,7 +16,8 @@
         "electron:publish-win": "electron-builder --publish always --win",
         "electron:publish-linux": "electron-builder --publish always --linux",
         "electron:build-zip": "electron-builder build --win zip --linux zip",
-        "electron:dist": "electron-packager ."
+        "electron:dist": "electron-packager .",
+        "bun": "bun run dev.ts"
     },
     "devDependencies": {
         "@types/node": "^24.0.1",
