@@ -3,7 +3,8 @@
 #playlist-snap-container,
 #search-container,
 #channel-videos,
-#feed-container {
+#feed-container,
+#alg-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 5px;
@@ -24,7 +25,8 @@
 .playlistSnapCard,
 .searchCard,
 .channelVideoCard,
-.feedCard {
+.feedCard,
+.algCard {
     border-radius: 8px;
     padding: 1rem;
     transition: transform 0.2s ease;

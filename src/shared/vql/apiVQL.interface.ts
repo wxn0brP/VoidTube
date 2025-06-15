@@ -1,8 +1,9 @@
 import { createValtheraAdapter } from "@wxn0brp/vql";
+import { loadConfig, runFeedVQL } from "../alg";
 import { getChannelVideos, getPlaylistIds, searchVideo } from "../apiBack";
-import { getRecommended } from "../getRecommended";
-import { downloadVideo, apiGetVideos, channelInfo, apiGetVideo, apiExecutor } from "./apiVQL.logic";
 import { getFeed, getQuickFeed } from "../feed";
+import { getRecommended } from "../getRecommended";
+import { apiExecutor, apiGetVideo, apiGetVideos, channelInfo, downloadVideo } from "./apiVQL.logic";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
@@ -39,6 +40,8 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "search") return await searchVideo(search.q || search.query, search.size || 10);
             if (collection === "self-version") return { version: process.env.VOIDTUBE_VERSION || "unknown" };
             if (collection === "channelInfo") return await channelInfo(search.url || search._id || search.id, search.update || false);
+            if (collection === "algCfg") return await loadConfig();
+            if (collection === "algRun") return await runFeedVQL();
         } catch (e) {
             console.error(e);
         }

@@ -155,7 +155,8 @@ section {
 
 #search-view,
 #playlist-snap,
-#feed-view {
+#feed-view,
+#alg-view {
     flex-direction: column;
 }
 
@@ -199,7 +200,8 @@ section {
 
 .historyCard,
 .searchCard,
-.feedCard {
+.feedCard,
+.algCard {
     .author {
         margin-top: 5px;
         margin-bottom: 2px;

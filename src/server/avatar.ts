@@ -1,5 +1,5 @@
-import { FFResponse } from "@wxn0brp/falcon-frame/dist/res";
-import { FFRequest } from "@wxn0brp/falcon-frame/dist/types";
+import { FFResponse } from "@wxn0brp/falcon-frame/res";
+import { FFRequest } from "@wxn0brp/falcon-frame/types";
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync } from "fs";
 import { getExternalResourcePath } from "../shared/path";
