@@ -1,13 +1,14 @@
 import { UiComponent } from "@wxn0brp/flanker-ui";
-import { changeView } from ".";
-import { mgl } from "../mgl";
-import { $store } from "../store";
-import { SearchEntry } from "../types/video";
-import { clearQueryParams, fewItems, formatTime, numToLocale, updateQueryParam } from "../utils";
-import navBarView from "./navBar";
-import metaControlView from "./video/metaControl";
-import { loadVideo } from "./video/player/status";
-import channelView from "./view/channel";
+import { changeView } from "..";
+import { fetchVQL } from "#api/index";
+import { mgl } from "#mgl";
+import { $store } from "#store";
+import { SearchEntry } from "#types/video";
+import navBarView from "#ui/navBar";
+import metaControlView from "#ui/video/metaControl";
+import { loadVideo } from "#ui/video/player/status";
+import { fewItems, formatTime, numToLocale, clearQueryParams, updateQueryParam } from "#utils";
+import channelView from "./channel";
 
 class SearchView implements UiComponent {
     element: HTMLDivElement;
@@ -97,3 +98,12 @@ const searchView = new SearchView();
 export default searchView;
 
 mgl.searchShow = searchView.show;
+
+mgl.searchFeed = async () => {
+    await fetchVQL(`api algCfg! s._id=1`);
+    await fetchVQL(`api algRun! s._id=1`);
+    const feed = await fetchVQL(`cache searchRes! s._id = feed`);
+    if (!feed || !feed.data.length) return;
+    searchView.render(feed.data);
+    searchView.show();
+}

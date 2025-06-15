@@ -1,7 +1,7 @@
 import { searchVideo } from "#api/video";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import { getYouTubeVideoId, updateQueryParam, clearQueryParams, setTitle } from "#utils";
-import searchView from "./search";
+import searchView from "./view/search";
 import { loadVideo } from "./video/player/status";
 
 class SearchBarView implements UiComponent {

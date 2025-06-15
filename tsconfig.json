@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "ES2022",
         "target": "ES2022",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "paths": {
             "#vql/*": ["./node_modules/@wxn0brp/vql/dist/*"],
             "#db/*": ["./node_modules/@wxn0brp/db/dist/*"]

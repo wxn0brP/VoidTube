@@ -23,6 +23,7 @@ const initData = {
         channel: false,
         feed: false,
         settings: false,
+        alg: false,
     },
     loader: 0,
 

@@ -4,7 +4,7 @@ import asideView from "./aside";
 import playListsModal from "./modal/playlists";
 import playListSnapView from "./view/playListSnap";
 import navBarView from "./navBar";
-import searchView from "./search";
+import searchView from "./view/search";
 import searchBarView from "./searchBar";
 import loaderView from "./small/loader";
 import audioFormatsView from "./video/audioFormat";
@@ -20,6 +20,7 @@ import playListsView from "./view/playListsView";
 import videoView from "./view/videoView";
 import settingsView from "./view/settings";
 import messageView from "./modal/message";
+import algView from "./view/alg";
 
 export const components = [
     playerView,
@@ -42,6 +43,7 @@ export const components = [
     feedView,
     settingsView,
     messageView,
+    algView,
 ]
 
 components.forEach(component => component.mount());

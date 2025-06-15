@@ -105,3 +105,13 @@ export interface FeedEntry {
         time: number;
     };
 }
+
+export interface AlgEntry {
+    id: string;
+    title: string;
+    thumbnail: string;
+    duration: number;
+    views: number;
+    channel: string;
+    channelName: string;
+}
