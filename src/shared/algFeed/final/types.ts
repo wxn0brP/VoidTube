@@ -9,10 +9,11 @@ export interface Config {
     minHistory: number;             // eg. 20
     maxKeywords: number;            // eg. 10
     keywordMinFreq: number;         // eg. 7
+    videoPerTag: number;            // eg. 5
     noisePercent: number;           // eg. 10%
     noiseBoost: number;             // eg. 15
-    userTags: [string, number][];
     irrelevant: string[];           // ignore [the, a, an]
+    userTags: [string, number][];   // always search
 };
 
 export type FeedbackMap = Map<string, number>; // tag => score

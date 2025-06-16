@@ -13,3 +13,5 @@ export async function saveConfig() {
         await db.alg.updateOneOrAdd("cfg", { _id: name }, {}, { v: value });
     return {};
 }
+
+saveConfig();

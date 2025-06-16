@@ -10,9 +10,10 @@ export async function getConfig(): Promise<Config> {
         minHistory:         await getSetting("minHistory",      20),
         maxKeywords:        await getSetting("maxKeywords",     10),
         keywordMinFreq:     await getSetting("keywordMinFreq",  7),
+        videoPerTag:        await getSetting("videoPerTag",     5),
         noisePercent:       await getSetting("noisePercent",    10),
         noiseBoost:         await getSetting("noiseBoost",      15),
-        irrelevant:         await getSetting("irrelevant",      []),
+        irrelevant:         await getSetting("irrelevant",      []).then(v => v.split(",")),
         userTags:           await getSetting("userTags",        []),
     };
 }
