@@ -12,7 +12,7 @@ export interface SearchEntry {
     channelName: string;
 }
 
-export async function buildInitialCandidates(history: Video[], config: Config, maxPerQuery = 5): Promise<SearchEntry[]> {
+export async function buildInitialCandidates(history: Video[], config: Config): Promise<SearchEntry[]> {
     if (history.length < config.minHistory) {
         console.log("[VoidTube-alg-buildInitialCandidates] Not enough history. Returning empty array.");
         return [];
@@ -25,7 +25,7 @@ export async function buildInitialCandidates(history: Video[], config: Config, m
     const allResults: SearchEntry[] = [];
 
     for (const keyword of keywords) {
-        const results = await searchVideo(keyword, maxPerQuery);
+        const results = await searchVideo(keyword, config.videoPerTag);
         console.log(`[VoidTube-alg-buildInitialCandidates] Found ${results.length} videos for "${keyword}"`);
         allResults.push(...results);
     }
