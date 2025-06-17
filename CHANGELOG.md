@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/wxn0brP/VoidTube/compare/v0.0.4...v0.0.5) (2025-06-17)
+
+
+### Features
+
+* 0x40 - UX FOX ([b6d24e6](https://github.com/wxn0brP/VoidTube/commit/b6d24e6ce45a41b4c7f028502402b84e0a792415))
+* 0x43 - share channel ([2d28be7](https://github.com/wxn0brP/VoidTube/commit/2d28be781b8e9ff20f1ac8d2a3baf11941f3f200))
+* 0x44 - settings ([ee3d1a3](https://github.com/wxn0brP/VoidTube/commit/ee3d1a32a0b4847908de8c2893e8cbf1c21f25cd))
+* 0x48 - ui message ([eb07a46](https://github.com/wxn0brP/VoidTube/commit/eb07a4654b2a6cb55f9ebdb34a5b0257de1f7833))
+* 0x49 - update deps ([d3cd847](https://github.com/wxn0brP/VoidTube/commit/d3cd8478dedb7a65b8532df6c2c04881a3ba9769))
+* 0x4a - alg (experimental) ([7016f12](https://github.com/wxn0brP/VoidTube/commit/7016f12b454605c5e3b8d38f821322dcd2e5ff53))
+* 0x4b - alg & app scripts ([2263cfa](https://github.com/wxn0brP/VoidTube/commit/2263cfa88737cf363f7f788ae87567247a234145))
+* 0x4c - add alg to settings ([8c663ec](https://github.com/wxn0brP/VoidTube/commit/8c663ecb8684346682d3cae2274289940a949ab9))
+* 0x4d - alg & bug fixes ([7b5780d](https://github.com/wxn0brP/VoidTube/commit/7b5780d35a7f53567c458eb907c10a0c3440da1a))
+* 0x50 - macOS build ([560d9b8](https://github.com/wxn0brP/VoidTube/commit/560d9b8bdd64bec4ac6997140e7e4c5d045fa300))
+
+
+### Bug Fixes
+
+* 0x40.1 ([56e25a1](https://github.com/wxn0brP/VoidTube/commit/56e25a1e7a0fb4c47aec21f49f92ca846b52970b))
+* 0x42 - UX FOX ([f29cfe2](https://github.com/wxn0brP/VoidTube/commit/f29cfe2fd3204871309ceb3457e447c85104d4f5))
+* 0x45 - feed query ([a156c42](https://github.com/wxn0brP/VoidTube/commit/a156c4258c8e20c849d8d7f50a811d4b777cf823))
+* 0x46 - get video and cancel task ([42cf43a](https://github.com/wxn0brP/VoidTube/commit/42cf43aead067c0767326056adb465d920a5f876))
+* 0x47 - workflow ([d20941a](https://github.com/wxn0brP/VoidTube/commit/d20941a869b4b66f33fe7f1bc673f657bb9a4128))
+* 0x4e - macOS support ([f3504fb](https://github.com/wxn0brP/VoidTube/commit/f3504fb4c5b161dfd11d20ce534d0733bd6d5a2d))
+
 ### [0.0.4](https://github.com/wxn0brP/VoidTube/compare/v0.0.3...v0.0.4) (2025-06-06)
 
 
