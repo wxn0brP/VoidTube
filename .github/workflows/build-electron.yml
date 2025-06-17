@@ -105,7 +105,7 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: 📥 Checkout repository
+      - name: 📥 Checkout repo
         uses: actions/checkout@v4
 
       - name: 🔧 Setup Node.js
@@ -118,65 +118,19 @@ jobs:
           npm install -g typescript tsc-alias
           npm install
 
-      - name: 🌐 Build frontend
-        run: |
-          cd front
-          npm install
-          npm run build
-          cd ..
-
       - name: ⚙️ Compile TypeScript
         run: |
           npm run build
-          rm -rf public/scss
 
-      - name: 🤖 Determine build type
-        id: determine_build_type
-        run: |
-          if [ -z "${{ github.event.inputs.build-type }}" ]; then
-            echo "BUILD_TYPE=full" >> $GITHUB_ENV
-          else
-            echo "BUILD_TYPE=${{ github.event.inputs.build-type }}" >> $GITHUB_ENV
-          fi
-
-      - name: 🛠 Install Xcode CLI Tools
-        run: |
-          xcode-select --install || true
-          sudo xcodebuild -license accept
-
-      - name: 🔐 Set up entitlements (optional)
-        run: |
-          cat > entitlements.mac.plist <<EOL
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>com.apple.security.cs.allow-unsigned-executable-memory</key><true/>
-            <key>com.apple.security.cs.disable-library-validation</key><true/>
-          </dict>
-          </plist>
-          EOL
-
-      - name: 🚀 Full build and publish
-        if: env.BUILD_TYPE == 'full'
+      - name: 🚀 Build macOS app (no code signing)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_IDENTITY_AUTO_DISCOVERY: false
         run: |
-          npx electron-builder --publish always --mac mas dmg zip
+          export CSC_IDENTITY_AUTO_DISCOVERY=false
+          npx electron-builder --mac zip
 
-      - name: 📦 Quick build (only zip)
-        if: env.BUILD_TYPE == 'quick'
-        run: |
-          npx electron-builder build --mac zip
-
-      - name: 📤 Upload quick build to pre-release
-        if: env.BUILD_TYPE == 'quick'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TAG_NAME="pre-release-$(date +%Y%m%d%H%M%S)"
-          gh release create "$TAG_NAME" \
-            --prerelease \
-            --title "Quick macOS Build $TAG_NAME" \
-            --notes "Automated quick macOS build from $GITHUB_SHA" \
-            release/*.zip
+      - name: 📤 Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: VoidTube-macOS
+          path: release/
