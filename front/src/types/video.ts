@@ -114,4 +114,6 @@ export interface AlgEntry {
     views: number;
     channel: string;
     channelName: string;
+    score: number;
+    tags: string[];
 }

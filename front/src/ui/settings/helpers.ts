@@ -40,7 +40,6 @@ export function createInput(setting: SettingInput) {
     if (setting.input_type === "number") {
         if (setting.max !== undefined) input.max = setting.max.toString();
         if (setting.min !== undefined) input.min = setting.min.toString();
-        console.log(setting.max, setting.min);
     } else if (setting.input_type === "text") {
         if (setting.max !== undefined) input.maxLength = setting.max;
         if (setting.min !== undefined) input.minLength = setting.min;
