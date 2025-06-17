@@ -81,7 +81,11 @@ export async function getYtDlpPath(): Promise<string> {
 
     await mkdir(baseDir, { recursive: true });
 
-    const binName = process.platform === "win32" ? "yt-dlp.exe" : "yt-dlp";
+    const binName = process.platform === "win32"
+        ? "yt-dlp.exe"
+        : process.platform === "darwin"
+            ? "yt-dlp_macos"
+            : "yt-dlp_linux";
     const binPath = path.join(baseDir, binName);
 
     if (!checkIsFileEmpty(binPath)) return binPath;
