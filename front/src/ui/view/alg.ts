@@ -32,7 +32,8 @@ class AlgView implements UiComponent {
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>
                 <h3>${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
-                ${numToLocale(entry.views)} views
+                ${numToLocale(entry.views)} views <br>
+                <span data-id="scores" style="cursor: help; text-decoration: underline">Result score</span>
                 <div class="author">
                     <img src="${"/avatarTry?id=" + entry.channel}" class="avatar">
                     <a href="/?channel=${entry.channel}">${entry.channelName}</a>
@@ -41,6 +42,10 @@ class AlgView implements UiComponent {
                     <button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                 </div>
             `
+            card.querySelector<HTMLSpanElement>("[data-id=scores]")!.title = `score: ${entry.score}
+tags:
+${entry.tags.map(t => `- ${t}`).join("\n")}
+            `.trim();
 
             card.addEventListener("click", () => {
                 $store.playlistId.set("");

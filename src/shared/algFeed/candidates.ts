@@ -1,16 +1,6 @@
 import { searchVideo } from "../apiBack";
-import { Video, Config } from "./final/types";
+import { Video, Config, SearchEntry } from "./final/types";
 import { tokenize } from "./utils";
-
-export interface SearchEntry {
-    id: string;
-    title: string;
-    thumbnail: string;
-    duration: number;
-    views: number;
-    channel: string;
-    channelName: string;
-}
 
 export async function buildInitialCandidates(history: Video[], config: Config): Promise<SearchEntry[]> {
     if (history.length < config.minHistory) {

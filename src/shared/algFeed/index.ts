@@ -30,9 +30,7 @@ export async function runFeed() {
     for (const f of feedbackRaw) feedback.set(f._id, f.v);
 
     const candidates = await buildInitialCandidates(history, config);
-    const feedRaw = generateFeed(history, candidates, config, feedback);
-    const candidatesMap = new Map(candidates.map(v => [v.id, v]));
-    const feed = feedRaw.map(v => candidatesMap.get(v.id)!);
+    const feed = generateFeed(history, candidates, config, feedback);
 
     console.log("[VoidTube-alg] Final feed:", feed.length);
 

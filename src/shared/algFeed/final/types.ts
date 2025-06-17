@@ -17,3 +17,20 @@ export interface Config {
 };
 
 export type FeedbackMap = Map<string, number>; // tag => score
+
+export interface SearchEntry {
+    id: string;
+    title: string;
+    thumbnail: string;
+    duration: number;
+    views: number;
+    channel: string;
+    channelName: string;
+}
+
+export interface AlgEntry {
+    tags: string[];
+    score: number;
+}
+
+export type FeedEntry = AlgEntry & SearchEntry; 

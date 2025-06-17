@@ -37,7 +37,7 @@ export default function (container: HTMLDivElement) {
 
         if ("storeField" in setting && "id" in setting) {
             setting.storeField.subscribe(() => {
-                fetchVQL(`user updateOneOrAdd settings s._id="${setting.id}" u.value=${setting.storeField.get()}`);
+                fetchVQL(`user updateOneOrAdd settings s._id="${setting.id.replace("app_","")}" u.value=${setting.storeField.get()}`);
             });
         }
 
