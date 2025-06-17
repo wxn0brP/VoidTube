@@ -16,6 +16,8 @@
         "electron:publish-win": "electron-builder --publish always --win",
         "electron:publish-linux": "electron-builder --publish always --linux",
         "electron:build-zip": "electron-builder build --win zip --linux zip",
+        "electron:build-mac": "electron-builder build --mac",
+        "electron:publish-mac": "electron-builder --publish always --mac",
         "electron:dist": "electron-packager .",
         "bun": "bun run dev.ts"
     },
@@ -69,6 +71,18 @@
             ],
             "icon": "public/favicon.png",
             "category": "Application"
+        },
+        "mac": {
+            "target": [
+                "mas",
+                "zip",
+                "7z"
+            ],
+            "icon": "public/icon.icns",
+            "hardenedRuntime": true,
+            "gatekeeperAssess": false,
+            "entitlements": "build/entitlements.mac.plist",
+            "entitlementsInherit": "build/entitlements.mac.plist"
         },
         "publish": {
             "provider": "github",
