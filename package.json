@@ -74,15 +74,13 @@
         },
         "mac": {
             "target": [
-                "mas",
                 "zip",
                 "7z"
             ],
             "icon": "public/icon.icns",
-            "hardenedRuntime": true,
-            "gatekeeperAssess": false,
-            "entitlements": "build/entitlements.mac.plist",
-            "entitlementsInherit": "build/entitlements.mac.plist"
+            "type": "development",
+            "hardenedRuntime": false,
+            "gatekeeperAssess": false
         },
         "publish": {
             "provider": "github",
