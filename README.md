@@ -23,7 +23,7 @@ Download latest release [here](https://github.com/wxn0brP/VoidTube/releases).
 
 ## 🛠 Build from source
 
-VoidTube requires Node.js, `yt-dlp`, and front-end dependencies.
+VoidTube requires Node.js and Electron.
 
 ```bash
 git clone https://github.com/wxn0brP/VoidTube.git
@@ -44,7 +44,7 @@ npm run start:client
 
 * **yt-dlp** – video/data extraction backend
 * **Node.js / Electron** – runtime shell
-* **Vanilla CSS / Tailwind** – styling layer
+* **SCSS** – styling layer
 * **Custom local DB** – ValtheraDB (see [here](https://github.com/wxn0brP/ValtheraDB)) or any ValtheraCompatible storage
 * **No telemetry** – no tracking, no Google pings
 
@@ -54,8 +54,7 @@ npm run start:client
 * [x] History + search
 * [x] Playlists + import
 * [x] Responsive layout
-* [ ] Local subscriptions
-* [ ] Mobile shell (Mobile App)
+* [x] Local subscriptions
 
 ## 🧷 License
 
