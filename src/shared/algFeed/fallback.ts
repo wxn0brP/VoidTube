@@ -1,8 +1,13 @@
-import { Video, FeedbackMap } from "./final/types";
-import { tokenize } from "./utils";
+import { Video, FeedbackMap, Config } from "./final/types";
+import { getHashTag, tokenize } from "./utils";
 
-export function applyFeedback(video: Video, feedback: FeedbackMap, delta: number): void {
-    const tokens = [...tokenize(video.title), ...tokenize(video.description)];
+export function applyFeedback(video: Video, config: Config, feedback: FeedbackMap, delta: number): void {
+    const hashTags = getHashTag(video.description, config);
+    const tokens = [
+        ...tokenize(video.title, config),
+        ...tokenize(video.description, config),
+        ...hashTags
+    ];
     const unique = new Set(tokens);
 
     for (const token of unique) {

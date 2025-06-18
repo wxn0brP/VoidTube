@@ -23,7 +23,7 @@ class PlayListsModal implements UiComponent {
             card.className = "playlistCard";
             card.innerHTML = `
                 <div style="background-image: url(${item.thumbnail})" class="img"></div>
-                <h3>${item.name}</h3>
+                <h3 title="${item.name}">${item.name}</h3>
                 ${item.videosCount} videos <br>
                 Duration: ${formatTime(item.duration, null)}
             `;

@@ -17,7 +17,7 @@ class VideoInfoView implements UiComponent {
         const d = info.uploadDate;
         const date = d[6] + d[7] + "." + d[4] + d[5] + "." + d[0] + d[1] + d[2] + d[3];
         this.element.innerHTML = `
-            <h3>${info.title}</h3>
+            <h3 title="${info.title}">${info.title}</h3>
             <b>Upload date:</b> ${date} -
             <b>Views:</b> ${info.views} -
             <b>Likes:</b> ${info.likes}

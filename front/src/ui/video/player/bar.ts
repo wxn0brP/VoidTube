@@ -44,6 +44,7 @@ export function setupBar() {
         }
 
         if (e.target instanceof HTMLInputElement) return;
+        if (e.target instanceof HTMLTextAreaElement) return;
 
         if (e.code === "Space" || e.key === "k") {
             e.preventDefault();

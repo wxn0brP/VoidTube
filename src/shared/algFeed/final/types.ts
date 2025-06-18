@@ -12,6 +12,8 @@ export interface Config {
     videoPerTag: number;            // eg. 5
     noisePercent: number;           // eg. 10%
     noiseBoost: number;             // eg. 15
+    hashTagBoost: number;           // eg. 3
+    minScore: number;               // eg. 0
     irrelevant: string[];           // ignore [the, a, an]
     userTags: [string, number][];   // always search
 };

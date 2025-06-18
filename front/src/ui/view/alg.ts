@@ -30,7 +30,7 @@ class AlgView implements UiComponent {
 
             card.innerHTML = `
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>
-                <h3>${entry.title}</h3>
+                <h3 title="${entry.title}">${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
                 ${numToLocale(entry.views)} views <br>
                 <span data-id="scores" style="cursor: help; text-decoration: underline">Result score</span>

@@ -41,7 +41,7 @@ class HistoryView implements UiComponent {
 
                 card.innerHTML = `
                     <div style="background-image: url(${entry.info.thumbnail})" class="img"></div>
-                    <h3>${entry.info.title}</h3>
+                    <h3 title="${entry.info.title}">${entry.info.title}</h3>
                     ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
                     ${numToLocale(entry.info.views)} views -
                     ${date}

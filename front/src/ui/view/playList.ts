@@ -23,7 +23,7 @@ class PlayListView implements UiComponent {
             card.className = "videoCard";
             card.innerHTML = `
                 <div style="background-image: url(${item.info.thumbnail})"></div>
-                <h3>${item.info.title}</h3>
+                <h3 title="${item.info.title}">${item.info.title}</h3>
                 ${formatTime(item.info.duration, null)}
             `;
             card.addEventListener("click", () => {
@@ -61,7 +61,7 @@ class PlayListView implements UiComponent {
                 }
                 card.innerHTML = `
                     <div style="background-image: url(${item.thumbnail || "/favicon.svg"})"></div>
-                    <h3>${item.title || "Loading..."}</h3>
+                    <h3 title="${item.title}">${item.title || "Loading..."}</h3>
                     ${formatTime(item.duration, null)}
                     <button class="btn" data-id="play-next-btn">
                         Play next

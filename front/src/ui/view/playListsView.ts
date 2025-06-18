@@ -40,7 +40,7 @@ class PlayListsView implements UiComponent {
     renderCard(card: HTMLDivElement, item: PlaylistsEntry) {
         card.innerHTML = `
             <div style="background-image: url(${item?.thumbnail || "/favicon.svg"})" class="img"></div>
-            <h3>${item?.name}</h3>
+            <h3 title="${item?.name}">${item?.name}</h3>
             ${item?.videosCount} videos <br>
             Duration: ${formatTime(item?.duration, null)}
             <div class="btns">

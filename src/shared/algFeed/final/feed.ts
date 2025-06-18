@@ -23,9 +23,9 @@ export function generateFeed(
     });
 
     for (const video of videos) {
-        const score = scoreVideo(video, interestVector);
+        const score = scoreVideo(video, config, interestVector);
         video.score = score;
-        if (score > 0) {
+        if (score > config.minScore) {
             scored.set(video.id, score);
         }
     }
@@ -48,10 +48,10 @@ export function injectNoise(candidates: FeedEntry[], scored: Map<string, number>
     }
 }
 
-export function scoreVideo(video: FeedEntry, interest: Map<string, number>): number {
+export function scoreVideo(video: FeedEntry, config: Config, interest: Map<string, number>): number {
     // const tokens = [...video.tags, ...tokenize(video.title), ...tokenize(video.description)];
-    const tokens = tokenize(video.title);
-    video.tags = tokens;
+    const tokens = tokenize(video.title, config);
+    video.tags = [...new Set(tokens)];
     let score = 0;
 
     for (const token of tokens) {

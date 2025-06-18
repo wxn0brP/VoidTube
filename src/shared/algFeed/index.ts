@@ -13,6 +13,8 @@ export async function getConfig(): Promise<Config> {
         videoPerTag:        await getSetting("videoPerTag",     5),
         noisePercent:       await getSetting("noisePercent",    10),
         noiseBoost:         await getSetting("noiseBoost",      15),
+        hashTagBoost:       await getSetting("hashTagBoost",    3),
+        minScore:           await getSetting("minScore",        0),
         irrelevant:         await getSetting("irrelevant",      []).then(v => v.split(",")),
         userTags:           await getSetting("userTags",        []),
     };

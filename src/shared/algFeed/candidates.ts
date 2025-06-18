@@ -1,6 +1,6 @@
 import { searchVideo } from "../apiBack";
 import { Video, Config, SearchEntry } from "./final/types";
-import { tokenize } from "./utils";
+import { getHashTag, tokenize } from "./utils";
 
 export async function buildInitialCandidates(history: Video[], config: Config): Promise<SearchEntry[]> {
     if (history.length < config.minHistory) {
@@ -36,9 +36,17 @@ export function getTopKeywordsFromHistory(history: Video[], config: Config): str
     const freq = new Map<string, number>();
 
     for (const vid of history) {
-        const tokens = [...tokenize(vid.title), ...tokenize(vid.description)];
+        const title = tokenize(vid.title, config);
+        const tokens = [...title, ...title, ...tokenize(vid.description, config)];
         for (const token of tokens) {
             freq.set(token, (freq.get(token) ?? 0) + 1);
+        }
+    }
+
+    for (const vid of history) {
+        const hashTags = getHashTag(vid.description, config);
+        for (const hashTag of hashTags) {
+            freq.set(hashTag, (freq.get(hashTag) ?? 0) + config.hashTagBoost);
         }
     }
 

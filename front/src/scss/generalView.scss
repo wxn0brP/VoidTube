@@ -55,6 +55,15 @@
         flex-shrink: 0;
     }
 
+    h3 {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+    }
+
     &:hover {
         transform: scale(0.99);
     }
