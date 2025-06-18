@@ -5,6 +5,7 @@ import https from "https";
 import http from "http";
 import os from "os";
 import path from "path";
+import { log } from "./logger";
 
 function checkSystemYtDlp() {
     const cmd = process.platform === "win32" ? "where" : "which";
@@ -93,7 +94,7 @@ export async function getYtDlpPath(): Promise<string> {
 
     const url = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + binName;
 
-    console.log(`[VoidTube] Downloading yt-dlp to: ${binPath}`);
+    log("wrapper", `Downloading yt-dlp to: ${binPath}`);
     await downloadFile(url, binPath);
 
     if (process.platform !== "win32") {

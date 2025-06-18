@@ -3,6 +3,7 @@ import { resolve } from "path";
 import { download, getChannelInfo, getVideoInfo } from "../apiBack";
 import db from "../db";
 import Executor from "../executor";
+import { log } from "../logger";
 
 function getTTL() {
     const now = Math.floor(new Date().getTime() / 1000);
@@ -64,7 +65,7 @@ export async function apiGetVideo(url: string, dynamic = true, staticData?: any)
             console.error("[API-VQL] Failed to get video formats:", url);
             if (i < 3) {
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                console.log("[API-VQL] Retrying get video formats... (" + (i + 1) + " / 3)");
+                log("API-VQL", "Retrying get video formats... (" + (i + 1) + " / 3)");
                 return fn(i + 1);
             }
         }

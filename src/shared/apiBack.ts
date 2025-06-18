@@ -1,3 +1,4 @@
+import { log } from "./logger";
 import { wrapper } from "./wrapper";
 
 const options = {
@@ -20,7 +21,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
             videoUrl = `https://www.youtube.com/watch?v=${videoUrl}`;
         }
 
-        console.log("[VoidTube-SCRAPER] getVideoInfo\t", videoUrl, withFormats);
+        log("scraper", "getVideoInfo\t", videoUrl, withFormats);
 
         const opts = Object.assign({}, options, {
             preferFreeFormats: true,
@@ -71,7 +72,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
 export async function searchVideo(title: string, size: number) {
     try {
         if (title === "undefined") throw new Error("Unknown video");
-        console.log("[VoidTube-SCRAPER] searchVideo\t", title);
+        log("scraper", "searchVideo\t", title);
 
         const opts = Object.assign({}, options, {
             flatPlaylist: true,
@@ -98,7 +99,7 @@ export async function getPlaylistIds(playlist: string) {
         if (!playlist.startsWith("https://www.youtube.com/playlist?list=")) {
             playlist = `https://www.youtube.com/playlist?list=${playlist}`;
         }
-        console.log("[VoidTube-SCRAPER] getPL_Ids\t", playlist);
+        log("scraper", "getPlaylistIds\t", playlist);
 
         const opts = Object.assign({}, options, {
             flatPlaylist: true,
@@ -120,7 +121,7 @@ export async function download(url: string, format: string, dir: string) {
             url = `https://www.youtube.com/watch?v=${url}`;
         }
 
-        console.log("[VoidTube-SCRAPER] download\t", url);
+        log("scraper", "download\t", url);
 
         const outputTemplate = dir + '/%(title)s.%(ext)s';
 
@@ -155,7 +156,7 @@ export async function getChannelInfo(channelUrl: string) {
             channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
         }
 
-        console.log("[VoidTube-SCRAPER] getChnlInfo\t", channelUrl);
+        log("scraper", "getChnlInfo\t", channelUrl);
 
         const opts = Object.assign({}, options, { flatPlaylist: true, });
 
@@ -213,7 +214,7 @@ export async function getChannelVideos(channelUrl: string, flat: boolean = true)
             channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
         }
 
-        console.log("[VoidTube-SCRAPER] getChnlVid\t", channelUrl);
+        log("scraper", "getChnlVid\t", channelUrl);
 
         const result = await wrapper(channelUrl + "/videos", opts);
 

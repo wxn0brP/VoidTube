@@ -1,7 +1,8 @@
 import { Valthera } from "@wxn0brp/db";
 import { getExternalResourcePath } from "./path";
+import { log } from "./logger";
 
-console.log("[VoidTube-ValtheraDB] Database path:", getExternalResourcePath("internal-db"));
+log("ValtheraDB", "Database path:", getExternalResourcePath("internal-db"));
 
 const db = {
     user:       new Valthera(getExternalResourcePath("internal-db", "user")),
