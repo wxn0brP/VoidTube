@@ -39,7 +39,7 @@ class FeedView implements UiComponent {
 
                 card.innerHTML = `
                     <div style="background-image: url(https://i3.ytimg.com/vi/${id}/maxresdefault.jpg)" class="img"></div>
-                    <h3>${entry.title}</h3>
+                    <h3 title="${entry.title}">${entry.title}</h3>
                     <p>${new Date(entry.pubDate).toLocaleString()}</p>
                     <div class="author">
                         <img src="${"/avatar?link=" + entry.channel.avatar}" class="avatar">

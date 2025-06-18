@@ -23,7 +23,7 @@ export default async function (container: HTMLDivElement) {
             const settingCfg: { type: string } = settingsData.find(setting => setting.id === settingId);
             if (settingCfg.type === "input") {
                 const input = element.querySelector<HTMLInputElement>("input")!;
-                input.value = setting.v || "";
+                input.value = setting.v ?? "";
                 input.oninput = () => {
                     fetchVQL(`alg updateOneOrAdd cfg s._id="${id}" u.v="${input.value}"`);
                 }

@@ -1,6 +1,7 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { Setting } from "#types/setting";
+import { uiMsg } from "#ui/modal/message";
 
 export const settingsData: Setting[] = [
     {
@@ -74,6 +75,22 @@ export const settingsData: Setting[] = [
         max: 9999,
     },
     {
+        type: "input",
+        id: "alg_hashTagBoost",
+        text: "Hash Tag Weight",
+        input_type: "number",
+        min: 0,
+        max: 9999,
+    },
+    {
+        type: "input",
+        id: "alg_minScore",
+        text: "Video Minimum Score",
+        input_type: "number",
+        min: 0,
+        max: 9999,
+    },
+    {
         type: "textarea",
         id: "alg_irrelevant",
         text: "Irrelevant Tags",
@@ -81,9 +98,10 @@ export const settingsData: Setting[] = [
         width: 15,
         height: 5,
         saveButton: {
-            onClick: (value) => {
+            onClick: async (value) => {
                 const val = value.split("\n").map(v => v.trim()).filter(v => v.length > 0).join(",");
-                fetchVQL(`alg updateOneOrAdd cfg s._id=irrelevant u.v=${val}`);
+                await fetchVQL(`alg updateOneOrAdd cfg s._id=irrelevant u.v=${val}`);
+                uiMsg("Saved");
             },
         }
     }

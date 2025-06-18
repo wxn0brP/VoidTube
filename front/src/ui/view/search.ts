@@ -29,7 +29,7 @@ class SearchView implements UiComponent {
 
             card.innerHTML = `
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>
-                <h3>${entry.title}</h3>
+                <h3 title="${entry.title}">${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
                 ${numToLocale(entry.views)} views
                 <div class="author">
