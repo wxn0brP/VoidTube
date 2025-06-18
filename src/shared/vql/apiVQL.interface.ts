@@ -4,6 +4,7 @@ import { getChannelVideos, getPlaylistIds, searchVideo } from "../apiBack";
 import { getFeed, getQuickFeed } from "../feed";
 import { getRecommended } from "../getRecommended";
 import { apiExecutor, apiGetVideo, apiGetVideos, channelInfo, downloadVideo } from "./apiVQL.logic";
+import { seeLogs } from "../logger";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
@@ -42,6 +43,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "self-version") return { version: process.env.VOIDTUBE_VERSION || "unknown" };
             if (collection === "channelInfo") return await channelInfo(search.url || search._id || search.id, search.update || false);
             if (collection === "algRun") return await runFeedVQL();
+            if (collection === "seeLogs") return seeLogs();
         } catch (e) {
             console.error(e);
         }

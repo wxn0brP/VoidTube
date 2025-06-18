@@ -4,6 +4,7 @@ import { buildInitialCandidates } from "./candidates";
 import { getHistory } from "./history";
 import { getSetting } from "./getSetting";
 import db from "../db";
+import { log } from "../logger";
 
 export async function getConfig(): Promise<Config> {
     return {
@@ -22,10 +23,10 @@ export async function getConfig(): Promise<Config> {
 
 export async function runFeed() {
     const history = await getHistory();
-    console.log("[VoidTube-alg] Loaded history:", history.length);
+    log("alg", "Loaded history:", history.length);
 
     const config = await getConfig();
-    console.log("[VoidTube-alg] Config:", config);
+    log("alg", "Config:", config);
 
     const feedback: FeedbackMap = new Map();
     const feedbackRaw = await db.alg.find("feedback", {});
@@ -34,7 +35,7 @@ export async function runFeed() {
     const candidates = await buildInitialCandidates(history, config);
     const feed = generateFeed(history, candidates, config, feedback);
 
-    console.log("[VoidTube-alg] Final feed:", feed.length);
+    log("alg", "Final feed:", feed.length);
 
     return feed;
 }

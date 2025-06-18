@@ -21,6 +21,13 @@ export const settingsData: Setting[] = [
         min: 0,
         max: 20,
     },
+    {
+        type: "button",
+        onClick: () => {
+            fetchVQL("api seeLogs! s._id=1");
+        },
+        text: "See Logs"
+    },
     { type: "separator" },
     {
         type: "header",
