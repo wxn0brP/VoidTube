@@ -14,7 +14,7 @@ for (const file of files) {
     }
 }
 
-const logTime = new Date().toISOString();
+const logTime = Math.floor(Date.now() / 1000);
 export const file = getExternalResourcePath("internal-db", "logs", logTime + ".log");
 
 writeFileSync(file, "", "utf-8");
