@@ -14,7 +14,6 @@ const app = new FalconFrame({
 if (isDev) log("server", "FalconFrame started with", app.logger.logLevel, "debug level");
 
 const port = parseInt(process.env.PORT) || 29848;
-app.listen(port);
 
 const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
 if (isDev) log("server", "__cwd:", __cwd);
@@ -60,5 +59,7 @@ process.on("unhandledRejection", (reason, p) => {
 });
 
 process.on("uncaughtException", (err) => {
-    log("server", "Uncaught Exception thrown:", err);
+    log("server", "Uncaught Exception thrown:", err.message, err.stack);
 });
+
+app.listen(port);
