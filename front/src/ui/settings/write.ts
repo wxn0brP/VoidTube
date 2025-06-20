@@ -29,7 +29,8 @@ export default async function (container: HTMLDivElement) {
                 }
             } else if (settingCfg.type === "textarea") {
                 const input = element.querySelector<HTMLTextAreaElement>("textarea")!;
-                input.value = setting.v.replaceAll(",", "\n");
+                const val = Array.isArray(setting.v) ? setting.v.join("\n") : setting.v;
+                input.value = val.replaceAll(",", "\n");
             }
         }
     });
