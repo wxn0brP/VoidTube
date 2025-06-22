@@ -4,7 +4,8 @@
 #search-container,
 #channel-videos,
 #feed-container,
-#alg-container {
+#alg-container,
+#subs-list-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 5px;
@@ -26,7 +27,8 @@
 .searchCard,
 .channelVideoCard,
 .feedCard,
-.algCard {
+.algCard,
+.subCard {
     border-radius: 8px;
     padding: 1rem;
     transition: transform 0.2s ease;

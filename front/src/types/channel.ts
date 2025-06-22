@@ -18,3 +18,8 @@ export interface ChannelVideo {
         time: number;
     }
 }
+
+export interface UserSub {
+    _id: string;
+    channel: ChannelInfo;
+}

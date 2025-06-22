@@ -21,6 +21,7 @@ import videoView from "./view/videoView";
 import settingsView from "./view/settings";
 import messageView from "./modal/message";
 import algView from "./view/alg";
+import subsListView from "./view/subsList";
 
 export const components = [
     playerView,
@@ -44,6 +45,7 @@ export const components = [
     settingsView,
     messageView,
     algView,
+    subsListView,
 ]
 
 components.forEach(component => component.mount());

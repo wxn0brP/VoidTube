@@ -1,4 +1,4 @@
-import { UiComponent } from "@wxn0brp/flanker-ui";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
@@ -80,10 +80,7 @@ class SearchView implements UiComponent {
         this.element = document.querySelector("#search-view");
         this.container = this.element.querySelector("#search-container")!;
 
-        $store.view.search.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.search);
         $store.view.search.set(false);
     }
 

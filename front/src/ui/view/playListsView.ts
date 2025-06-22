@@ -8,7 +8,7 @@ import playListsModal from "#ui/modal/playlists";
 import playListSnapView from "#ui/view/playListSnap";
 import navBarView from "#ui/navBar";
 import { fewItems, formatTime, setTitle, updateQueryParam } from "#utils";
-import { UiComponent } from "@wxn0brp/flanker-ui";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import playListView from "./playList";
 
@@ -204,10 +204,7 @@ class PlayListsView implements UiComponent {
             this.loadPlaylists();
         };
 
-        $store.view.playlists.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.playlists);
         $store.view.playlists.set(false);
 
         setTimeout(() => {
