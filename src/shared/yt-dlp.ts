@@ -1,8 +1,7 @@
 import { spawnSync } from "child_process";
-import { createWriteStream, existsSync, statSync, unlinkSync } from "fs";
-import { chmod, mkdir } from "fs/promises";
-import https from "https";
-import http from "http";
+import { existsSync, readFileSync, statSync, unlinkSync } from "fs";
+import { chmod, mkdir, writeFile } from "fs/promises";
+import ky from "ky";
 import os from "os";
 import path from "path";
 import { log } from "./logger";
@@ -17,58 +16,21 @@ function checkSystemYtDlp() {
     return null;
 }
 
-function downloadFile(url: string, dest: string): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
-        const tryDownload = (downloadUrl: string) => {
-            const writeStream = createWriteStream(dest);
-
-            const client = downloadUrl.startsWith("https") ? https : http;
-
-            client.get(downloadUrl, (response) => {
-                if (response.statusCode === 302 || response.statusCode === 301 || response.statusCode === 307) {
-                    const redirectUrl = response.headers.location;
-                    if (!redirectUrl) {
-                        reject(new Error("Redirect location not found"));
-                        return;
-                    }
-
-                    writeStream.close();
-
-                    try {
-                        require("fs").unlinkSync(dest);
-                    } catch {}
-
-                    tryDownload(new URL(redirectUrl, downloadUrl).href);
-                    return;
-                }
-
-                if (response.statusCode !== 200) {
-                    reject(new Error(`Unable to download file: status ${response.statusCode}`));
-                    return;
-                }
-
-                response.pipe(writeStream);
-
-                writeStream.on("finish", () => {
-                    resolve();
-                });
-
-                writeStream.on("error", (err) => {
-                    reject(err);
-                });
-            }).on("error", (err) => {
-                reject(err);
-            });
-        };
-
-        tryDownload(url);
-    });
+async function downloadFile(url: string, dest: string): Promise<void> {
+    const buffer = await ky.get(url).arrayBuffer();
+    await writeFile(dest, Buffer.from(buffer));
 }
 
 export function checkIsFileEmpty(filePath: string): boolean {
     if (!existsSync(filePath)) return true;
     const stats = statSync(filePath);
     return stats.size < 100;
+}
+
+async function getLatestVersion(): Promise<string> {
+    const url = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/latest";
+    const res = await ky.get(url).json<{ tag_name: string }>();
+    return res.tag_name;
 }
 
 export async function getYtDlpPath(): Promise<string> {
@@ -89,9 +51,19 @@ export async function getYtDlpPath(): Promise<string> {
             : "yt-dlp_linux";
     const binPath = path.join(baseDir, binName);
 
-    if (!checkIsFileEmpty(binPath)) return binPath;
-    else if (existsSync(binPath)) unlinkSync(binPath);
+    if (!checkIsFileEmpty(binPath)) {
+        if (await checkUpdate(binPath)) {
+            await downloadYtDlp(binName, binPath, baseDir);
+        }
+        return binPath;
+    }
+    
+    await downloadYtDlp(binName, binPath, baseDir);
+    return binPath;
+}
 
+async function downloadYtDlp(binName: string, binPath: string, baseDir: string) {
+    if (existsSync(binPath)) unlinkSync(binPath);
     const url = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + binName;
 
     log("wrapper", `Downloading yt-dlp to: ${binPath}`);
@@ -101,5 +73,26 @@ export async function getYtDlpPath(): Promise<string> {
         await chmod(binPath, 0o755);
     }
 
-    return binPath;
+    const version = await getLatestVersion();
+    log("wrapper", `yt-dlp version: ${version}`);
+    await writeFile(path.join(baseDir, "yt-dlp.version"), version);
+}
+
+async function checkUpdate(ytDlp: string) {
+    const baseDir = path.dirname(ytDlp);
+
+    const versionPath = path.join(baseDir, "yt-dlp.version");
+    if (!existsSync(versionPath)) {
+        log("wrapper", `yt-dlp version file not found: ${versionPath}`);
+        return true;
+    }
+
+    const currentVersion = readFileSync(versionPath, "utf-8").trim();
+    const latestVersion = await getLatestVersion();
+    if (currentVersion !== latestVersion) {
+        log("wrapper", `yt-dlp version mismatch: ${currentVersion} != ${latestVersion}`);
+        return true;
+    }
+
+    return false;
 }
