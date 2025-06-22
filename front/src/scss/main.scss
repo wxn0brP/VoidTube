@@ -224,3 +224,38 @@ section {
         }
     }
 }
+
+#subs-list-view {
+    flex-direction: column;
+
+    .subCard {
+        max-width: 400px;
+
+        .img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-inline: auto;
+            margin-bottom: 5px;
+        }
+    }
+
+
+    #subs-list-bar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-inline: 15px;
+        padding-block: 5px;
+
+        input {
+            width: 300px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--accent);
+            background-color: var(--bg);
+            color: var(--txt);
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import { UiComponent } from "@wxn0brp/flanker-ui";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
@@ -90,10 +90,7 @@ ${entry.tags.map(t => `- ${t}`).join("\n")}
             this.load();
         });
 
-        $store.view.alg.subscribe((open) => {
-            this.element.style.display = open ? "" : "none";
-        });
-
+        uiHelpers.storeHide(this.element, $store.view.alg);
         $store.view.alg.set(false);
     }
 

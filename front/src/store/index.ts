@@ -24,6 +24,7 @@ const initData = {
         feed: false,
         settings: false,
         alg: false,
+        subs: false,
     },
     loader: 0,
 
