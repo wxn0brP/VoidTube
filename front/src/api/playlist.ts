@@ -1,4 +1,5 @@
 import { PlaylistEntry, PlaylistsEntry } from "#types/video";
+import { getThumbnail } from "#utils";
 import { fetchVQL } from ".";
 
 export async function fetchPlaylists(
@@ -16,7 +17,7 @@ export async function fetchPlaylists(
 playlist ${playlist._id}
 relations:
   info:
-    path: [api, video-static]
+    path: [api, video-static-quick]
 
 many: true
 search: {}
@@ -29,10 +30,13 @@ select:
             `.trim();
 
             const videosRes = await fetchVQL(query);
+            const firstVideo = videosRes[0];
+            const thumbnail = firstVideo?.info ? getThumbnail(firstVideo.info.thumbnail, firstVideo._id) : "/favicon.svg";
+
             const entry: PlaylistsEntry = {
                 ...playlist,
                 videosCount: videosRes.length,
-                thumbnail: videosRes[0]?.info?.thumbnail || "/favicon.svg",
+                thumbnail,
                 duration: videosRes.reduce((a, b) => a + b.info.duration, 0) || 0,
             };
 
@@ -50,7 +54,7 @@ export async function fetchPlaylistInfo(id: string) {
 playlist ${id}
 relations:
   info:
-    path: [api, video-static]
+    path: [api, video-static-quick]
     select: [title,duration,thumbnail]
 
 many: true
@@ -83,7 +87,7 @@ export async function fetchPlaylistSnap(id: string) {
 playlist ${id}
 relations:
   info:
-    path: [api, video-static]
+    path: [api, video-static-quick]
     select: [title,duration,thumbnail,views]
   history:
     path: [user, history]

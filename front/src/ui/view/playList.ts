@@ -2,10 +2,10 @@ import { fetchVQL } from "#api/index";
 import { fetchPlaylistInfo } from "#api/playlist";
 import { $store } from "#store";
 import { UiComponent } from "@wxn0brp/flanker-ui";
-import { PlaylistEntry, VideoInfo } from "#types/video";
+import { PlaylistEntry, VideoQuickInfo } from "#types/video";
 import { scrollToPlaylistElement } from "#ui/video/player/audioSync";
 import { loadVideo } from "#ui/video/player/status";
-import { clearQueryParams, formatTime, setTitle, updateQueryParam } from "#utils";
+import { clearQueryParams, formatTime, getThumbnail, setTitle, updateQueryParam } from "#utils";
 import { changeView } from "..";
 import navBarView from "../navBar";
 import metaControlView from "../video/metaControl";
@@ -22,7 +22,7 @@ class PlayListView implements UiComponent {
             const card = document.createElement("div");
             card.className = "videoCard";
             card.innerHTML = `
-                <div style="background-image: url(${item.info.thumbnail})"></div>
+                <div style="background-image: url(${getThumbnail(item.info.thumbnail, item._id)})"></div>
                 <h3 title="${item.info.title}">${item.info.title}</h3>
                 ${formatTime(item.info.duration, null)}
             `;
@@ -52,7 +52,7 @@ class PlayListView implements UiComponent {
             const card = document.createElement("div");
             card.className = "videoCard";
 
-            function html(item: Omit<VideoInfo, "formats">) {
+            function html(item: VideoQuickInfo) {
                 if (!item) {
                     item = { title: "Error loading video" } as any;
                     setTimeout(() => {
@@ -60,7 +60,7 @@ class PlayListView implements UiComponent {
                     }, 5000);
                 }
                 card.innerHTML = `
-                    <div style="background-image: url(${item.thumbnail || "/favicon.svg"})"></div>
+                    <div style="background-image: url(${getThumbnail(item.thumbnail, item._id)})"></div>
                     <h3 title="${item.title}">${item.title || "Loading..."}</h3>
                     ${formatTime(item.duration, null)}
                     <button class="btn" data-id="play-next-btn">
@@ -93,7 +93,7 @@ class PlayListView implements UiComponent {
             }
             this.recommendationsContainer.appendChild(card);
             html({} as any);
-            setTimeout(() => fetchVQL(`api video-static! s._id = ${_id}`).then(html), i * 10);
+            setTimeout(() => fetchVQL(`api video-static-quick! s._id = ${_id}`).then(html), i * 10);
         });
     }
 

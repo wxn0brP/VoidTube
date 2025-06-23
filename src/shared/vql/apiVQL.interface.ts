@@ -3,8 +3,8 @@ import { runFeedVQL, saveConfig } from "../alg";
 import { getChannelVideos, getPlaylistIds, searchVideo } from "../apiBack";
 import { getFeed, getQuickFeed } from "../feed";
 import { getRecommended } from "../getRecommended";
-import { apiExecutor, apiGetVideo, apiGetVideos, channelInfo, downloadVideo } from "./apiVQL.logic";
 import { seeLogs } from "../logger";
+import { apiExecutor, apiGetVideo, apiGetVideos, channelInfo, downloadVideo, fetchQuickCache, fetchQuickCache$ } from "./apiVQL.logic";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
@@ -29,6 +29,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "channelVideos") return await getChannelVideos(search.url || search._id, search.flat ?? true);
             if (collection === "channelFeed") return await getFeed(search.url || search._id);
             if (collection === "quickFeed") return await getQuickFeed();
+            if (collection === "video-static-quick") return await fetchQuickCache$(search);
         } catch (e) {
             console.error(e);
         }
@@ -44,6 +45,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "channelInfo") return await channelInfo(search.url || search._id || search.id, search.update || false);
             if (collection === "algRun") return await runFeedVQL();
             if (collection === "seeLogs") return seeLogs();
+            if (collection === "video-static-quick") return await fetchQuickCache(search._id || search.id);
         } catch (e) {
             console.error(e);
         }

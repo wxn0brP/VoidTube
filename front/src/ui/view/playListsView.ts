@@ -7,7 +7,7 @@ import uiFunc from "#ui/modal";
 import playListsModal from "#ui/modal/playlists";
 import playListSnapView from "#ui/view/playListSnap";
 import navBarView from "#ui/navBar";
-import { fewItems, formatTime, setTitle, updateQueryParam } from "#utils";
+import { fewItems, formatTime, getThumbnail, setTitle, updateQueryParam } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import playListView from "./playList";
@@ -39,7 +39,7 @@ class PlayListsView implements UiComponent {
 
     renderCard(card: HTMLDivElement, item: PlaylistsEntry) {
         card.innerHTML = `
-            <div style="background-image: url(${item?.thumbnail || "/favicon.svg"})" class="img"></div>
+            <div style="background-image: url(${item?.thumbnail ? getThumbnail(item.thumbnail, item._id) : "/favicon.svg"})" class="img"></div>
             <h3 title="${item?.name}">${item?.name}</h3>
             ${item?.videosCount} videos <br>
             Duration: ${formatTime(item?.duration, null)}

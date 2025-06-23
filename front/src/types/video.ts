@@ -117,3 +117,12 @@ export interface AlgEntry {
     score: number;
     tags: string[];
 }
+
+export interface VideoQuickInfo {
+    _id: string;
+    title: string;
+    duration: number;
+    channel: string;
+    thumbnail: string | null;
+    views: number;
+}

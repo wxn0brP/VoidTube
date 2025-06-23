@@ -4,7 +4,7 @@ import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { HistoryEntry } from "#types/video";
-import { clearQueryParams, fewItems, formatTime, levenshtein, numToLocale, setTitle } from "#utils";
+import { clearQueryParams, fewItems, formatTime, getThumbnail, levenshtein, numToLocale, setTitle } from "#utils";
 import { changeView } from "..";
 import channelView, { thumbnailMiddle } from "./channel";
 import metaControlView from "../video/metaControl";
@@ -40,7 +40,7 @@ class HistoryView implements UiComponent {
                 const date = dateRaw[6] + dateRaw[7] + "." + dateRaw[4] + dateRaw[5] + "." + dateRaw[0] + dateRaw[1] + dateRaw[2] + dateRaw[3];
 
                 card.innerHTML = `
-                    <div style="background-image: url(${entry.info.thumbnail})" class="img"></div>
+                    <div style="background-image: url(${getThumbnail(entry.info.thumbnail, entry._id)})" class="img"></div>
                     <h3 title="${entry.info.title}">${entry.info.title}</h3>
                     ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
                     ${numToLocale(entry.info.views)} views -
@@ -113,7 +113,7 @@ class HistoryView implements UiComponent {
 
         // quick load
         setTimeout(() => {
-            this.loadHistory(128);
+            this.loadHistory(32);
         }, 100);
         // load all history
         setTimeout(() => {
