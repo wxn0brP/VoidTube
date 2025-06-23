@@ -21,7 +21,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
             videoUrl = `https://www.youtube.com/watch?v=${videoUrl}`;
         }
 
-        log("scraper", "getVideoInfo\t", videoUrl, withFormats);
+        log("scraper", "getVideoInfo", videoUrl, withFormats);
 
         const opts = Object.assign({}, options, {
             preferFreeFormats: true,
@@ -72,7 +72,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
 export async function searchVideo(title: string, size: number) {
     try {
         if (title === "undefined") throw new Error("Unknown video");
-        log("scraper", "searchVideo\t", title);
+        log("scraper", "searchVideo", title);
 
         const opts = Object.assign({}, options, {
             flatPlaylist: true,
@@ -99,7 +99,7 @@ export async function getPlaylistIds(playlist: string) {
         if (!playlist.startsWith("https://www.youtube.com/playlist?list=")) {
             playlist = `https://www.youtube.com/playlist?list=${playlist}`;
         }
-        log("scraper", "getPlaylistIds\t", playlist);
+        log("scraper", "getPlaylistIds", playlist);
 
         const opts = Object.assign({}, options, {
             flatPlaylist: true,
@@ -121,7 +121,7 @@ export async function download(url: string, format: string, dir: string) {
             url = `https://www.youtube.com/watch?v=${url}`;
         }
 
-        log("scraper", "download\t", url);
+        log("scraper", "download", url);
 
         const outputTemplate = dir + '/%(title)s.%(ext)s';
 
@@ -156,7 +156,7 @@ export async function getChannelInfo(channelUrl: string) {
             channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
         }
 
-        log("scraper", "getChnlInfo\t", channelUrl);
+        log("scraper", "getChnlInfo", channelUrl);
 
         const opts = Object.assign({}, options, { flatPlaylist: true, });
 
@@ -214,7 +214,7 @@ export async function getChannelVideos(channelUrl: string, flat: boolean = true)
             channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
         }
 
-        log("scraper", "getChnlVid\t", channelUrl);
+        log("scraper", "getChnlVid", channelUrl);
 
         const result = await wrapper(channelUrl + "/videos", opts);
 

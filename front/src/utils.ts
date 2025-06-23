@@ -83,3 +83,9 @@ export function fewItems(element: HTMLElement, length: number) {
 export function numToLocale(num: number) {
     return (num || 0).toLocaleString();
 }
+
+export function getThumbnail(data: string, id: string) {
+    if (!data) return "https://i.ytimg.com/vi/" + id + "/maxresdefault.jpg";
+    if (data.startsWith("http")) return data;
+    return "https://i.ytimg.com/vi/" + id + "/" + data + ".jpg";
+}

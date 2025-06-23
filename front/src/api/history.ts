@@ -18,7 +18,7 @@ export async function fetchHistory(limit = 0) {
 user history
 relations:
   info:
-    path: [api, video-static]
+    path: [api, video-static-quick]
     relations:
       channelData:
         path: [api, channelInfo]

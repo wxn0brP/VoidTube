@@ -2,7 +2,7 @@ import { fetchPlaylistSnap } from "#api/playlist";
 import { $store } from "#store";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { PlaylistSnapEntry } from "#types/video";
-import { clearQueryParams, fewItems, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { clearQueryParams, fewItems, formatTime, getThumbnail, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { changeView } from "..";
 import metaControlView from "../video/metaControl";
 import navBarView from "../navBar";
@@ -25,7 +25,7 @@ class PlayListSnapView implements UiComponent {
             const card = document.createElement("div");
             card.className = "playlistSnapCard";
             card.innerHTML = `
-                <div style="background-image: url(${entry.info.thumbnail})" class="img"></div>
+                <div style="background-image: url(${getThumbnail(entry.info.thumbnail, entry._id)})" class="img"></div>
                 <h3 title="${entry.info.title}">${entry.info.title}</h3>
                 ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
                 ${numToLocale(entry.info.views)} views -
