@@ -5,8 +5,8 @@ export function buildInterestVector(history: Video[], config: Config, feedback: 
     const freqMap = new Map<string, number>();
 
     for (const vid of history) {
-        const hashTags = getHashTag(vid.description, config);
-        const tokens = [...tokenize(vid.title, config), ...tokenize(vid.description, config)];
+        const hashTags = getHashTag(vid.description || "", config);
+        const tokens = [...tokenize(vid.title, config), ...tokenize(vid.description || "", config)];
         for (const token of tokens) {
             freqMap.set(token, (freqMap.get(token) ?? 0) + 1);
         }

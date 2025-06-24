@@ -1,6 +1,7 @@
 import { Config } from "./final/types";
 
 export function tokenize(text: string, config: Config): string[] {
+    if (!text) return [];
     return text
         .toLowerCase()
         .replace(/[^a-z0-9\s]/g, '')
@@ -10,6 +11,7 @@ export function tokenize(text: string, config: Config): string[] {
 }
 
 export function getHashTag(text: string, config: Config): string[] {
+    if (!text) return [];
     const match = text.match(/#(\w+)/);
     return match ?
         match.slice(1).filter(w => !config.irrelevant.includes(w)) :
