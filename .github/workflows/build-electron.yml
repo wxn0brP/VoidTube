@@ -14,6 +14,14 @@ on:
           - quick
         default: "quick"
         description: "Select build type"
+      mac-only:
+        type: boolean
+        default: false
+        description: "Build only macOS"
+      tag:
+        type: string
+        default: ""
+        description: "Release tag to upload to (required for mac-only)"
 
 concurrency:
   group: build-electron-${{ github.ref }}
@@ -21,6 +29,7 @@ concurrency:
 
 jobs:
   build-electron:
+    if: github.event.inputs.mac-only != 'true'
     runs-on: ubuntu-latest
 
     outputs:
@@ -108,8 +117,11 @@ jobs:
   build-mac:
     name: 🍏 Build macOS
     runs-on: macos-latest
-    needs: build-electron
-    if: needs.build-electron.outputs.build_type == 'full'
+    needs: [build-electron]
+    if: |
+      (github.event_name == 'push') ||
+      (github.event.inputs.mac-only == 'true') ||
+      (github.event.inputs.build-type == 'full')
 
     steps:
       - name: 📥 Checkout repo
@@ -132,13 +144,22 @@ jobs:
       - name: 🚀 Build macOS app (no code signing)
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx electron-builder --mac zip
 
-      - name: 📤 Upload macOS build to existing tag release
+      - name: 📤 Upload to release (auto or manual)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release upload "${GITHUB_REF_NAME}" release/*.zip --clobber
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ github.event.inputs.mac-only }}" = "true" ]; then
+            if [ -z "${{ github.event.inputs.tag }}" ]; then
+              echo "::error ::Manual mac-only build requires 'tag' input"
+              exit 1
+            fi
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+
+          gh release upload "$TAG" release/*.zip --clobber
