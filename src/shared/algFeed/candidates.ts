@@ -38,14 +38,14 @@ export function getTopKeywordsFromHistory(history: Video[], config: Config): str
 
     for (const vid of history) {
         const title = tokenize(vid.title, config);
-        const tokens = [...title, ...title, ...tokenize(vid.description, config)];
+        const tokens = [...title, ...title, ...tokenize(vid.description || "", config)];
         for (const token of tokens) {
             freq.set(token, (freq.get(token) ?? 0) + 1);
         }
     }
 
     for (const vid of history) {
-        const hashTags = getHashTag(vid.description, config);
+        const hashTags = getHashTag(vid.description || "", config);
         for (const hashTag of hashTags) {
             freq.set(hashTag, (freq.get(hashTag) ?? 0) + config.hashTagBoost);
         }
