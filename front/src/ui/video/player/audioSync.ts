@@ -5,12 +5,14 @@ import playListView from "#ui/view/playList";
 import { updateQueryParam } from "#utils";
 import playerView from ".";
 import { loadVideo } from "./status";
+import { emitPlay } from "./tabs";
 
 export function setupAudioSync() {
     playerView.videoEl.addEventListener("play", () => {
         playerView.audioEl.currentTime = playerView.videoEl.currentTime;
         playerView.audioEl.play().catch(err => console.error("Audio play error:", err));
         playerView.paused = false;
+        emitPlay();
     });
 
     playerView.videoEl.addEventListener("pause", () => {
@@ -52,6 +54,7 @@ export function setupAudioSync() {
     if ("mediaSession" in navigator) {
         navigator.mediaSession.setActionHandler("play", () => {
             playerView.videoEl.play();
+            emitPlay();
         });
         navigator.mediaSession.setActionHandler("pause", () => {
             playerView.videoEl.pause();

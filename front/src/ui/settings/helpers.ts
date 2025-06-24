@@ -1,4 +1,4 @@
-import { SettingSelect, SettingButton, SettingInput, SettingTextArea } from "#types/setting";
+import { SettingSelect, SettingButton, SettingInput, SettingTextArea, SettingCheckbox } from "#types/setting";
 import { uiHelpers } from "@wxn0brp/flanker-ui";
 
 export function createSelect(setting: SettingSelect) {
@@ -73,4 +73,15 @@ export function createTextArea(setting: SettingTextArea) {
     if (setting.height) textarea.rows = setting.height;
 
     return div;
+}
+
+export function createCheckbox(setting: SettingCheckbox) {
+    const label = document.createElement("label");
+    label.innerHTML = "<b>" + setting.text + "</b>";
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    if (setting.storeField) uiHelpers.watchCheckbox(checkbox, setting.storeField);
+
+    label.appendChild(checkbox);
+    return label;
 }

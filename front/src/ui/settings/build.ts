@@ -1,6 +1,6 @@
 import { fetchVQL } from "#api/index";
 import { settingsData } from "./data";
-import { createSelect, createButton, createInput, createTextArea } from "./helpers";
+import { createSelect, createButton, createInput, createTextArea, createCheckbox } from "./helpers";
 
 export default function (container: HTMLDivElement) {
     settingsData.forEach(setting => {
@@ -28,6 +28,9 @@ export default function (container: HTMLDivElement) {
                 break;
             case "textarea":
                 element = createTextArea(setting);
+                break;
+            case "checkbox":
+                element = createCheckbox(setting);
                 break;
             default:
                 throw new Error("Unknown setting type");

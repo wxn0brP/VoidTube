@@ -1,6 +1,6 @@
 import { ReactiveCell } from "@wxn0brp/flanker-ui";
 
-export type Setting = SettingSelect | SettingButton | SettingInput | Separator | Header | Div | SettingTextArea;
+export type Setting = SettingSelect | SettingButton | SettingInput | Separator | Header | Div | SettingTextArea | SettingCheckbox;
 
 export interface SettingSelect {
     type: "select";
@@ -23,7 +23,7 @@ export interface SettingInput {
     placeholder?: string;
     storeField?: ReactiveCell<string>;
     id: string;
-    input_type?: "text" | "number";
+    input_type?: "text" | "number" | "checkbox";
     min?: number;
     max?: number;
 }
@@ -54,4 +54,11 @@ export interface SettingTextArea {
         text?: string;
         onClick: (value: string, e: Event) => void;
     }
+}
+
+export interface SettingCheckbox {
+    type: "checkbox";
+    text: string;
+    storeField?: ReactiveCell<boolean>;
+    id: string;
 }
