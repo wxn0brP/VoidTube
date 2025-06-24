@@ -31,6 +31,12 @@ jobs:
         run: |
           npm run build
 
+      - name: 🌐 Build frontend
+        run: |
+          cd front
+          npm install
+          npm run build
+
       - name: 🚀 Build macOS app (no code signing)
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
