@@ -23,6 +23,9 @@ jobs:
   build-electron:
     runs-on: ubuntu-latest
 
+    outputs:
+      build_type: ${{ steps.determine_build_type.outputs.build_type }}
+
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
@@ -47,8 +50,10 @@ jobs:
         id: determine_build_type
         run: |
           if [ -z "${{ github.event.inputs.build-type }}" ]; then
+            echo "build_type=full" >> $GITHUB_OUTPUT
             echo "BUILD_TYPE=full" >> $GITHUB_ENV
           else
+            echo "build_type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
             echo "BUILD_TYPE=${{ github.event.inputs.build-type }}" >> $GITHUB_ENV
           fi
 
@@ -103,6 +108,8 @@ jobs:
   build-mac:
     name: 🍏 Build macOS
     runs-on: macos-latest
+    needs: build-electron
+    if: needs.build-electron.outputs.build_type == 'full'
 
     steps:
       - name: 📥 Checkout repo
@@ -130,8 +137,8 @@ jobs:
         run: |
           npx electron-builder --mac zip
 
-      - name: 📤 Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: VoidTube-macOS
-          path: release/
+      - name: 📤 Upload macOS build to existing tag release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "${GITHUB_REF_NAME}" release/*.zip --clobber
