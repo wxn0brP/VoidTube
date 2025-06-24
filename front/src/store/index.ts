@@ -33,7 +33,8 @@ const initData = {
 
     settings: {
         quality: "best",
-        recommendations: "10"
+        recommendations: "10",
+        onePlay: true,
     }
 }
 

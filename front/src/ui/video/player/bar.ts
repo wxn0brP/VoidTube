@@ -151,7 +151,7 @@ export function setupBar() {
         if (!nextVideoId) return;
 
         // if server don't have buffered video then fetch it
-        fetchVQL(`api video! s.url = ${nextVideoId}`, true);
+        fetchVQL(`api video! s.url = ${nextVideoId}`, { silent: true });
         console.debug("[player] buffering next video on server", nextVideoId);
     }, 25_000);
 

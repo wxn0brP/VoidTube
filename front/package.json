@@ -11,13 +11,14 @@
         "start": "node dist/index.js"
     },
     "devDependencies": {
-        "@types/node": "^22.15.30",
+        "@types/node": "^24.0.4",
         "esbuild": "^0.25.5",
         "esbuild-style-plugin": "^1.6.3",
-        "sass": "^1.89.1",
+        "sass": "^1.89.2",
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/flanker-ui": "github:wxn0brP/FlankerUi#dist-v0.1.0"
+        "@wxn0brp/flanker-ui": "^0.2.2",
+        "@wxn0brp/vql-client": "^0.0.9"
     }
 }

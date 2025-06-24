@@ -22,6 +22,12 @@ export const settingsData: Setting[] = [
         max: 20,
     },
     {
+        type: "checkbox",
+        id: "app_onePlay",
+        text: "One Play",
+        storeField: $store.settings.onePlay,
+    },
+    {
         type: "button",
         onClick: () => {
             fetchVQL("api seeLogs! s._id=1");

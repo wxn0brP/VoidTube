@@ -10,12 +10,14 @@ import { updateQueryParam } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
 import { uiMsg } from "#ui/modal/message";
+import { emitPlay } from "./tabs";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
     playerView.paused ? playerView.videoEl.pause() : playerView.videoEl.play();
     playerView.controls.playPauseBtn.textContent = playerView.paused ? "▶️" : "⏸️";
     if (playerView.paused) saveProgress();
+    else emitPlay();
 }
 
 export function toggleFullscreen() {
