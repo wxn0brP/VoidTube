@@ -1,8 +1,8 @@
+import { note } from "#echo/logger";
 import ky from "ky";
-import { log } from "./logger";
 
 export async function fetchQuick(videoId: string) {
-    log("fetchQuick", "Fetching", videoId);
+    note("fetchQuick", "Fetching", videoId);
     const html = await ky(`https://www.youtube.com/watch?v=${videoId}`).text();
 
     const playerRespMatch = html.match(/ytInitialPlayerResponse\s*=\s*({.+?})\s*;/);

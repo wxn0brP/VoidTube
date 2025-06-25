@@ -3,8 +3,8 @@ import { Config, FeedbackMap } from "./final/types";
 import { buildInitialCandidates } from "./candidates";
 import { getHistory } from "./history";
 import { getSetting } from "./getSetting";
-import db from "../db";
-import { log } from "../logger";
+import db from "#db";
+import { note } from "#echo/logger";
 
 export async function getConfig(): Promise<Config> {
     return {
@@ -23,10 +23,10 @@ export async function getConfig(): Promise<Config> {
 
 export async function runFeed() {
     const history = await getHistory();
-    log("alg", "Loaded history:", history.length);
+    note("alg", "Loaded history:", history.length);
 
     const config = await getConfig();
-    log("alg", "Config:", config);
+    note("alg", "Config:", config);
 
     const feedback: FeedbackMap = new Map();
     const feedbackRaw = await db.alg.find("feedback", {});
@@ -35,7 +35,7 @@ export async function runFeed() {
     const candidates = await buildInitialCandidates(history, config);
     const feed = generateFeed(history, candidates, config, feedback);
 
-    log("alg", "Final feed:", feed.length);
+    note("alg", "Final feed:", feed.length);
 
     return feed;
 }

@@ -1,14 +1,41 @@
+import { seeLogs } from "#echo/logger";
+import { getChannelVideos, getPlaylistIds, searchVideo } from "#relay/apiBack";
+import { getFeed, getQuickFeed } from "#relay/feed";
+import { getRecommended } from "#relay/getRecommended";
 import { createValtheraAdapter } from "@wxn0brp/vql";
-import { runFeedVQL, saveConfig } from "../alg";
-import { getChannelVideos, getPlaylistIds, searchVideo } from "../apiBack";
-import { getFeed, getQuickFeed } from "../feed";
-import { getRecommended } from "../getRecommended";
-import { seeLogs } from "../logger";
-import { apiExecutor, apiGetVideo, apiGetVideos, channelInfo, downloadVideo, fetchQuickCache, fetchQuickCache$ } from "./apiVQL.logic";
+import { runFeedVQL, saveConfig } from "./alg";
+import "./cache";
+import { channelInfo } from "./logic/channel";
+import { downloadVideo } from "./logic/download";
+import { fetchQuickCache, fetchQuickCache$ } from "./logic/quick";
+import { apiExecutor, retrieveVideoData, retrieveVideoData$ } from "./logic/vidInfo";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
-        return ["video", "playlist", "channel", "download", "search", "video-static", "channelVideos", "recommendations", "recommendationsData", "self-version", "channelInfo", "video-load", "channelFeed", "quickFeed", "algSave", "algRun"];
+        return [
+            "playlist",
+            "channel",
+            "download",
+            "search",
+            
+            "video",
+            "video-static",
+            "video-static-quick",
+            
+            "channelVideos",
+            "recommendations",
+            "recommendationsData",
+            "channelInfo",
+            
+            "channelFeed",
+            "quickFeed",
+            "algSave",
+            "algRun",
+            
+            "self-version",
+            "video-load",
+            "seeLogs",
+        ];
     },
 
     async add(collection, data) {
@@ -25,7 +52,7 @@ export const YouTubeAdapter = createValtheraAdapter({
         try {
             if (collection === "playlist") return await getPlaylistIds(search.url || search._id);
             if (collection === "recommendations") return await getRecommended(search.url || search._id, search.limit || 10);
-            if (collection === "video-static") return await apiGetVideos(search);
+            if (collection === "video-static") return await retrieveVideoData$(search);
             if (collection === "channelVideos") return await getChannelVideos(search.url || search._id, search.flat ?? true);
             if (collection === "channelFeed") return await getFeed(search.url || search._id);
             if (collection === "quickFeed") return await getQuickFeed();
@@ -38,8 +65,8 @@ export const YouTubeAdapter = createValtheraAdapter({
 
     async findOne(collection, search) {
         try {
-            if (collection === "video") return await apiGetVideo(search.url || search._id);
-            if (collection === "video-static") return await apiGetVideo(search.url || search._id, false);
+            if (collection === "video") return await retrieveVideoData(search.url || search._id);
+            if (collection === "video-static") return await retrieveVideoData(search.url || search._id, false);
             if (collection === "search") return await searchVideo(search.q || search.query, search.size || 10);
             if (collection === "self-version") return { version: process.env.VOIDTUBE_VERSION || "unknown" };
             if (collection === "channelInfo") return await channelInfo(search.url || search._id || search.id, search.update || false);

@@ -4,8 +4,9 @@
         "target": "ES2022",
         "moduleResolution": "bundler",
         "paths": {
-            "#vql/*": ["./node_modules/@wxn0brp/vql/dist/*"],
-            "#db/*": ["./node_modules/@wxn0brp/db/dist/*"]
+            "@@vql/*": ["./node_modules/@wxn0brp/vql/dist/*"],
+            "@@db/*": ["./node_modules/@wxn0brp/db/dist/*"],
+            "#*": ["./src/shared/*"],
         },
         "esModuleInterop": true,
         "skipLibCheck": true,

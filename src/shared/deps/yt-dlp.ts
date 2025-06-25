@@ -1,10 +1,10 @@
+import { note } from "#echo/logger";
 import { spawnSync } from "child_process";
 import { existsSync, readFileSync, statSync, unlinkSync } from "fs";
 import { chmod, mkdir, writeFile } from "fs/promises";
 import ky from "ky";
 import os from "os";
 import path from "path";
-import { log } from "./logger";
 
 function checkSystemYtDlp() {
     const cmd = process.platform === "win32" ? "where" : "which";
@@ -66,7 +66,7 @@ async function downloadYtDlp(binName: string, binPath: string, baseDir: string) 
     if (existsSync(binPath)) unlinkSync(binPath);
     const url = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/" + binName;
 
-    log("wrapper", `Downloading yt-dlp to: ${binPath}`);
+    note("wrapper", `Downloading yt-dlp to: ${binPath}`);
     await downloadFile(url, binPath);
 
     if (process.platform !== "win32") {
@@ -74,7 +74,7 @@ async function downloadYtDlp(binName: string, binPath: string, baseDir: string) 
     }
 
     const version = await getLatestVersion();
-    log("wrapper", `yt-dlp version: ${version}`);
+    note("wrapper", `yt-dlp version: ${version}`);
     await writeFile(path.join(baseDir, "yt-dlp.version"), version);
 }
 
@@ -83,14 +83,14 @@ async function checkUpdate(ytDlp: string) {
 
     const versionPath = path.join(baseDir, "yt-dlp.version");
     if (!existsSync(versionPath)) {
-        log("wrapper", `yt-dlp version file not found: ${versionPath}`);
+        note("wrapper", `yt-dlp version file not found: ${versionPath}`);
         return true;
     }
 
     const currentVersion = readFileSync(versionPath, "utf-8").trim();
     const latestVersion = await getLatestVersion();
     if (currentVersion !== latestVersion) {
-        log("wrapper", `yt-dlp version mismatch: ${currentVersion} != ${latestVersion}`);
+        note("wrapper", `yt-dlp version mismatch: ${currentVersion} != ${latestVersion}`);
         return true;
     }
 

@@ -1,7 +1,6 @@
+import db from "#db";
 import { XMLParser } from "fast-xml-parser";
-import { fetchVQL } from "./vql";
 import ky from "ky";
-import db from "./db";
 
 const parser = new XMLParser();
 const baseUrl = "https://www.youtube.com/feeds/videos.xml?channel_id=";

@@ -1,8 +1,8 @@
 import { Valthera } from "@wxn0brp/db";
-import { getExternalResourcePath } from "./path";
-import { log } from "./logger";
+import { getExternalResourcePath } from "#utils/path";
+import { note } from "#echo/logger";
 
-log("ValtheraDB", "Database path:", getExternalResourcePath("internal-db"));
+note("ValtheraDB", "Database path:", getExternalResourcePath("internal-db"));
 
 const db = {
     user:       new Valthera(getExternalResourcePath("internal-db", "user")),

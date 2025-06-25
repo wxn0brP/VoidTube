@@ -1,4 +1,4 @@
-import { fetchVQL } from "../vql";
+import { fetchVQL } from "#gate";
 
 export default async function (...args: any[]) {
     const text = args.join(" ");

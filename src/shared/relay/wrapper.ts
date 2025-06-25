@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 import { YtFlags, YtResponse } from "./yt.types";
-import { checkIsFileEmpty, getYtDlpPath } from "./yt-dlp";
-import { log } from "./logger";
+import { checkIsFileEmpty, getYtDlpPath } from "#deps/yt-dlp";
+import { note } from "#echo/logger";
 
 let ytDlp: string = "yt-dlp";
 try {
@@ -13,7 +13,7 @@ try {
 } catch (e) {
     console.error("Error while getting yt-dlp path:", e);
 }
-if (process.env.NODE_ENV === "development") log("wrapper", `yt-dlp path: ${ytDlp}`);
+if (process.env.NODE_ENV === "development") note("wrapper", `yt-dlp path: ${ytDlp}`);
 
 function camelToKebab(str: string): string {
     return str.replace(/([A-Z])/g, "-$1").toLowerCase();
@@ -25,11 +25,11 @@ function flagsConvert(flags: YtFlags): string[] {
         .map(([key, _]) => `--${camelToKebab(key)}`);
 }
 
-async function wrapper<T = YtResponse>(url: string, flags: YtFlags, unknownFlags?: string[]): Promise<T> {
+export async function wrapper<T = YtResponse>(url: string, flags: YtFlags, unknownFlags?: string[]): Promise<T> {
     return new Promise((resolve, reject) => {
         const cmd = `${ytDlp} ${flagsConvert(flags).join(" ")} ${url}` + (unknownFlags ? " " + unknownFlags.join(" ") : "");
         exec(cmd, { maxBuffer: 1024 * 1024 * 100 }, (error, stdout, stderr) => {
-            if (stderr) log("wrapper", "Wrapper error:" + stderr);
+            if (stderr) note("wrapper", "Wrapper error:" + stderr);
             if (error) return reject(error);
 
             if (flags.dumpJson || flags.dumpSingleJson) {
@@ -40,5 +40,3 @@ async function wrapper<T = YtResponse>(url: string, flags: YtFlags, unknownFlags
         });
     })
 }
-
-export { wrapper }

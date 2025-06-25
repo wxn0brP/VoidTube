@@ -1,8 +1,8 @@
-import fs from "fs";
+import { showNotification } from "#echo/notification";
 import crypto from "crypto";
-import path from "path";
+import fs from "fs";
 import ky from "ky";
-import { showNotification } from "../shared/notification";
+import path from "path";
 
 const logPrefix = "[VoidTube-quick-updater]";
 const manifestUrl = "https://raw.githubusercontent.com/wxn0brP/VoidTube/refs/heads/dist-split/output/manifest.json";
