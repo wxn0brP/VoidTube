@@ -6,6 +6,7 @@ import playListsView from "#ui/view/playListsView";
 import uiFunc from "../modal";
 import playListsModal from "../modal/playlists";
 import { uiMsg } from "#ui/modal/message";
+import "./metaControl.scss";
 
 class MetaControlView implements UiComponent {
     element: HTMLDivElement;

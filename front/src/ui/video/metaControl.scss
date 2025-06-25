@@ -1,0 +1,25 @@
+
+
+#meta-control-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    button,
+    select {
+        border: 1px solid var(--accent);
+        padding: 5px;
+        border-radius: 5px;
+        background: none;
+        cursor: pointer;
+        color: var(--txt);
+    }
+
+    select option {
+        background-color: var(--bg);
+        color: var(--txt);
+    }
+}

@@ -35,6 +35,7 @@ class FeedView implements UiComponent {
             .forEach(entry => {
                 const card = document.createElement("div");
                 card.className = "feedCard";
+                card.clA("card");
                 const id = entry.id;
 
                 card.innerHTML = `

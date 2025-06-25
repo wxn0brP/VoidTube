@@ -8,6 +8,7 @@ import metaControlView from "../video/metaControl";
 import navBarView from "../navBar";
 import { loadVideo } from "#ui/video/player/status";
 import { uiMsg } from "#ui/modal/message";
+import "./channel.scss";
 
 export const thumbnailMiddle = "/avatar?link=";
 
@@ -111,6 +112,7 @@ relations:
         for (const entry of data) {
             const card = document.createElement("div");
             card.className = "channelVideoCard";
+            card.clA("card");
 
             card.innerHTML = `
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>

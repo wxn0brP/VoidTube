@@ -32,7 +32,7 @@ async function fetchHistory() {
                 info: {
                     path: [
                         "api",
-                        "video-static"
+                        "video-static-quick"
                     ],
                 }
             },

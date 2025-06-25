@@ -6,6 +6,7 @@ import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
 import { playNext } from "./audioSync";
 import { changePlay, toggleFullscreen } from "./status";
+import "./bar.scss";
 
 export function setupBar() {
     let hasHours = false;

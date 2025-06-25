@@ -24,6 +24,7 @@ class PlayListSnapView implements UiComponent {
         data.forEach(entry => {
             const card = document.createElement("div");
             card.className = "playlistSnapCard";
+            card.clA("card");
             card.innerHTML = `
                 <div style="background-image: url(${getThumbnail(entry.info.thumbnail, entry._id)})" class="img"></div>
                 <h3 title="${entry.info.title}">${entry.info.title}</h3>

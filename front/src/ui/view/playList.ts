@@ -21,6 +21,7 @@ class PlayListView implements UiComponent {
         playlist.forEach((item, i) => {
             const card = document.createElement("div");
             card.className = "videoCard";
+            card.clA("card");
             card.innerHTML = `
                 <div style="background-image: url(${getThumbnail(item.info.thumbnail, item._id)})"></div>
                 <h3 title="${item.info.title}">${item.info.title}</h3>
@@ -51,6 +52,7 @@ class PlayListView implements UiComponent {
         videos.forEach(async (_id, i) => {
             const card = document.createElement("div");
             card.className = "videoCard";
+            card.clA("card");
 
             function html(item: VideoQuickInfo) {
                 if (!item) {

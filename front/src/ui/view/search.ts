@@ -26,6 +26,7 @@ class SearchView implements UiComponent {
         search.forEach(entry => {
             const card = document.createElement("div");
             card.className = "searchCard";
+            card.clA("card");
 
             card.innerHTML = `
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>

@@ -21,6 +21,7 @@ class PlayListsModal implements UiComponent {
         playlist.sort((a, b) => b.last - a.last).forEach((item) => {
             const card = document.createElement("div");
             card.className = "playlistCard";
+            card.clA("card");
             card.innerHTML = `
                 <div style="background-image: url(${item.thumbnail})" class="img"></div>
                 <h3 title="${item.name}">${item.name}</h3>
