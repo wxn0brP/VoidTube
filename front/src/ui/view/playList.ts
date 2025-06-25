@@ -61,6 +61,7 @@ class PlayListView implements UiComponent {
                         card.remove();
                     }, 5000);
                 }
+                
                 card.innerHTML = `
                     <div style="background-image: url(${getThumbnail(item.thumbnail, item._id)})"></div>
                     <h3 title="${item.title}">${item.title || "Loading..."}</h3>
@@ -72,18 +73,12 @@ class PlayListView implements UiComponent {
                     <button class="btn" data-id="playlist">Playlist 📂</button>
                 `;
 
-                card.addEventListener("click", () => {
-                    loadVideo(_id);
-                });
-                card.addEventListener("contextmenu", (e) => {
-                    e.preventDefault();
-                    window.open(window.location.origin + "/?v=" + _id);
-                });
                 card.querySelector(`[data-id=playlist]`)!.addEventListener("click", (e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     metaControlView.toggleToPlayList(_id);
                 });
+
                 card.querySelector(`[data-id=play-next-btn]`)!.addEventListener("click", (e) => {
                     e.stopPropagation();
                     e.preventDefault();
@@ -94,6 +89,16 @@ class PlayListView implements UiComponent {
                 playListView.recommendations[i] = [_id, playNext];
             }
             this.recommendationsContainer.appendChild(card);
+
+            card.onclick = () => {
+                loadVideo(_id);
+            };
+
+            card.oncontextmenu = (e) => {
+                e.preventDefault();
+                window.open(window.location.origin + "/?v=" + _id);
+            };
+
             html({} as any);
             setTimeout(() => fetchVQL(`api video-static-quick! s._id = ${_id}`).then(html), i * 10);
         });
