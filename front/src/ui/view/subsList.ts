@@ -8,6 +8,7 @@ import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import channelView, { followsFormatter } from "./channel";
 import playListView from "./playList";
+import "./subsList.scss";
 
 class SubsListView implements UiComponent {
     element: HTMLDivElement;
@@ -28,6 +29,7 @@ class SubsListView implements UiComponent {
         subs.forEach((sub) => {
             const card = document.createElement("div");
             card.className = "subCard";
+            card.clA("card");
             card.innerHTML = `
                 <div style="background-image: url(${sub.channel.avatar})" class="img"></div>
                 <h3 title="${sub.channel.name}">${sub.channel.name}</h3>

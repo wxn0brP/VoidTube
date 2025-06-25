@@ -5,8 +5,8 @@ import { $store } from "#store";
 import { PlaylistsEntry } from "#types/video";
 import uiFunc from "#ui/modal";
 import playListsModal from "#ui/modal/playlists";
-import playListSnapView from "#ui/view/playListSnap";
 import navBarView from "#ui/navBar";
+import playListSnapView from "#ui/view/playListSnap";
 import { fewItems, formatTime, getThumbnail, setTitle, updateQueryParam } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
@@ -29,6 +29,7 @@ class PlayListsView implements UiComponent {
         playlist.sort((a, b) => b.last - a.last).forEach((item) => {
             const card = document.createElement("div");
             card.className = "playlistCard";
+            card.clA("card");
             card.id = "playlist-" + item._id;
             this.renderCard(card, item);
 

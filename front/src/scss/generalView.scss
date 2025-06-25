@@ -1,11 +1,28 @@
-#history-container,
-#playlists-container,
-#playlist-snap-container,
-#search-container,
-#channel-videos,
-#feed-container,
-#alg-container,
-#subs-list-container {
+.view {
+    height: calc(100vh - 70px);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .viewBar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-inline: 15px;
+        padding-block: 5px;
+
+        input {
+            width: 300px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--accent);
+            background-color: var(--bg);
+            color: var(--txt);
+        }
+    }
+}
+
+.cardContainer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 5px;
@@ -21,14 +38,7 @@
     }
 }
 
-.historyCard,
-.playlistCard,
-.playlistSnapCard,
-.searchCard,
-.channelVideoCard,
-.feedCard,
-.algCard,
-.subCard {
+.card {
     border-radius: 8px;
     padding: 1rem;
     transition: transform 0.2s ease;
@@ -78,6 +88,28 @@
         &.rm {
             color: red;
             cursor: not-allowed;
+        }
+    }
+
+    .author {
+        margin-top: 5px;
+        margin-bottom: 2px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 20%;
+        }
+
+        a {
+            text-decoration: underline;
+            cursor: pointer;
+            color: var(--txt);
+            font-size: 1.2em;
         }
     }
 }

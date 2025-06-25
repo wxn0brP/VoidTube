@@ -27,6 +27,7 @@ class AlgView implements UiComponent {
         alg.forEach(entry => {
             const card = document.createElement("div");
             card.className = "algCard";
+            card.clA("card");
 
             card.innerHTML = `
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>

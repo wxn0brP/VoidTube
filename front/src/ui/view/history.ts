@@ -35,6 +35,7 @@ class HistoryView implements UiComponent {
             .forEach(entry => {
                 const card = document.createElement("div");
                 card.className = "historyCard";
+                card.clA("card");
 
                 const dateRaw = entry.info.uploadDate;
                 const date = dateRaw[6] + dateRaw[7] + "." + dateRaw[4] + dateRaw[5] + "." + dateRaw[0] + dateRaw[1] + dateRaw[2] + dateRaw[3];

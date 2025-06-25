@@ -1,6 +1,7 @@
 import { $store } from "#store";
 import { VideoInfo } from "#types/video";
 import { UiComponent } from "@wxn0brp/flanker-ui";
+import "./video.scss";
 
 class VideoInfoView implements UiComponent {
     element: HTMLElement;

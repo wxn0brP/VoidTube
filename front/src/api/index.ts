@@ -14,8 +14,9 @@ initVQLClient({
             if (!ctx.silent) loaderView.off();
             if (time > 5_000) console.warn("VQL time > 5s", time, "\n", query);
         },
-        onError: (query, err) => {
+        onError: (query, err, res, ctx) => {
             console.error("[VQL]", query, err);
+            if (!ctx.silent) loaderView.off();
         }
     }
 });
