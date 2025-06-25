@@ -1,7 +1,9 @@
 import { fetchVQL } from "#api/index";
+import { $store } from "#store";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import { changeView } from ".";
 import { uiMsg } from "./modal/message";
+import { loadVideo } from "./video/player/status";
 
 interface StackItem {
     view: string;
@@ -40,6 +42,7 @@ class NavBarView implements UiComponent {
 
         window.history.replaceState(null, "", item.search.trim() || window.location.pathname);
         changeView(item.view);
+        extraActions(item);
     }
 
     save(view: string) {
@@ -58,6 +61,15 @@ class NavBarView implements UiComponent {
 
         window.history.replaceState(null, "", item.search.trim() || window.location.pathname);
         changeView(item.view);
+        extraActions(item);    
+    }
+}
+
+function extraActions(item: StackItem) {
+    if (item.view === "video") {
+        const v = new URLSearchParams(item.search).get("v");
+        if ($store.videoId.get() === v) return;
+        loadVideo(v, { saveNav: false });
     }
 }
 

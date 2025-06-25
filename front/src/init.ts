@@ -40,7 +40,7 @@ function params() {
     const videoId = urlParams.get("v");
     if (videoId) {
         const id = getYouTubeVideoId(videoId);
-        setTimeout(() => loadVideo(id, false), 1000);
+        setTimeout(() => loadVideo(id, { autoPlay: false }), 1000);
         updateQueryParam("v", id);
         changeView("video");
         navBarView.save("video");
