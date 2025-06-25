@@ -1,7 +1,7 @@
 import { fetchVideoHistoryTime, updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { VideoInfo } from "#types/video";
+import { LoadVideoOpts, VideoInfo } from "#types/video";
 import { changeView } from "#ui/index";
 import navBarView from "#ui/navBar";
 import historyView from "#ui/view/history";
@@ -45,8 +45,15 @@ export async function loadProgress() {
     }
 }
 
-async function loadVideoFn(id: string, autoPlay: boolean = true, saveProgressOpt: boolean = true) {
-    if (saveProgressOpt) saveProgress();
+async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
+    opts = {
+        autoPlay: true,
+        saveProgressOpt: true,
+        saveNav: true,
+        ...opts,
+    }
+
+    if (opts.saveProgressOpt) saveProgress();
     if (!id) return console.error("No video id provided");
     
     await fetchVQL("api -video-load s.id=0"); // cancel previous load
@@ -80,7 +87,7 @@ async function loadVideoFn(id: string, autoPlay: boolean = true, saveProgressOpt
     
     playerView.videoEl.addEventListener("loadedmetadata", async () => {
         await loadProgress();
-        if (autoPlay) playerView.videoEl.play();
+        if (opts.autoPlay) playerView.videoEl.play();
     }, { once: true });
 }
 

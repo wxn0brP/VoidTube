@@ -126,3 +126,9 @@ export interface VideoQuickInfo {
     thumbnail: string | null;
     views: number;
 }
+
+export interface LoadVideoOpts {
+     autoPlay: boolean;
+     saveProgressOpt: boolean;
+     saveNav: boolean; 
+}
