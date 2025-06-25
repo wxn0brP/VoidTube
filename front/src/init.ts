@@ -1,7 +1,7 @@
 import channelView from "#ui/view/channel";
 import navBarView from "#ui/navBar";
 import { changeView } from "./ui";
-import playListView from "./ui/view/playList";
+import playListSideBarView from "./ui/view/playListSideBar";
 import searchBarView from "./ui/searchBar";
 import { getYouTubeVideoId, setTitle, updateQueryParam } from "./utils";
 import { loadVideo } from "#ui/video/player/status";
@@ -33,7 +33,7 @@ function params() {
     if (playlistId) {
         const indexS = urlParams.get("pi") || "0";
         const index = Number(indexS);
-        setTimeout(() => playListView.loadPlaylist(playlistId, index), 1000);
+        setTimeout(() => playListSideBarView.loadPlaylist(playlistId, index), 1000);
         return;
     }
 

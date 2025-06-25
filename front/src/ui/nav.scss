@@ -26,6 +26,18 @@ nav {
             cursor: pointer;
             color: var(--txt);
         }
+
+        a {
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--txt);
+            text-decoration: none;
+
+            &:active,
+            &:visited {
+                color: var(--txt);
+            }
+        }
     }
 
     input {

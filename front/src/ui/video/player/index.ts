@@ -2,7 +2,7 @@ import { mgl } from "#mgl";
 import { $store } from "#store";
 import { changeView } from "#ui/index";
 import navBarView from "#ui/navBar";
-import playListView from "#ui/view/playList";
+import playListSideBarView from "#ui/view/playListSideBar";
 import { clearQueryParams, setTitle, updateQueryParam } from "#utils";
 import utils, { UiComponent } from "@wxn0brp/flanker-ui";
 import { setupAudioSync } from "./audioSync";
@@ -110,7 +110,7 @@ export class PlayerView implements UiComponent {
         setTitle($store.video.get()?.title);
         clearQueryParams();
         updateQueryParam("v", $store.videoId.get());
-        playListView.queryParams();
+        playListSideBarView.queryParams();
         navBarView.save("video");
     }
 }

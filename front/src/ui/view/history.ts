@@ -10,7 +10,7 @@ import channelView, { thumbnailMiddle } from "./channel";
 import metaControlView from "../video/metaControl";
 import uiFunc from "../modal";
 import navBarView from "../navBar";
-import playListView from "./playList";
+import playListSideBarView from "./playListSideBar";
 import { loadVideo } from "#ui/video/player/status";
 
 class HistoryView implements UiComponent {
@@ -133,7 +133,7 @@ class HistoryView implements UiComponent {
         changeView("history");
         setTitle("");
         clearQueryParams();
-        playListView.queryParams();
+        playListSideBarView.queryParams();
         navBarView.save("history");
     }
 

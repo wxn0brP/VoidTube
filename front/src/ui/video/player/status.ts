@@ -5,7 +5,7 @@ import { LoadVideoOpts, VideoInfo } from "#types/video";
 import { changeView } from "#ui/index";
 import navBarView from "#ui/navBar";
 import historyView from "#ui/view/history";
-import playListView from "#ui/view/playList";
+import playListSideBarView from "#ui/view/playListSideBar";
 import { updateQueryParam } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
@@ -75,13 +75,13 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
     navBarView.save("video");
 
     $store.nextVideoId.set("");
-    playListView.renderRecommendations([]);
+    playListSideBarView.renderRecommendations([]);
     const recommendationsCount = +$store.settings.recommendations.get();
     if (!$store.playlistId.get() && recommendationsCount > 0) {
         const query = `api recommendations s._id = ${id} s.limit = ${recommendationsCount}`;
         fetchVQL<string[]>(query).then(data => {
             if(data.length) $store.nextVideoId.set(data[0]);
-            playListView.renderRecommendations(data);
+            playListSideBarView.renderRecommendations(data);
         });
     }
     
