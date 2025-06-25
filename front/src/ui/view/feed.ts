@@ -4,7 +4,7 @@ import { clearQueryParams, fewItems, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import navBarView from "../navBar";
-import playListView from "./playList";
+import playListSideBarView from "./playListSideBar";
 import { fetchVQL } from "#api/index";
 import { loadVideo } from "#ui/video/player/status";
 import channelView from "./channel";
@@ -117,7 +117,7 @@ many: true
         changeView("feed");
         setTitle("");
         clearQueryParams();
-        playListView.queryParams();
+        playListSideBarView.queryParams();
         navBarView.save("feed");
     }
 }

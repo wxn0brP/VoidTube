@@ -7,7 +7,7 @@ import { clearQueryParams, levenshtein, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import channelView, { followsFormatter } from "./channel";
-import playListView from "./playList";
+import playListSideBarView from "./playListSideBar";
 import "./subsList.scss";
 
 class SubsListView implements UiComponent {
@@ -92,7 +92,7 @@ many: true
         changeView("subs");
         setTitle("");
         clearQueryParams();
-        playListView.queryParams();
+        playListSideBarView.queryParams();
         navBarView.save("subs");
     }
 

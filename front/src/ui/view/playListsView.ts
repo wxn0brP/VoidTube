@@ -10,7 +10,7 @@ import playListSnapView from "#ui/view/playListSnap";
 import { fewItems, formatTime, getThumbnail, setTitle, updateQueryParam } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
-import playListView from "./playList";
+import playListSideBarView from "./playListSideBar";
 
 class PlayListsView implements UiComponent {
     element: HTMLDivElement;
@@ -65,8 +65,8 @@ class PlayListsView implements UiComponent {
         card.querySelector(`[data-id=play]`)!.addEventListener("click", (e) => {
             e.stopPropagation();
             e.preventDefault();
-            playListView.loadPlaylist(item._id);
-            playListView.show();
+            playListSideBarView.loadPlaylist(item._id);
+            playListSideBarView.show();
         });
 
         card.querySelector(`[data-id=rm]`)!.addEventListener("click", async (e) => {

@@ -15,7 +15,7 @@ import videoInfoView from "./video/videoInfo";
 import channelView from "./view/channel";
 import feedView from "./view/feed";
 import historyView from "./view/history";
-import playListView from "./view/playList";
+import playListSideBarView from "./view/playListSideBar";
 import playListsView from "./view/playListsView";
 import videoView from "./view/videoView";
 import settingsView from "./view/settings";
@@ -31,7 +31,7 @@ export const components = [
     audioFormatsView,
     videoView,
     historyView,
-    playListView,
+    playListSideBarView,
     playListsView,
     searchView,
     loaderView,

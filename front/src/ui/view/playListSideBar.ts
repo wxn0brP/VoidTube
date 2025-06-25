@@ -10,7 +10,7 @@ import { changeView } from "..";
 import navBarView from "../navBar";
 import metaControlView from "../video/metaControl";
 
-class PlayListView implements UiComponent {
+class PlayListSideBarView implements UiComponent {
     element: HTMLDivElement;
     container: HTMLDivElement;
     recommendationsContainer: HTMLDivElement;
@@ -86,7 +86,7 @@ class PlayListView implements UiComponent {
                 });
 
                 const playNext = card.querySelector<HTMLSpanElement>("[data-id=play-next]");
-                playListView.recommendations[i] = [_id, playNext];
+                playListSideBarView.recommendations[i] = [_id, playNext];
             }
             this.recommendationsContainer.appendChild(card);
 
@@ -151,5 +151,5 @@ class PlayListView implements UiComponent {
     }
 }
 
-const playListView = new PlayListView();
-export default playListView;
+const playListSideBarView = new PlayListSideBarView();
+export default playListSideBarView;

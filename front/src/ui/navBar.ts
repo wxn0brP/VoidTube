@@ -4,6 +4,8 @@ import { UiComponent } from "@wxn0brp/flanker-ui";
 import { changeView } from ".";
 import { uiMsg } from "./modal/message";
 import { loadVideo } from "./video/player/status";
+import { clearQueryParams } from "#utils";
+import "./nav.scss";
 
 interface StackItem {
     view: string;
@@ -26,12 +28,17 @@ class NavBarView implements UiComponent {
         this.undoBtn.onclick = () => this.undo();
         this.redoBtn.onclick = () => this.redo();
 
-        this.element.querySelector("b").addEventListener("contextmenu", (e) => {
+        const VoidTube = this.element.querySelector("a");
+        VoidTube.addEventListener("click", (e) => {
+            e.preventDefault();
+            clearQueryParams();
+        });
+        VoidTube.addEventListener("contextmenu", (e) => {
             e.preventDefault();
             fetchVQL("api self-version! s.id=0").then(({ version }) => {
                 uiMsg(`Version: ${version}`);
             });
-        })
+        });
     }
 
     undo() {

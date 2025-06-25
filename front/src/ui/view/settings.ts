@@ -6,7 +6,7 @@ import write from "#ui/settings/write";
 import { clearQueryParams, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
-import playListView from "./playList";
+import playListSideBarView from "./playListSideBar";
 import "./settings.scss";
 
 class SettingsView implements UiComponent {
@@ -27,7 +27,7 @@ class SettingsView implements UiComponent {
         changeView("settings");
         setTitle("");
         clearQueryParams();
-        playListView.queryParams();
+        playListSideBarView.queryParams();
         navBarView.save("settings");
     }
 
