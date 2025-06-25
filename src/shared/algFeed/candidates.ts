@@ -1,34 +1,34 @@
-import { searchVideo } from "../apiBack";
-import { log } from "../logger";
+import { note } from "#echo/logger";
+import { searchVideo } from "#relay/apiBack";
 import { Video, Config, SearchEntry } from "./final/types";
 import { getHashTag, tokenize } from "./utils";
 
 export async function buildInitialCandidates(history: Video[], config: Config): Promise<SearchEntry[]> {
     if (history.length < config.minHistory) {
-        log("alg-buildInitialCandidates", "Not enough history. Returning empty array.");
+        note("alg-buildInitialCandidates", "Not enough history. Returning empty array.");
         return [];
     }
 
     const keywords = getTopKeywordsFromHistory(history, config);
 
-    log("alg-buildInitialCandidates", `Using keywords: ${keywords.join(", ")}`);
+    note("alg-buildInitialCandidates", `Using keywords: ${keywords.join(", ")}`);
 
     const allResults: SearchEntry[] = [];
 
     for (const keyword of keywords) {
         const results = await searchVideo(keyword, config.videoPerTag);
-        log("alg-buildInitialCandidates", `Found ${results.length} videos for "${keyword}"`);
+        note("alg-buildInitialCandidates", `Found ${results.length} videos for "${keyword}"`);
         allResults.push(...results);
     }
 
-    log("alg-buildInitialCandidates", `Found a total of ${allResults.length} videos`);
+    note("alg-buildInitialCandidates", `Found a total of ${allResults.length} videos`);
 
     const unique = new Map<string, SearchEntry>();
     for (const entry of allResults) {
         unique.set(entry.id, entry);
     }
 
-    log("alg-buildInitialCandidates", `After deduping, found ${unique.size} videos`);
+    note("alg-buildInitialCandidates", `After deduping, found ${unique.size} videos`);
 
     return [...unique.values()];
 }

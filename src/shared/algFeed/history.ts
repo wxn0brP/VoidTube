@@ -1,5 +1,5 @@
-import { VQLR } from "#vql/types/vql";
-import { fetchVQL } from "../vql";
+import { fetchVQL } from "#gate";
+import { VQLR } from "@@vql/types/vql";
 import { Video } from "./final/types";
 
 export interface HistoryEntry {

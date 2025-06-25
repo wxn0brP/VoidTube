@@ -1,9 +1,9 @@
+import db from "#db";
+import { getExternalResourcePath } from "#utils/path";
 import { FFResponse } from "@wxn0brp/falcon-frame/res";
 import { FFRequest } from "@wxn0brp/falcon-frame/types";
 import { execSync } from "child_process";
 import { existsSync, mkdirSync, readFileSync } from "fs";
-import { getExternalResourcePath } from "../shared/path";
-import db from "../shared/db";
 
 const dir = getExternalResourcePath("internal-db", "avatars");
 

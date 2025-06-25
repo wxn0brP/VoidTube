@@ -1,5 +1,5 @@
 import { appendFileSync, existsSync, mkdirSync, readdirSync, unlinkSync, writeFileSync } from "fs";
-import { getExternalResourcePath } from "./path";
+import { getExternalResourcePath } from "#utils/path";
 import { exec } from "child_process";
 
 const filesPath = getExternalResourcePath("internal-db", "logs");
@@ -18,12 +18,12 @@ const logTime = Math.floor(Date.now() / 1000);
 export const file = getExternalResourcePath("internal-db", "logs", logTime + ".log");
 
 writeFileSync(file, "", "utf-8");
-export function log(name: string, ...args: any[]) {
+export function note(name: string, ...args: any[]) {
     console.log(`[VT/${name}]`, ...args);
     appendFileSync(file, `[VT/${name}] ${args.join(" ")}\n`, "utf-8");
 }
 
-log("logger", "Logging to", file);
+note("logger", "Logging to", file);
 
 export function seeLogs() {
     const platform = process.platform;

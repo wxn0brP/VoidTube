@@ -1,4 +1,4 @@
-import db from "../db";
+import db from "#db";
 
 export async function getSetting<T=any>(name: string, defaultValue?: T) {
     const setting = await db.alg.findOne("cfg", { _id: name });
