@@ -97,10 +97,17 @@ class HistoryView implements UiComponent {
             });
     }
 
-    public async loadHistory(limit: number = 0) {
-        const history = await fetchHistory(limit);
+    public async loadHistory() {
+        const history = await fetchHistory();
         this.render(history);
         return history;
+    }
+
+    async loadPartialHistory() {
+        const idsData = await fetchVQL<{ _id: string, last: number }[]>(`user history`);
+        const ids = idsData.sort((a, b) => b.last - a.last).map(d => d._id).slice(0, 32);
+        const history = await fetchHistory(ids);
+        this.render(history);
     }
 
     mount(): void {
@@ -114,7 +121,7 @@ class HistoryView implements UiComponent {
 
         // quick load
         setTimeout(() => {
-            this.loadHistory(32);
+            this.loadPartialHistory();
         }, 100);
         // load all history
         setTimeout(() => {

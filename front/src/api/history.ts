@@ -13,7 +13,7 @@ export async function fetchVideoHistoryTime(id: string): Promise<number> {
     return res.watched ? res.time : 0;
 }
 
-export async function fetchHistory(limit = 0) {
+export async function fetchHistory($in?: string[]) {
     const query = `
 user history
 relations:
@@ -27,12 +27,9 @@ relations:
         type: "11"
 
 many: true
-${limit ? `options: 
-  max: ${limit}
-  reverse: true
-` : ""}
 search:
   watched: true
+  ${$in ? `$in: { _id: [${$in.map(id => `"${id}"`).join(",")}] }` : ""}
 select:
   _id: 1
   time: 1
