@@ -35,6 +35,8 @@ const initData = {
         quality: "best",
         recommendations: "10",
         onePlay: true,
+        searchLanguage: "en",
+        searchCountry: "US",
     }
 }
 

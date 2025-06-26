@@ -56,6 +56,37 @@ nav {
     input[type="number"] {
         width: 100px;
     }
+
+    #suggestions {
+        position: absolute;
+        top: 35px;
+        left: 50%;
+        transform: translateX(-51%);
+        min-width: 300px;
+        max-width: 400px;
+
+        background-color: rgba($color: #111, $alpha: .7);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid var(--accent);
+        border-radius: 5px;
+        overflow-y: auto;
+        padding: 5px;
+        font-size: 1.2rem;
+
+        z-index: 100;
+
+        li {
+            list-style: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
 }
 
 @media screen and (max-width: 1300px) {
