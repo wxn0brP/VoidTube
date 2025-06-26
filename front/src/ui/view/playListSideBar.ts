@@ -63,14 +63,16 @@ class PlayListSideBarView implements UiComponent {
                 }
                 
                 card.innerHTML = `
-                    <div style="background-image: url(${getThumbnail(item.thumbnail, item._id)})"></div>
+                    <div class="img" style="background-image: url(${getThumbnail(item.thumbnail, item._id)})"></div>
                     <h3 title="${item.title}">${item.title || "Loading..."}</h3>
-                    ${formatTime(item.duration, null)}
-                    <button class="btn" data-id="play-next-btn">
-                        Play next
-                        <span data-id="play-next">${_id === nextVideoId ? "✅" : "❌"}</span>
-                    </button>
-                    <button class="btn" data-id="playlist">Playlist 📂</button>
+                    <h4>${formatTime(item.duration, null)}</h4>
+                    <div class="btns">
+                        <button class="btn" data-id="play-next-btn">
+                            Play next
+                            <span data-id="play-next">${_id === nextVideoId ? "✅" : "❌"}</span>
+                        </button>
+                        <button class="btn" data-id="playlist">Playlist 📂</button>
+                    </div>
                 `;
 
                 card.querySelector(`[data-id=playlist]`)!.addEventListener("click", (e) => {
