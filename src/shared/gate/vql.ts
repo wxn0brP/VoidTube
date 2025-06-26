@@ -9,6 +9,7 @@ import { channelInfo } from "./logic/channel";
 import { downloadVideo } from "./logic/download";
 import { fetchQuickCache, fetchQuickCache$ } from "./logic/quick";
 import { apiExecutor, retrieveVideoData, retrieveVideoData$ } from "./logic/vidInfo";
+import { getSuggestions } from "#relay/suggestions";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
@@ -57,6 +58,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "channelFeed") return await getFeed(search.url || search._id);
             if (collection === "quickFeed") return await getQuickFeed();
             if (collection === "video-static-quick") return await fetchQuickCache$(search);
+            if (collection === "suggestions") return await getSuggestions(search.q || search.query, search.hl || "en", search.gl || "US");
         } catch (e) {
             console.error(e);
         }

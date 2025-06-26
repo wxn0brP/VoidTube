@@ -28,6 +28,22 @@ export const settingsData: Setting[] = [
         storeField: $store.settings.onePlay,
     },
     {
+        type: "input",
+        id: "app_searchLanguage",
+        text: "Search Language",
+        storeField: $store.settings.searchLanguage,
+        input_type: "text",
+        placeholder: "eg. en",
+    },
+    {
+        type: "input",
+        id: "app_searchCountry",
+        text: "Search Country",
+        storeField: $store.settings.searchCountry,
+        input_type: "text",
+        placeholder: "eg. US",
+    },
+    {
         type: "button",
         onClick: () => {
             fetchVQL("api seeLogs! s._id=1");
