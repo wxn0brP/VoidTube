@@ -8,7 +8,7 @@
         cursor: pointer;
         margin-bottom: 5px;
 
-        div {
+        div.img {
             width: 100%;
             aspect-ratio: 16/9;
             background-image: url("/favicon.svg");
@@ -18,8 +18,12 @@
             margin-bottom: 5px;
         }
 
-        .btn {
-            transform: unset;
+        .btns {
+            gap: 10px;
+
+            .btn {
+                transform: unset;
+            }
         }
     }
 }
