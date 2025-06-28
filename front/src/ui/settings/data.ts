@@ -44,6 +44,18 @@ export const settingsData: Setting[] = [
         placeholder: "eg. US",
     },
     {
+        type: "checkbox",
+        id: "app_sponsorBlock",
+        text: "Sponsor Block",
+        storeField: $store.settings.sponsorBlock.enabled,
+    },
+    {
+        type: "checkbox",
+        id: "app_sponsorBlockFull",
+        text: "Sponsor Block Full Area Trigger Mode",
+        storeField: $store.settings.sponsorBlock.full,
+    },
+    {
         type: "button",
         onClick: () => {
             fetchVQL("api seeLogs! s._id=1");

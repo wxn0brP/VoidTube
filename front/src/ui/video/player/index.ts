@@ -11,11 +11,12 @@ import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
 import { loadMediaSession, loadVideo } from "./status";
+import { setUpSponsorBlock } from "./sync";
 
 export class PlayerView implements UiComponent {
     public element: HTMLDivElement;
     public bar: HTMLDivElement;
-    
+
     public lastUpdateTime = Date.now();
     public videoEl: HTMLVideoElement;
     public audioEl: HTMLAudioElement;
@@ -98,6 +99,7 @@ export class PlayerView implements UiComponent {
         setupAudioSync();
         setupBar();
         setupChannelInfo();
+        setUpSponsorBlock();
 
         window.addEventListener("beforeunload", () => {
             localStorage.setItem("cache.progress", JSON.stringify({ id: $store.videoId.get(), time: Math.floor(this.videoEl.currentTime) }));

@@ -1,6 +1,7 @@
 import { createStore } from "@wxn0brp/flanker-ui";
 import { mgl } from "../mgl";
 import { PlaylistsEntry, VideoCache, VideoInfo } from "../types/video";
+import { SponsorSegment } from "#types/sponsorBlock";
 
 const initData = {
     video: null as VideoInfo,
@@ -37,6 +38,15 @@ const initData = {
         onePlay: true,
         searchLanguage: "en",
         searchCountry: "US",
+        sponsorBlock: {
+            full: true,
+            enabled: true
+        }
+    },
+
+    sponsorBlock: {
+        id: "",
+        segments: [] as SponsorSegment[]
     }
 }
 

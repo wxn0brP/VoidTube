@@ -10,7 +10,7 @@ import { updateQueryParam } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
 import { emitPlay } from "./tabs";
-import recommendationPanel from "../recomendations";
+import recommendationPanel from "../recommendations";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;

@@ -4,7 +4,7 @@ import { $store } from "#store";
 import { clamp, formatTime } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
-import { playNext } from "./audioSync";
+import { playNext } from "./sync";
 import { changePlay, toggleFullscreen } from "./status";
 import "./bar.scss";
 
