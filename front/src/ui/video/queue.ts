@@ -4,7 +4,7 @@ import { PlaylistEntry } from "#types/video";
 import { loadVideo } from "#ui/video/player/status";
 import { formatTime, getThumbnail, updateQueryParam } from "#utils";
 import { UiComponent } from "@wxn0brp/flanker-ui";
-import { scrollToPlaylistElement } from "./player/audioSync";
+import { scrollToPlaylistElement } from "./player/sync";
 
 class QueuePanel implements UiComponent {
     element: HTMLDivElement;

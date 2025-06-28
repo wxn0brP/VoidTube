@@ -22,7 +22,7 @@ import messageView from "./modal/message";
 import algView from "./view/alg";
 import subsListView from "./view/subsList";
 import queuePanel from "./video/queue";
-import recommendationPanel from "./video/recomendations";
+import recommendationPanel from "./video/recommendations";
 
 export const components = [
     playerView,
