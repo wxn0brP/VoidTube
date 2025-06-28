@@ -43,7 +43,6 @@ class PlayListsView implements UiComponent {
             <div style="background-image: url(${item?.thumbnail ? getThumbnail(item.thumbnail, item._id) : "/favicon.svg"})" class="img"></div>
             <h3 title="${item?.name}">${item?.name}</h3>
             ${item?.videosCount} videos <br>
-            Duration: ${formatTime(item?.duration, null)}
             <div class="btns">
                 <button class="btn rm" data-id="rm">Delete</button>
                 <button class="btn" data-id="rename">Rename</button>

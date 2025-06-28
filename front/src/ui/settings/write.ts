@@ -1,5 +1,4 @@
 import { fetchVQL } from "#api/index";
-import { $store } from "#store";
 import { settingsData } from "./data";
 
 export default async function (container: HTMLDivElement) {
@@ -12,8 +11,8 @@ export default async function (container: HTMLDivElement) {
         if (settingId.startsWith("app_")) {
             const id = settingId.replace("app_", "");
             const setting = settingsValues.find(setting => setting._id === id);
-            if ($store.settings[id]) {
-                setting ? $store.settings[id].set(setting.value) : $store.settings[id].set($store.settings[id].get());
+            if (setting && "storeField" in setting) {
+                (setting as any).storeField.set(setting.value);
             }
         } else if (settingId.startsWith("alg_")) {
             const id = settingId.replace("alg_", "");

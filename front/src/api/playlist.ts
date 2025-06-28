@@ -13,31 +13,14 @@ export async function fetchPlaylists(
 
     await Promise.all(
         playlists.map(async (playlist: { _id: string, name: string, last: number }) => {
-            const query = `
-playlist ${playlist._id}
-relations:
-  info:
-    path: [api, video-static-quick]
-
-many: true
-search: {}
-select: 
-  _id: 1
-  last: 1
-  info:
-    duration: 1
-    thumbnail: 1
-            `.trim();
-
-            const videosRes = await fetchVQL(query);
-            const firstVideo = videosRes[0];
-            const thumbnail = firstVideo?.info ? getThumbnail(firstVideo.info.thumbnail, firstVideo._id) : "/favicon.svg";
+            const videosRes = await fetchVQL(`playlist ${playlist._id}`);
+            const firstVideo = await fetchVQL(`api video-static-quick! s._id = ${videosRes[0]._id}`);
+            const thumbnail = firstVideo ? getThumbnail(firstVideo.thumbnail, firstVideo._id) : "/favicon.svg";
 
             const entry: PlaylistsEntry = {
                 ...playlist,
                 videosCount: videosRes.length,
                 thumbnail,
-                duration: videosRes.reduce((a, b) => a + b.info.duration, 0) || 0,
             };
 
             playlistEntries.push(entry);

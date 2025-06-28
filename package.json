@@ -22,16 +22,16 @@
         "bun": "bun run dev.ts"
     },
     "devDependencies": {
-        "@types/node": "^24.0.3",
+        "@types/node": "^24.0.7",
         "electron": "^37.0.0",
         "tsc-alias": "^1.8.10",
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/db": "^0.9.1",
+        "@wxn0brp/db": "^0.10.0",
         "@wxn0brp/falcon-frame": "^0.0.14",
         "@wxn0brp/lucerna-log": "^0.1.1",
-        "@wxn0brp/vql": "^0.3.10",
+        "@wxn0brp/vql": "^0.3.11",
         "fast-xml-parser": "^5.2.5",
         "ky": "^1.8.1"
     },

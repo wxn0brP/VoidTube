@@ -1,4 +1,5 @@
 import { HistoryEntry } from "#types/video";
+import { VQLFind } from "@wxn0brp/vql-client/vql";
 import { fetchVQL } from ".";
 
 export async function updateVideoHistoryTime(id: string, time: number) {
@@ -13,7 +14,7 @@ export async function fetchVideoHistoryTime(id: string): Promise<number> {
     return res.watched ? res.time : 0;
 }
 
-export async function fetchHistory($in?: string[]) {
+export async function fetchHistory(options?: VQLFind["options"]) {
     const query = `
 user history
 relations:
@@ -29,7 +30,10 @@ relations:
 many: true
 search:
   watched: true
-  ${$in ? `$in: { _id: [${$in.map(id => `"${id}"`).join(",")}] }` : ""}
+${options ? `
+options:
+  ${Object.entries(options).map(([key, value]) => `${key}: ${value}`).join("\n  ")}
+` : ""}
 select:
   _id: 1
   time: 1
