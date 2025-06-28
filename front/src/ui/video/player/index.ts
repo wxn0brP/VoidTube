@@ -119,3 +119,5 @@ const playerView = new PlayerView();
 export default playerView;
 
 mgl.playerShow = playerView.show;
+mgl.player = {}
+mgl.player.setTime = (time: number) => playerView.videoEl.currentTime = time;

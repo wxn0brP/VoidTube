@@ -1,6 +1,5 @@
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
-import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { SearchEntry } from "#types/video";
