@@ -65,7 +65,6 @@ export interface PlaylistsEntry {
     last: number;
     videosCount: number;
     thumbnail: string;
-    duration: number;
 }
 
 export interface SearchEntry {

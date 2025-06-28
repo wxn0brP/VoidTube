@@ -104,9 +104,11 @@ class HistoryView implements UiComponent {
     }
 
     async loadPartialHistory() {
-        const idsData = await fetchVQL<{ _id: string, last: number }[]>(`user history`);
-        const ids = idsData.sort((a, b) => b.last - a.last).map(d => d._id).slice(0, 32);
-        const history = await fetchHistory(ids);
+        const history = await fetchHistory({
+            max: 32,
+            sortBy: "last",
+            sortAsc: false,
+        });
         this.render(history);
     }
 

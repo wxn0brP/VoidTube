@@ -3,7 +3,6 @@ import { fetchPlaylists } from "#api/playlist";
 import { $store } from "#store";
 import { PlaylistsEntry } from "#types/video";
 import playListsView from "#ui/view/playListsView";
-import { formatTime } from "#utils";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import uiFunc from ".";
 
@@ -26,7 +25,6 @@ class PlayListsModal implements UiComponent {
                 <div style="background-image: url(${item.thumbnail})" class="img"></div>
                 <h3 title="${item.name}">${item.name}</h3>
                 ${item.videosCount} videos <br>
-                Duration: ${formatTime(item.duration, null)}
             `;
 
             card.addEventListener("click", () => {
