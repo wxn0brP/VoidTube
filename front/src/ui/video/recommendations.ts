@@ -15,6 +15,14 @@ class RecommendationPanel implements UiComponent {
         this.recommendations = [];
         const nextVideoId = $store.nextVideoId.get();
 
+        if ($store.lastVideos.get().length) {
+            const lastVideos = new Set($store.lastVideos.get());
+            const notIn = videos.filter(x => !lastVideos.has(x));
+            const inLast = videos.filter(x => lastVideos.has(x));
+
+            videos = [...notIn, ...inLast];
+        }
+
         videos.forEach(async (_id, i) => {
             const card = document.createElement("div");
             card.className = "videoCard card";

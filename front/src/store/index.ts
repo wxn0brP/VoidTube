@@ -41,8 +41,10 @@ const initData = {
         sponsorBlock: {
             full: true,
             enabled: true
-        }
+        },
+        antiRecommendationLoop: true,
     },
+    lastVideos: [] as string[],
 
     sponsorBlock: {
         id: "",
