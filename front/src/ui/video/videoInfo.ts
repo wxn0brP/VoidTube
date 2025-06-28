@@ -2,6 +2,7 @@ import { $store } from "#store";
 import { VideoInfo } from "#types/video";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import "./video.scss";
+import { setDescription } from "./description";
 
 class VideoInfoView implements UiComponent {
     element: HTMLElement;
@@ -23,8 +24,9 @@ class VideoInfoView implements UiComponent {
             <b>Views:</b> ${info.views} -
             <b>Likes:</b> ${info.likes}
             <br><br>
-            <p>${info.description.replace(/\n/g, "<br>") || "No description"}</p>
+            <article data-id="description"></article>
         `;
+        setDescription(this.element.qi("description"), info.description);
     }
 }
 

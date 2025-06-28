@@ -1,4 +1,5 @@
 export const promptDiv = document.querySelector<HTMLDivElement>("#prompt");
+import "./openLink";
 
 const uiFunc = {
     prompt(text: string, defaultValue: string = ""): Promise<string> {

@@ -6,6 +6,7 @@ import { fetchVQL } from "@wxn0brp/vql-client";
 import uiFunc from "./modal";
 import { loadVideo } from "./video/player/status";
 import searchView from "./view/search";
+import { mgl } from "#mgl";
 
 class SearchBarView implements UiComponent {
     element: HTMLDivElement;
@@ -44,7 +45,6 @@ class SearchBarView implements UiComponent {
             const target = e.target as HTMLElement;
             if (target.closest("#search-bar") || target.closest("#prompt")) return;
             this.hideSuggestions();
-            updateQueryParam("query", undefined);
         });
 
         this.loadSearchHistory();
@@ -190,3 +190,9 @@ function filterWithLevenshtein(query: string, list: string[], maxDistance: numbe
 
 const searchBarView = new SearchBarView();
 export default searchBarView;
+
+mgl.searchShow = (text: string, e: Event) => {
+    e.preventDefault();
+    searchBarView.searchInput.value = text;
+    searchBarView.search();
+};
