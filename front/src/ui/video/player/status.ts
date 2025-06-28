@@ -3,14 +3,14 @@ import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { LoadVideoOpts, VideoInfo } from "#types/video";
 import { changeView } from "#ui/index";
+import { uiMsg } from "#ui/modal/message";
 import navBarView from "#ui/navBar";
 import historyView from "#ui/view/history";
-import playListSideBarView from "#ui/view/playListSideBar";
 import { updateQueryParam } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
-import { uiMsg } from "#ui/modal/message";
 import { emitPlay } from "./tabs";
+import recommendationPanel from "../recomendations";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
@@ -55,12 +55,12 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
 
     if (opts.saveProgressOpt) saveProgress();
     if (!id) return console.error("No video id provided");
-    
+
     await fetchVQL("api -video-load s.id=0"); // cancel previous load
     await utils.delay(100);
     const data = await fetchVQL<VideoInfo>(`api video! s.url = ${id}`);
 
-    if(!data.formats?.length) return uiMsg("Failed to load video");
+    if (!data.formats?.length) return uiMsg("Failed to load video");
 
     $store.video.set(data);
     $store.videoId.set(id);
@@ -75,16 +75,16 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
     navBarView.save("video");
 
     $store.nextVideoId.set("");
-    playListSideBarView.renderRecommendations([]);
+    recommendationPanel.render([]);
     const recommendationsCount = +$store.settings.recommendations.get();
     if (!$store.playlistId.get() && recommendationsCount > 0) {
         const query = `api recommendations s._id = ${id} s.limit = ${recommendationsCount}`;
         fetchVQL<string[]>(query).then(data => {
-            if(data.length) $store.nextVideoId.set(data[0]);
-            playListSideBarView.renderRecommendations(data);
+            if (data.length) $store.nextVideoId.set(data[0]);
+            recommendationPanel.render(data);
         });
     }
-    
+
     playerView.videoEl.addEventListener("loadedmetadata", async () => {
         await loadProgress();
         if (opts.autoPlay) playerView.videoEl.play();

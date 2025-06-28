@@ -3,10 +3,10 @@ import { $store } from "#store";
 import navBarView from "#ui/navBar";
 import build from "#ui/settings/build";
 import write from "#ui/settings/write";
+import queuePanel from "#ui/video/queue";
 import { clearQueryParams, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
-import playListSideBarView from "./playListSideBar";
 import "./settings.scss";
 
 class SettingsView implements UiComponent {
@@ -27,7 +27,7 @@ class SettingsView implements UiComponent {
         changeView("settings");
         setTitle("");
         clearQueryParams();
-        playListSideBarView.queryParams();
+        queuePanel.queryParams();
         navBarView.save("settings");
     }
 

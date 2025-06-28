@@ -2,16 +2,16 @@ import { fetchHistory } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
-import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { HistoryEntry } from "#types/video";
+import { loadVideo } from "#ui/video/player/status";
+import queuePanel from "#ui/video/queue";
 import { clearQueryParams, fewItems, formatTime, getThumbnail, levenshtein, numToLocale, setTitle } from "#utils";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
-import channelView, { thumbnailMiddle } from "./channel";
-import metaControlView from "../video/metaControl";
 import uiFunc from "../modal";
 import navBarView from "../navBar";
-import playListSideBarView from "./playListSideBar";
-import { loadVideo } from "#ui/video/player/status";
+import metaControlView from "../video/metaControl";
+import channelView, { thumbnailMiddle } from "./channel";
 
 class HistoryView implements UiComponent {
     element: HTMLDivElement;
@@ -140,7 +140,7 @@ class HistoryView implements UiComponent {
         changeView("history");
         setTitle("");
         clearQueryParams();
-        playListSideBarView.queryParams();
+        queuePanel.queryParams();
         navBarView.save("history");
     }
 

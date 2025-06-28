@@ -4,12 +4,12 @@ import { clearQueryParams, fewItems, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import navBarView from "../navBar";
-import playListSideBarView from "./playListSideBar";
 import { fetchVQL } from "#api/index";
 import { loadVideo } from "#ui/video/player/status";
 import channelView from "./channel";
 import metaControlView from "#ui/video/metaControl";
 import { mgl } from "#mgl";
+import queuePanel from "#ui/video/queue";
 
 class FeedView implements UiComponent {
     element: HTMLDivElement;
@@ -117,7 +117,7 @@ many: true
         changeView("feed");
         setTitle("");
         clearQueryParams();
-        playListSideBarView.queryParams();
+        queuePanel.queryParams();
         navBarView.save("feed");
     }
 }

@@ -1,11 +1,11 @@
 import channelView from "#ui/view/channel";
 import navBarView from "#ui/navBar";
 import { changeView } from "./ui";
-import playListSideBarView from "./ui/view/playListSideBar";
 import searchBarView from "./ui/searchBar";
 import { getYouTubeVideoId, setTitle, updateQueryParam } from "./utils";
 import { loadVideo } from "#ui/video/player/status";
 import playerView from "#ui/video/player";
+import queuePanel from "#ui/video/queue";
 
 await new Promise(r => setTimeout(r, 100)); // wait for ui to mount
 
@@ -33,7 +33,7 @@ function params() {
     if (playlistId) {
         const indexS = urlParams.get("pi") || "0";
         const index = Number(indexS);
-        setTimeout(() => playListSideBarView.loadPlaylist(playlistId, index), 1000);
+        setTimeout(() => queuePanel.loadPlaylist(playlistId, index), 1000);
         return;
     }
 
