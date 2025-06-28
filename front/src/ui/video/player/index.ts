@@ -1,16 +1,16 @@
+import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { changeView } from "#ui/index";
+import { uiMsg } from "#ui/modal/message";
 import navBarView from "#ui/navBar";
-import playListSideBarView from "#ui/view/playListSideBar";
 import { clearQueryParams, setTitle, updateQueryParam } from "#utils";
 import utils, { UiComponent } from "@wxn0brp/flanker-ui";
+import queuePanel from "../queue";
 import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
 import { loadMediaSession, loadVideo } from "./status";
-import { fetchVQL } from "#api/index";
-import { uiMsg } from "#ui/modal/message";
 
 export class PlayerView implements UiComponent {
     public element: HTMLDivElement;
@@ -110,7 +110,7 @@ export class PlayerView implements UiComponent {
         setTitle($store.video.get()?.title);
         clearQueryParams();
         updateQueryParam("v", $store.videoId.get());
-        playListSideBarView.queryParams();
+        queuePanel.queryParams();
         navBarView.save("video");
     }
 }

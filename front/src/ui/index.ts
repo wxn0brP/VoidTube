@@ -15,13 +15,14 @@ import videoInfoView from "./video/videoInfo";
 import channelView from "./view/channel";
 import feedView from "./view/feed";
 import historyView from "./view/history";
-import playListSideBarView from "./view/playListSideBar";
 import playListsView from "./view/playListsView";
 import videoView from "./view/videoView";
 import settingsView from "./view/settings";
 import messageView from "./modal/message";
 import algView from "./view/alg";
 import subsListView from "./view/subsList";
+import queuePanel from "./video/queue";
+import recommendationPanel from "./video/recomendations";
 
 export const components = [
     playerView,
@@ -31,7 +32,8 @@ export const components = [
     audioFormatsView,
     videoView,
     historyView,
-    playListSideBarView,
+    queuePanel,
+    recommendationPanel,
     playListsView,
     searchView,
     loaderView,

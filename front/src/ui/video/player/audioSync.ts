@@ -1,9 +1,9 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { $store } from "#store";
 import navBarView from "#ui/navBar";
-import playListSideBarView from "#ui/view/playListSideBar";
 import { updateQueryParam } from "#utils";
 import playerView from ".";
+import queuePanel from "../queue";
 import { loadVideo } from "./status";
 import { emitPlay } from "./tabs";
 
@@ -144,6 +144,6 @@ export function playPrev() {
 }
 
 export function scrollToPlaylistElement() {
-    const elements = playListSideBarView.element.querySelectorAll(".videoCard");
+    const elements = queuePanel.element.querySelectorAll(".videoCard");
     elements[$store.playlistIndex.get() || 0].scrollIntoView({ behavior: "smooth", block: "center" });
 }

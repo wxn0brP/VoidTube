@@ -3,11 +3,11 @@ import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UserSub } from "#types/channel";
 import navBarView from "#ui/navBar";
+import queuePanel from "#ui/video/queue";
 import { clearQueryParams, levenshtein, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import channelView, { followsFormatter } from "./channel";
-import playListSideBarView from "./playListSideBar";
 import "./subsList.scss";
 
 class SubsListView implements UiComponent {
@@ -92,7 +92,7 @@ many: true
         changeView("subs");
         setTitle("");
         clearQueryParams();
-        playListSideBarView.queryParams();
+        queuePanel.queryParams();
         navBarView.save("subs");
     }
 
