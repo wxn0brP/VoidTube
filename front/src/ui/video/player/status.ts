@@ -89,6 +89,10 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
         await loadProgress();
         if (opts.autoPlay) playerView.videoEl.play();
     }, { once: true });
+
+    if ($store.settings.antiRecommendationLoop.get()) {
+        $store.lastVideos.set([...new Set([...$store.lastVideos.get(), id])]);
+    }
 }
 
 export const loadVideo = utils.debounce<typeof loadVideoFn>(loadVideoFn, 200);

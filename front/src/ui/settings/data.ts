@@ -56,6 +56,12 @@ export const settingsData: Setting[] = [
         storeField: $store.settings.sponsorBlock.full,
     },
     {
+        type: "checkbox",
+        id: "app_antiRecommendationLoop",
+        text: "Anti Recommendation Loop",
+        storeField: $store.settings.antiRecommendationLoop,
+    },
+    {
         type: "button",
         onClick: () => {
             fetchVQL("api seeLogs! s._id=1");
