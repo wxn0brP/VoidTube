@@ -64,7 +64,7 @@ class SearchView implements UiComponent {
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                metaControlView.toggleToPlayList(entry.id);
+                metaControlView.toggleToPlayList(entry.id, e);
             });
 
             card.querySelector(`img`).addEventListener("error", () => {

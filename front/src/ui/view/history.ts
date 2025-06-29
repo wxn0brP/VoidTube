@@ -90,7 +90,7 @@ class HistoryView implements UiComponent {
                 card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    metaControlView.toggleToPlayList(entry._id);
+                    metaControlView.toggleToPlayList(entry._id, e);
                 });
 
                 this.container.appendChild(card);

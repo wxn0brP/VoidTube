@@ -22,12 +22,19 @@ class MetaControlView implements UiComponent {
         this.shareBtn = this.element.querySelector("#share")!;
         this.downloadBtn = this.element.querySelector("#download")!;
 
-        this.toggleToPlayListBtn.onclick = () => this.toggleToPlayList();
+        this.toggleToPlayListBtn.onclick = (e) => this.toggleToPlayList($store.videoId.get(), e);
         this.shareBtn.onclick = () => this.share();
         this.downloadBtn.onclick = () => this.download();
     }
 
-    public async toggleToPlayList(id = $store.videoId.get()) {
+    public async toggleToPlayList(id = $store.videoId.get(), e?: Event) {
+        if (e && e instanceof MouseEvent && e.shiftKey) {
+            fetchVQL(`playlist updateOneOrAdd later s._id = ${id} u._id = ${id}`);
+            fetchVQL(`user updateOneOrAdd playlist s._id=later u.last=${Math.floor(Date.now() / 1000)} add_arg.name = "Watch later"`);
+            uiMsg("Added to watch later playlist");
+            return;
+        }
+
         const playlists = await fetchPlaylistsContainingVideo(id);
 
         playListsModal.show({

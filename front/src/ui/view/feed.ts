@@ -73,7 +73,7 @@ class FeedView implements UiComponent {
                 card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    metaControlView.toggleToPlayList(id);
+                    metaControlView.toggleToPlayList(id, e);
                 });
 
                 this.container.appendChild(card);

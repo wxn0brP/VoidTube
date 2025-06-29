@@ -52,7 +52,7 @@ class RecommendationPanel implements UiComponent {
 
                 card.querySelector(`[data-id=playlist]`)!.addEventListener("click", (e) => {
                     e.stopPropagation();
-                    metaControlView.toggleToPlayList(_id);
+                    metaControlView.toggleToPlayList(_id, e);
                 });
 
                 card.querySelector(`[data-id=play-next-btn]`)!.addEventListener("click", (e) => {
