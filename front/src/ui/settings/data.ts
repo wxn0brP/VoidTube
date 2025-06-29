@@ -1,6 +1,7 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { Setting } from "#types/setting";
+import uiFunc from "#ui/modal";
 import { uiMsg } from "#ui/modal/message";
 
 export const settingsData: Setting[] = [
@@ -67,6 +68,15 @@ export const settingsData: Setting[] = [
             fetchVQL("api seeLogs! s._id=1");
         },
         text: "See Logs"
+    },
+    {
+        type: "button",
+        text: "Clear Cache",
+        onClick: async () => {
+            const confirm = await uiFunc.confirm("Are you sure you want to clear cache?");
+            if (!confirm) return;
+            fetchVQL("api -clearQuickCache s._id=1");
+        }
     },
     { type: "separator" },
     {
