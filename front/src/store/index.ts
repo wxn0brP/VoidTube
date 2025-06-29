@@ -43,6 +43,16 @@ const initData = {
             enabled: true
         },
         antiRecommendationLoop: true,
+        alg: {
+            minHistory: "20",
+            maxKeywords: "10",
+            keywordMinFreq: "7",
+            videoPerTag: "5",
+            noisePercent: "10",
+            noiseBoost: "15",
+            hashTagBoost: "3",
+            minScore: "0",
+        }
     },
     lastVideos: [] as string[],
 

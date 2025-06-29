@@ -90,6 +90,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 1,
         max: 9999,
+        storeField: $store.settings.alg.minHistory
     },
     {
         type: "input",
@@ -98,6 +99,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 1,
         max: 9999,
+        storeField: $store.settings.alg.maxKeywords
     },
     {
         type: "input",
@@ -106,6 +108,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 1,
         max: 9999,
+        storeField: $store.settings.alg.keywordMinFreq
     },
     {
         type: "input",
@@ -114,6 +117,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 1,
         max: 9999,
+        storeField: $store.settings.alg.videoPerTag
     },
     {
         type: "input",
@@ -122,6 +126,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 0,
         max: 100,
+        storeField: $store.settings.alg.noisePercent
     },
     {
         type: "input",
@@ -130,6 +135,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 1,
         max: 9999,
+        storeField: $store.settings.alg.noiseBoost
     },
     {
         type: "input",
@@ -138,6 +144,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 0,
         max: 9999,
+        storeField: $store.settings.alg.hashTagBoost
     },
     {
         type: "input",
@@ -146,6 +153,7 @@ export const settingsData: Setting[] = [
         input_type: "number",
         min: 0,
         max: 9999,
+        storeField: $store.settings.alg.minScore
     },
     {
         type: "textarea",
@@ -157,7 +165,7 @@ export const settingsData: Setting[] = [
         saveButton: {
             onClick: async (value) => {
                 const val = value.split("\n").map(v => v.trim()).filter(v => v.length > 0).join(",");
-                await fetchVQL(`alg updateOneOrAdd cfg s._id=irrelevant u.v=${val}`);
+                await fetchVQL(`user updateOneOrAdd settings s._id=alg_irrelevant u.v=${val}`);
                 uiMsg("Saved");
             },
         }
