@@ -10,6 +10,7 @@ import { downloadVideo } from "./logic/download";
 import { fetchQuickCache, fetchQuickCache$ } from "./logic/quick";
 import { apiExecutor, retrieveVideoData, retrieveVideoData$ } from "./logic/vidInfo";
 import { getSuggestions } from "#relay/suggestions";
+import { clearQuickCache } from "#relay/fetchQuick";
 
 export const YouTubeAdapter = createValtheraAdapter({
     async getCollections() {
@@ -93,6 +94,7 @@ export const YouTubeAdapter = createValtheraAdapter({
     async remove(collection, search) {
         try {
             if (collection === "video-load") return apiExecutor.cancelLevel(0);
+            if (collection === "clearQuickCache") return await clearQuickCache();
         } catch (e) {
             console.error(e);
         }

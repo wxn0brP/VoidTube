@@ -1,7 +1,11 @@
+import db from "#db";
 import { note } from "#echo/logger";
 import ky from "ky";
 
+const cache = new Map();
+
 export async function fetchQuick(videoId: string) {
+    if (cache.has(videoId)) return cache.get(videoId);
     note("fetchQuick", "Fetching", videoId);
     const html = await ky(`https://www.youtube.com/watch?v=${videoId}`).text();
 
@@ -27,13 +31,25 @@ export async function fetchQuick(videoId: string) {
         thumbnailUrl = lastPart === "maxresdefault" ? null : lastPart;
     }
 
-    return {
+    const data = {
         _id: videoId,
         title: video.title,
         duration: parseInt(video.lengthSeconds || "0", 10),
         channel: microformat?.externalChannelId || null,
         views: parseInt(video.viewCount, 10) || 0,
         uploadDate: microformat?.uploadDate || null,
-        thumbnail: thumbnailUrl
+        thumbnail: thumbnailUrl,
+        channelName: microformat?.ownerChannelName || ""
     };
+
+    cache.set(videoId, data);
+    setTimeout(() => cache.delete(videoId), 10_000);
+    return data;
+}
+
+export async function clearQuickCache() {
+    const history = await db.user.find<{ _id: string }>("history", {});
+    const list = history.map(h => h._id);
+    await db.cache.remove("video-static-quick", { $nin: { _id: list } });
+    return true;
 }

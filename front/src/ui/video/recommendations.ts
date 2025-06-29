@@ -43,6 +43,10 @@ class RecommendationPanel implements UiComponent {
                     <div class="img" style="background-image: url(${getThumbnail(item.thumbnail, item._id)})"></div>
                     <h3 title="${item.title}">${item.title || "Loading..."}</h3>
                     <h4>${formatTime(item.duration, null)}</h4>
+                    <div class="author">
+                        <img src="${"/avatarTry?id=" + item.channel}" class="avatar">
+                        <a href="/?channel=${item.channel}">${item.channelName || ""}</a>
+                    </div>
                     <div class="btns">
                         <button class="btn" data-id="play-next-btn">
                             Play next
@@ -61,6 +65,10 @@ class RecommendationPanel implements UiComponent {
                     e.stopPropagation();
                     e.preventDefault();
                     $store.nextVideoId.set(_id);
+                });
+                
+                card.querySelector(`img`).addEventListener("error", () => {
+                    card.querySelector(`img`).style.display = "none";
                 });
 
                 const playNext = card.querySelector<HTMLSpanElement>("[data-id=play-next]");

@@ -124,6 +124,7 @@ export interface VideoQuickInfo {
     channel: string;
     thumbnail: string | null;
     views: number;
+    channelName: string;
 }
 
 export interface LoadVideoOpts {
