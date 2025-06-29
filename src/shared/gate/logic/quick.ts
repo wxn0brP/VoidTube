@@ -38,8 +38,9 @@ export async function fetchQuickCache$(search: { $in: { _id: string[] } }) {
             data.channelName = channelName.get(data.channel);
         } else {
             data.channelName = (await channelInfo(data.channel)).name;
-            map.set(data._id, data.channelName);
+            channelName.set(data.channel, data.channelName);
         }
+        map.set(data._id, data);
     }
 
     for (const id of search.$in._id) {
