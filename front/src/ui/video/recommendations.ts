@@ -19,6 +19,8 @@ class RecommendationPanel implements UiComponent {
             const lastVideos = new Set($store.lastVideos.get());
             const notIn = videos.filter(x => !lastVideos.has(x));
             const inLast = videos.filter(x => lastVideos.has(x));
+            if (inLast.includes(nextVideoId)) 
+                $store.nextVideoId.set(notIn[0] || null);
 
             videos = [...notIn, ...inLast];
         }
