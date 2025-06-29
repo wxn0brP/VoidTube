@@ -56,3 +56,10 @@ export const $store = createStore(initData);
 mgl.store = $store;
 
 initData.videoMetaCache = {};
+
+export function appendLastVideos(id: string | string[]) {
+    const ids = Array.isArray(id) ? id : [id];
+    const old = $store.lastVideos.get();
+    const set = new Set([...old, ...ids]);
+    $store.lastVideos.set([...set]);
+}
