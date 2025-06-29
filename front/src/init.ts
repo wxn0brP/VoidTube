@@ -9,7 +9,7 @@ import queuePanel from "#ui/video/queue";
 
 await new Promise(r => setTimeout(r, 100)); // wait for ui to mount
 
-function params() {
+export function initParma(autoPlay = false) {
     const urlParams = new URLSearchParams(window.location.search);
 
     const query = urlParams.get("query");
@@ -40,7 +40,7 @@ function params() {
     const videoId = urlParams.get("v");
     if (videoId) {
         const id = getYouTubeVideoId(videoId);
-        setTimeout(() => loadVideo(id, { autoPlay: false }), 1000);
+        setTimeout(() => loadVideo(id, { autoPlay }), 1000);
         updateQueryParam("v", id);
         changeView("video");
         navBarView.save("video");
@@ -59,5 +59,9 @@ function params() {
     }
 }
 
-params();
+initParma();
 await import("./store/registers");
+
+window.addEventListener("popstate", () => {
+    initParma(true);
+});
