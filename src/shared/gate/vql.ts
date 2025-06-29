@@ -3,7 +3,7 @@ import { getChannelVideos, getPlaylistIds, searchVideo } from "#relay/apiBack";
 import { getFeed, getQuickFeed } from "#relay/feed";
 import { getRecommended } from "#relay/getRecommended";
 import { createValtheraAdapter } from "@wxn0brp/vql";
-import { runFeedVQL, saveConfig } from "./alg";
+import { runFeedVQL } from "./alg";
 import "./cache";
 import { channelInfo } from "./logic/channel";
 import { downloadVideo } from "./logic/download";
@@ -31,7 +31,6 @@ export const YouTubeAdapter = createValtheraAdapter({
             
             "channelFeed",
             "quickFeed",
-            "algSave",
             "algRun",
             
             "self-version",
@@ -43,7 +42,6 @@ export const YouTubeAdapter = createValtheraAdapter({
     async add(collection, data) {
         try {
             if (collection === "download") return await downloadVideo(data);
-            if (collection === "algSave") return await saveConfig();
         } catch (e) {
             console.error(e);
         }

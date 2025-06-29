@@ -2,7 +2,6 @@ import { mgl } from "#mgl";
 import { $store } from "#store";
 import navBarView from "#ui/navBar";
 import build from "#ui/settings/build";
-import write from "#ui/settings/write";
 import queuePanel from "#ui/video/queue";
 import { clearQueryParams, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
@@ -20,7 +19,7 @@ class SettingsView implements UiComponent {
         uiHelpers.storeHide(this.element, $store.view.settings);
         $store.view.settings.set(false);
 
-        this.createSettings();
+        build(this.container);
     }
 
     show() {
@@ -29,11 +28,6 @@ class SettingsView implements UiComponent {
         clearQueryParams();
         queuePanel.queryParams();
         navBarView.save("settings");
-    }
-
-    private async createSettings() {
-        build(this.container);
-        write(this.container);
     }
 }
 
