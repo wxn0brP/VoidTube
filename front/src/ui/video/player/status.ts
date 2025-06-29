@@ -1,6 +1,6 @@
 import { fetchVideoHistoryTime, updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
-import { $store } from "#store";
+import { $store, appendLastVideos } from "#store";
 import { LoadVideoOpts, VideoInfo } from "#types/video";
 import { changeView } from "#ui/index";
 import { uiMsg } from "#ui/modal/message";
@@ -9,8 +9,8 @@ import historyView from "#ui/view/history";
 import { updateQueryParam } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
-import { emitPlay } from "./tabs";
 import recommendationPanel from "../recommendations";
+import { emitLastVideo, emitPlay } from "./tabs";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
@@ -91,7 +91,8 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
     }, { once: true });
 
     if ($store.settings.antiRecommendationLoop.get()) {
-        $store.lastVideos.set([...new Set([...$store.lastVideos.get(), id])]);
+        appendLastVideos(id);
+        emitLastVideo();
     }
 }
 
