@@ -13,14 +13,16 @@ class RecommendationPanel implements UiComponent {
     render(videos: string[]) {
         this.element.innerHTML = "";
         this.recommendations = [];
-        const nextVideoId = $store.nextVideoId.get();
+        let nextVideoId = $store.nextVideoId.get();
 
         if ($store.lastVideos.get().length) {
             const lastVideos = new Set($store.lastVideos.get());
             const notIn = videos.filter(x => !lastVideos.has(x));
             const inLast = videos.filter(x => lastVideos.has(x));
-            if (inLast.includes(nextVideoId)) 
+            if (inLast.includes(nextVideoId)) {
                 $store.nextVideoId.set(notIn[0] || null);
+                nextVideoId = $store.nextVideoId.get();
+            }
 
             videos = [...notIn, ...inLast];
         }
