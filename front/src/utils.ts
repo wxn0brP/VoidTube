@@ -9,11 +9,11 @@ export function updateQueryParam(key: string, value: string | undefined): void {
         url.searchParams.set(key, value);
     }
 
-    window.history.replaceState({}, '', url.toString());
+    window.history.pushState({}, '', url.toString());
 }
 
 export function clearQueryParams(): void {
-    window.history.replaceState({}, '', window.location.origin);
+    window.history.pushState({}, '', window.location.origin);
 }
 mgl.clearQueryParams = clearQueryParams;
 
