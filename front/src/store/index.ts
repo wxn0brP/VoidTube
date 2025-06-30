@@ -11,6 +11,7 @@ const initData = {
     videoChannelName: "",
     videoMetaCache: null as { [key: string]: VideoCache },
     recommendedId: "",
+    queueLoop: false,
 
     view: {
         video: false,

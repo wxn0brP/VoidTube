@@ -34,7 +34,6 @@ export class PlayerView implements UiComponent {
     public bufferedRange!: HTMLDivElement;
     public playedRange!: HTMLDivElement;
     public progressInput!: HTMLInputElement;
-    public loopPlaylist: boolean = false;
 
     constructor() {
         this.audioEl = new Audio();
