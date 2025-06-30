@@ -2,9 +2,9 @@ import { updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { clamp, formatTime } from "#utils";
-import utils from "@wxn0brp/flanker-ui";
+import utils, { uiHelpers } from "@wxn0brp/flanker-ui";
 import playerView from ".";
-import { getNextVideoId, playNext } from "./sync";
+import { getNextVideoId, playNext, playPrev } from "./sync";
 import { changePlay, toggleFullscreen } from "./status";
 import "./bar.scss";
 
@@ -21,8 +21,11 @@ export function setupBar() {
 
     const volume = playerView.bar.querySelector<HTMLInputElement>(".volume");
     const fullscreenBtn = playerView.bar.querySelector<HTMLButtonElement>(".fullscreen-btn");
-    const loopPlaylist = playerView.bar.querySelector<HTMLInputElement>("#loopPlaylist");
-    playerView.loopPlaylist = loopPlaylist.checked;
+    const loopQueue = playerView.bar.querySelector<HTMLInputElement>("#loop-queue");
+    $store.queueLoop.set(loopQueue.checked);
+
+    playerView.bar.querySelector("#previous-video")!.addEventListener("click", () => playPrev());
+    playerView.bar.querySelector("#next-video")!.addEventListener("click", () => playNext());
 
     playerView.controls = {
         playPauseBtn,
@@ -33,9 +36,7 @@ export function setupBar() {
 
     playPauseBtn.addEventListener("click", changePlay);
     playerView.videoEl.addEventListener("click", changePlay);
-    loopPlaylist.addEventListener("change", () => {
-        playerView.loopPlaylist = loopPlaylist.checked;
-    })
+    uiHelpers.watchCheckbox(loopQueue, $store.queueLoop);
 
     document.addEventListener("keydown", (e) => {
         if (e.code === "Escape") {
