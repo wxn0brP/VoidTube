@@ -7,6 +7,7 @@ import uiFunc from "../modal";
 import playListsModal from "../modal/playlists";
 import { uiMsg } from "#ui/modal/message";
 import "./metaControl.scss";
+import queuePanel from "./queue";
 
 class MetaControlView implements UiComponent {
     element: HTMLDivElement;
@@ -21,6 +22,7 @@ class MetaControlView implements UiComponent {
         this.toggleToPlayListBtn = this.element.querySelector("#toggle-to-playlist")!;
         this.shareBtn = this.element.querySelector("#share")!;
         this.downloadBtn = this.element.querySelector("#download")!;
+        this.element.querySelector<HTMLButtonElement>("#clear-queue")!.onclick = () => queuePanel.clear(true);
 
         this.toggleToPlayListBtn.onclick = (e) => this.toggleToPlayList($store.videoId.get(), e);
         this.shareBtn.onclick = () => this.share();

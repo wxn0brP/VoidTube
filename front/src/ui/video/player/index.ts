@@ -101,7 +101,14 @@ export class PlayerView implements UiComponent {
         setUpSponsorBlock();
 
         window.addEventListener("beforeunload", () => {
-            localStorage.setItem("cache.progress", JSON.stringify({ id: $store.videoId.get(), time: Math.floor(this.videoEl.currentTime) }));
+            localStorage.setItem("cache.progress", JSON.stringify({
+                id: $store.videoId.get(),
+                time: Math.floor(this.videoEl.currentTime)
+            }));
+            localStorage.setItem("cache.queue", JSON.stringify({
+                i: queuePanel.queueIndex,
+                q: queuePanel.queue
+            }));
         });
     }
 

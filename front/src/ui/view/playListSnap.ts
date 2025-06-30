@@ -51,10 +51,10 @@ class PlayListSnapView implements UiComponent {
                 window.open(window.location.origin + "/?v=" + entry._id);
             });
 
-            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
+            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
                 e.stopPropagation();
                 e.preventDefault();
-                queuePanel.append(entry._id);
+                e.shiftKey ? queuePanel.appendToNext(entry._id) : queuePanel.append(entry._id);
             });
 
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {

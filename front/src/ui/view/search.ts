@@ -64,10 +64,10 @@ class SearchView implements UiComponent {
                 channelView.load(entry.channel);
             });
 
-            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
+            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
                 e.stopPropagation();
                 e.preventDefault();
-                queuePanel.append(entry.id);
+                e.shiftKey ? queuePanel.appendToNext(entry.id) : queuePanel.append(entry.id);
             });
 
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
