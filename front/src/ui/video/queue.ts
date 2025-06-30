@@ -14,6 +14,7 @@ class QueuePanel implements UiComponent {
     videoMap = new Map<string, VideoQuickInfo>();
     queueIndex = 0;
     cards = new Map<string, HTMLDivElement>();
+    private draggingId: string | null = null;
 
     async render() {
         if (!this.queue) {
@@ -50,6 +51,9 @@ class QueuePanel implements UiComponent {
         rendered.forEach((item) => {
             const card = document.createElement("div");
             card.className = "queueCard";
+            card.setAttribute("draggable", "true");
+            card.setAttribute("data-id", item._id);
+            if (item._id === $store.videoId.get()) card.clA("playing");
             card.innerHTML = `
                 <div class="img">
                     <img src="${getThumbnail(item.thumbnail, item._id)}"></div>
@@ -69,6 +73,11 @@ class QueuePanel implements UiComponent {
                 e.preventDefault();
                 window.open(window.location.origin + "/?v=" + item._id);
             });
+
+            card.addEventListener("dragstart", this.handleDragStart.bind(this));
+            card.addEventListener("dragover", this.handleDragOver.bind(this));
+            card.addEventListener("drop", this.handleDrop.bind(this));
+
             this.element.appendChild(card);
             this.cards.set(item._id, card);
         });
@@ -76,6 +85,58 @@ class QueuePanel implements UiComponent {
         setTimeout(() => {
             this.scrollToPlayCard();
         }, 50);
+    }
+
+    private handleDragStart(e: DragEvent) {
+        const target = e.target as HTMLElement;
+        const card = target.closest(".queueCard") as HTMLElement;
+        if (!card) return;
+        this.element.clA("dragging");
+
+        this.draggingId = card.getAttribute("data-id");
+        card.clA("dragging");
+    }
+
+    private handleDragOver(e: DragEvent) {
+        e.preventDefault();
+        const target = e.target as HTMLElement;
+        const card = target.closest(".queueCard") as HTMLElement;
+        if (!card || !this.draggingId) return;
+
+        const draggedCard = this.element.qi(this.draggingId);
+        if (draggedCard === card) return;
+
+        const rect = card.getBoundingClientRect();
+        const offset = rect.y + rect.height / 2;
+
+        if (e.clientY < offset) {
+            this.element.insertBefore(draggedCard, card);
+        } else {
+            this.element.insertBefore(draggedCard, card.nextSibling);
+        }
+
+        this.updateQueueOrder();
+    }
+
+    private handleDrop() {
+        const card = this.element.querySelector(".dragging") as HTMLElement;
+        if (card) {
+            card.clR("dragging");
+            const cardId = card.getAttribute("data-id");
+            if (cardId === $store.videoId.get()) {
+                const index = this.queue.indexOf(cardId);
+                this.queueIndex = index;
+            }
+        }
+        this.draggingId = null;
+        setTimeout(() => {
+            this.element.clR("dragging");
+        }, 20);
+    }
+
+    private updateQueueOrder() {
+        const cards = this.element.querySelectorAll(".queueCard");
+        this.queue = Array.from(cards).map(c => c.getAttribute("data-id")).filter(Boolean) as string[];
     }
 
     public async loadPlaylist(id: string) {
@@ -115,6 +176,10 @@ class QueuePanel implements UiComponent {
         this.element.addEventListener("mouseenter", () => this.scrollToPlayCard());
         this.element.addEventListener("mouseleave", () => this.scrollToPlayCard());
         $store.videoId.subscribe(() => this.scrollToPlayCard());
+        $store.videoId.subscribe((id) => {
+            this.element.querySelectorAll<HTMLDivElement>(".playing").forEach(c => c.clR("playing"));
+            this.element.qi(id)?.clA("playing");
+        })
     }
 }
 
