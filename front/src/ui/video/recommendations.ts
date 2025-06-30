@@ -5,27 +5,22 @@ import { loadVideo } from "#ui/video/player/status";
 import { getThumbnail, formatTime } from "#utils";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import metaControlView from "./metaControl";
+import queuePanel from "./queue";
 
 class RecommendationPanel implements UiComponent {
     element: HTMLDivElement;
-    recommendations: [string, HTMLSpanElement][] = [];
 
     render(videos: string[]) {
         this.element.innerHTML = "";
-        this.recommendations = [];
-        let nextVideoId = $store.nextVideoId.get();
 
         if ($store.lastVideos.get().length) {
             const lastVideos = new Set($store.lastVideos.get());
             const notIn = videos.filter(x => !lastVideos.has(x));
             const inLast = videos.filter(x => lastVideos.has(x));
-            if (inLast.includes(nextVideoId)) {
-                $store.nextVideoId.set(notIn[0] || null);
-                nextVideoId = $store.nextVideoId.get();
-            }
 
             videos = [...notIn, ...inLast];
         }
+        $store.recommendedId.set(videos[0]);
 
         videos.forEach(async (_id, i) => {
             const card = document.createElement("div");
@@ -48,10 +43,7 @@ class RecommendationPanel implements UiComponent {
                         <a href="/?channel=${item.channel}">${item.channelName || ""}</a>
                     </div>
                     <div class="btns">
-                        <button class="btn" data-id="play-next-btn">
-                            Play next
-                            <span data-id="play-next">${_id === nextVideoId ? "✅" : "❌"}</span>
-                        </button>
+                        <button class="btn" data-id="queue">Queue➕</button>
                         <button class="btn" data-id="playlist">Playlist 📂</button>
                     </div>
                 `;
@@ -61,18 +53,15 @@ class RecommendationPanel implements UiComponent {
                     metaControlView.toggleToPlayList(_id, e);
                 });
 
-                card.querySelector(`[data-id=play-next-btn]`)!.addEventListener("click", (e) => {
+                card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    $store.nextVideoId.set(_id);
+                    queuePanel.append(_id);
                 });
                 
                 card.querySelector(`img`).addEventListener("error", () => {
                     card.querySelector(`img`).style.display = "none";
                 });
-
-                const playNext = card.querySelector<HTMLSpanElement>("[data-id=play-next]");
-                recommendationPanel.recommendations[i] = [_id, playNext];
             }
 
             this.element.appendChild(card);
@@ -93,13 +82,6 @@ class RecommendationPanel implements UiComponent {
 
     mount(): void {
         this.element = document.querySelector("#recommendations")!;
-
-        $store.nextVideoId.subscribe(id => {
-            this.recommendations.forEach(item => {
-                if (!item || item.length < 2) return;
-                item[1].innerHTML = id === item[0] ? "✅" : "❌";
-            });
-        });
     }
 }
 

@@ -4,7 +4,7 @@ import { $store } from "#store";
 import { clamp, formatTime } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
-import { playNext } from "./sync";
+import { getNextVideoId, playNext } from "./sync";
 import { changePlay, toggleFullscreen } from "./status";
 import "./bar.scss";
 
@@ -139,16 +139,7 @@ export function setupBar() {
 
     const playNextDebounced = utils.debounce(playNext);
     const bufferNextThrottled = utils.throttle(() => {
-        let nextVideoId = $store.nextVideoId.get();
-
-        if ($store.playlistId.get()) {
-            const playlistIndex = $store.playlistIndex.get();
-            if (playlistIndex !== undefined) {
-                const nextVideoIdTemp = $store.playlist.get()[playlistIndex + 1];
-                if (nextVideoIdTemp) nextVideoId = nextVideoIdTemp;
-            }
-        }
-
+        let nextVideoId = getNextVideoId();
         if (!nextVideoId) return;
 
         // if server don't have buffered video then fetch it

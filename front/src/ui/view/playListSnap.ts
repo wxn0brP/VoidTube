@@ -7,6 +7,7 @@ import { changeView } from "..";
 import metaControlView from "../video/metaControl";
 import navBarView from "../navBar";
 import { loadVideo } from "#ui/video/player/status";
+import queuePanel from "#ui/video/queue";
 
 class PlayListSnapView implements UiComponent {
     element: HTMLDivElement;
@@ -20,7 +21,7 @@ class PlayListSnapView implements UiComponent {
             this.container.innerHTML = `<h1 style="text-align: center;">No Videos</h1>`;
             return;
         }
-        
+
         data.forEach(entry => {
             const card = document.createElement("div");
             card.className = "playlistSnapCard";
@@ -31,14 +32,16 @@ class PlayListSnapView implements UiComponent {
                 ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
                 ${numToLocale(entry.info.views)} views -
                 <div class="btns">
+                    <button class="btn" data-id="queue">Queue➕</button>
                     <button button title="Playlist" class="btn" data-id="playlist">📂</button>
                 </div>
             `;
 
             card.addEventListener("click", () => {
-                $store.playlistId.set("");
-                $store.playlist.set([]);
-                $store.playlistIndex.set(0);
+                // TODO -
+                // $store.playlistId.set("");
+                // $store.playlist.set([]);
+                // $store.playlistIndex.set(0);
                 clearQueryParams();
                 loadVideo(entry._id);
             });
@@ -46,6 +49,12 @@ class PlayListSnapView implements UiComponent {
             card.addEventListener("contextmenu", (e) => {
                 e.preventDefault();
                 window.open(window.location.origin + "/?v=" + entry._id);
+            });
+
+            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                queuePanel.append(entry._id);
             });
 
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {

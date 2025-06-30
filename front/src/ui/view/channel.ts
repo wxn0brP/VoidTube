@@ -9,6 +9,7 @@ import navBarView from "../navBar";
 import { loadVideo } from "#ui/video/player/status";
 import { uiMsg } from "#ui/modal/message";
 import "./channel.scss";
+import queuePanel from "#ui/video/queue";
 
 export const thumbnailMiddle = "/avatar?link=";
 
@@ -120,14 +121,16 @@ relations:
                 ${formatTime(entry?.history?.time, null)} / ${formatTime(entry.duration, null)} <br>
                 ${numToLocale(entry.views)} views
                 <div class="btns">
+                    <button class="btn" data-id="queue">Queue➕</button>
                     <button button title="Playlist" class="btn" data-id="playlist">📂</button>
                 </div>
             `
 
             card.addEventListener("click", () => {
-                $store.playlistId.set("");
-                $store.playlist.set([]);
-                $store.playlistIndex.set(0);
+                // TODO -
+                // $store.playlistId.set("");
+                // $store.playlist.set([]);
+                // $store.playlistIndex.set(0);
                 clearQueryParams();
                 loadVideo(entry.id);
             });
@@ -135,6 +138,12 @@ relations:
             card.addEventListener("contextmenu", (e) => {
                 e.preventDefault();
                 window.open(window.location.origin + "/?v=" + entry.id);
+            });
+
+            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                queuePanel.append(entry.id);
             });
 
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {

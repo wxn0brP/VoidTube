@@ -1,11 +1,11 @@
-import channelView from "#ui/view/channel";
 import navBarView from "#ui/navBar";
+import playerView from "#ui/video/player";
+import { loadVideo } from "#ui/video/player/status";
+import queuePanel from "#ui/video/queue";
+import channelView from "#ui/view/channel";
 import { changeView } from "./ui";
 import searchBarView from "./ui/searchBar";
 import { getYouTubeVideoId, setTitle, updateQueryParam } from "./utils";
-import { loadVideo } from "#ui/video/player/status";
-import playerView from "#ui/video/player";
-import queuePanel from "#ui/video/queue";
 
 await new Promise(r => setTimeout(r, 100)); // wait for ui to mount
 
@@ -31,9 +31,12 @@ export function initParma(autoPlay = false) {
 
     const playlistId = urlParams.get("p");
     if (playlistId) {
-        const indexS = urlParams.get("pi") || "0";
-        const index = Number(indexS);
-        setTimeout(() => queuePanel.loadPlaylist(playlistId, index), 1000);
+        const index = urlParams.get("pi") || "0";
+        setTimeout(() => queuePanel.loadPlaylist(playlistId), 1000);
+        setTimeout(() => {
+            queuePanel.queueIndex = +index;
+            loadVideo(queuePanel.queue[queuePanel.queueIndex]);
+        }, 1000);
         return;
     }
 

@@ -1,7 +1,7 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { $store } from "#store";
+import { uiMsg } from "#ui/modal/message";
 import navBarView from "#ui/navBar";
-import { updateQueryParam } from "#utils";
 import playerView from ".";
 import queuePanel from "../queue";
 import { fetchSponsorSegments, sponsorBlock } from "./sponsorBlock";
@@ -13,24 +13,26 @@ export function playNext() {
         updateVideoHistoryTime(oldId, 0);
     }, 3000);
 
-    let nextVideoId = $store.nextVideoId.get();
-
-    const playlist = $store.playlist.get();
-    const playlistIndex = $store.playlistIndex.get() || 0;
-    let nextIndex = playlistIndex + 1;
-    if (nextIndex >= playlist.length) {
-        // if -1 then no loop
-        nextIndex = playerView.loopPlaylist ? 0 : -1;
+    const nextVideoId = getNextVideoId();
+    if (!nextVideoId) {
+        uiMsg("End of queue");
+        return;
     }
-    const nextVideoIdTemp = playlist[nextIndex];
-    if (nextVideoIdTemp) {
-        nextVideoId = nextVideoIdTemp;
-        $store.playlistIndex.set(nextIndex);
-        updateQueryParam("pi", (nextIndex).toString());
-        scrollToPlaylistElement();
-    }
+    queuePanel.queueIndex++;
 
     loadVideo(nextVideoId);
+}
+
+export function getNextVideoId() {
+    const length = queuePanel.queue.length;
+    const index = queuePanel.queueIndex + 1;
+    if (index >= length) {
+        if (playerView.loopPlaylist) return queuePanel.queue[0];
+        else if($store.recommendedId.get()) return $store.recommendedId.get();
+        else return null;
+    }
+
+    return queuePanel.queue[index];
 }
 
 function getPrevVideoIdFromStack(i = navBarView.stack.length - 2) {
@@ -50,29 +52,23 @@ export function playPrev() {
 
     let prevVideoId = "";
 
-    if ($store.playlistId.get()) {
-        const playlist = $store.playlist.get();
-        const playlistIndex = $store.playlistIndex.get() || 0;
-        let nextIndex = playlistIndex - 1;
-        if (nextIndex < 0) nextIndex = 0;
-        const nextVideoId = playlist[nextIndex];
-        if (nextVideoId) {
-            prevVideoId = nextVideoId;
-            $store.playlistIndex.set(nextIndex);
-            updateQueryParam("pi", (nextIndex).toString());
-            scrollToPlaylistElement();
+    const length = queuePanel.queue.length;
+    if (length) {
+        let prev = --queuePanel.queueIndex;
+        if (prev < 0) {
+            if (playerView.loopPlaylist) prev = length - 1;
+            else {
+                prev = 0;
+                queuePanel.queueIndex = 0;
+            }
         }
+        prevVideoId = queuePanel.queue[prev];
     }
         
     if (!prevVideoId) prevVideoId = getPrevVideoIdFromStack();
-    if (!prevVideoId) return
+    if (!prevVideoId) return;
 
     loadVideo(prevVideoId);
-}
-
-export function scrollToPlaylistElement() {
-    const elements = queuePanel.element.querySelectorAll(".videoCard");
-    elements[$store.playlistIndex.get() || 0].scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 export function setUpSponsorBlock() {
