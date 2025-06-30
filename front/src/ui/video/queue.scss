@@ -14,9 +14,17 @@
     background-color: #0c0c0c;
     padding-top: 10px;
 
-    &:hover {
+    &:hover,
+    &.dragging {
         height: auto;
         background-color: #111;
+
+        .playing {
+            background-color: #1e1e1e;
+            .title {
+                text-decoration: underline;
+            }
+        }
     }
 
     .queueCard {
@@ -44,8 +52,8 @@
 
         .info {
             float: left;
-            width: calc(100% - 5rem - 5px);
-            margin-left: 5px;
+            width: calc(100% - 5rem - 15px);
+            margin-left: 15px;
 
             .title {
                 font-weight: bold;
