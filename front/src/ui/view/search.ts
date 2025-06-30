@@ -1,14 +1,11 @@
-import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
-import { changeView } from "..";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { SearchEntry } from "#types/video";
+import { cardHelpers } from "#ui/helpers/card";
 import navBarView from "#ui/navBar";
-import metaControlView from "#ui/video/metaControl";
-import { loadVideo } from "#ui/video/player/status";
-import { fewItems, formatTime, numToLocale, clearQueryParams, updateQueryParam } from "#utils";
-import channelView from "./channel";
-import queuePanel from "#ui/video/queue";
+import { fewItems, formatTime, numToLocale, updateQueryParam } from "#utils";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
+import { changeView } from "..";
 
 class SearchView implements UiComponent {
     element: HTMLDivElement;
@@ -43,42 +40,12 @@ class SearchView implements UiComponent {
                 </div>
             `
 
-            card.addEventListener("click", () => {
-                // TODO -
-                // $store.playlistId.set("");
-                // $store.playlist.set([]);
-                // $store.playlistIndex.set(0);
-                clearQueryParams();
-                updateQueryParam("v", entry.id);
-                loadVideo(entry.id);
-            });
-
-            card.addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-                window.open(window.location.origin + "/?v=" + entry.id);
-            });
-
-            card.querySelector(`.author`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                channelView.load(entry.channel);
-            });
-
-            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
-                e.stopPropagation();
-                e.preventDefault();
-                e.shiftKey ? queuePanel.appendToNext(entry.id) : queuePanel.append(entry.id);
-            });
-
-            card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                metaControlView.toggleToPlayList(entry.id, e);
-            });
-
-            card.querySelector(`img`).addEventListener("error", () => {
-                card.querySelector(`img`).style.display = "none";
-            });
+            cardHelpers.click(card, entry);
+            cardHelpers.rightClick(card, entry);
+            cardHelpers.queue(card, entry);
+            cardHelpers.playlist(card, entry);
+            cardHelpers.author(card, entry.channel);
+            cardHelpers.avatarTry(card);
 
             this.container.appendChild(card);
         });

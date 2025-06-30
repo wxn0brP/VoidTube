@@ -1,13 +1,11 @@
 import { fetchPlaylistSnap } from "#api/playlist";
 import { $store } from "#store";
-import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { PlaylistSnapEntry } from "#types/video";
-import { clearQueryParams, fewItems, formatTime, getThumbnail, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { cardHelpers } from "#ui/helpers/card";
+import { fewItems, formatTime, getThumbnail, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
-import metaControlView from "../video/metaControl";
 import navBarView from "../navBar";
-import { loadVideo } from "#ui/video/player/status";
-import queuePanel from "#ui/video/queue";
 
 class PlayListSnapView implements UiComponent {
     element: HTMLDivElement;
@@ -37,31 +35,10 @@ class PlayListSnapView implements UiComponent {
                 </div>
             `;
 
-            card.addEventListener("click", () => {
-                // TODO -
-                // $store.playlistId.set("");
-                // $store.playlist.set([]);
-                // $store.playlistIndex.set(0);
-                clearQueryParams();
-                loadVideo(entry._id);
-            });
-
-            card.addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-                window.open(window.location.origin + "/?v=" + entry._id);
-            });
-
-            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
-                e.stopPropagation();
-                e.preventDefault();
-                e.shiftKey ? queuePanel.appendToNext(entry._id) : queuePanel.append(entry._id);
-            });
-
-            card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                metaControlView.toggleToPlayList(entry._id, e);
-            });
+            cardHelpers.click(card, entry);
+            cardHelpers.rightClick(card, entry);
+            cardHelpers.queue(card, entry);
+            cardHelpers.playlist(card, entry);
 
             this.container.appendChild(card);
         });

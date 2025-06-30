@@ -3,15 +3,14 @@ import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { HistoryEntry } from "#types/video";
-import { loadVideo } from "#ui/video/player/status";
+import { cardHelpers } from "#ui/helpers/card";
 import queuePanel from "#ui/video/queue";
 import { clearQueryParams, fewItems, formatTime, getThumbnail, levenshtein, numToLocale, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import uiFunc from "../modal";
 import navBarView from "../navBar";
-import metaControlView from "../video/metaControl";
-import channelView, { thumbnailMiddle } from "./channel";
+import { thumbnailMiddle } from "./channel";
 
 class HistoryView implements UiComponent {
     element: HTMLDivElement;
@@ -57,31 +56,11 @@ class HistoryView implements UiComponent {
                     </div>
                 `
 
-                card.addEventListener("click", () => {
-                    // TODO -
-                    // $store.playlistId.set("");
-                    // $store.playlist.set([]);
-                    // $store.playlistIndex.set(0);
-                    clearQueryParams();
-                    loadVideo(entry._id);
-                });
-
-                card.addEventListener("contextmenu", (e) => {
-                    e.preventDefault();
-                    window.open(window.location.origin + "/?v=" + entry._id);
-                });
-
-                card.querySelector(`.author`)!.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    channelView.load(entry.info.channel);
-                });
-
-                card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    e.shiftKey ? queuePanel.appendToNext(entry._id) : queuePanel.append(entry._id);
-                });
+                cardHelpers.click(card, entry);
+                cardHelpers.rightClick(card, entry);
+                cardHelpers.author(card, entry.info.channel);
+                cardHelpers.queue(card, entry);
+                cardHelpers.playlist(card, entry);
 
                 card.querySelector(`[data-id=rm]`)!.addEventListener("click", async (e) => {
                     e.stopPropagation();
@@ -93,12 +72,6 @@ class HistoryView implements UiComponent {
                     fetchVQL(`user -history s._id = ${entry._id}`).then(() => {
                         this.loadHistory();
                     });
-                });
-
-                card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    metaControlView.toggleToPlayList(entry._id, e);
                 });
 
                 this.container.appendChild(card);

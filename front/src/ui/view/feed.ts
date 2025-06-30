@@ -1,15 +1,13 @@
+import { fetchVQL } from "#api/index";
+import { mgl } from "#mgl";
 import { $store } from "#store";
 import { FeedEntry } from "#types/video";
+import { cardHelpers } from "#ui/helpers/card";
+import queuePanel from "#ui/video/queue";
 import { clearQueryParams, fewItems, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import navBarView from "../navBar";
-import { fetchVQL } from "#api/index";
-import { loadVideo } from "#ui/video/player/status";
-import channelView from "./channel";
-import metaControlView from "#ui/video/metaControl";
-import { mgl } from "#mgl";
-import queuePanel from "#ui/video/queue";
 
 class FeedView implements UiComponent {
     element: HTMLDivElement;
@@ -50,40 +48,13 @@ class FeedView implements UiComponent {
                         <button class="btn" data-id="queue">Queue➕</button>
                         <button button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                     </div>
-                `
+                `;
 
-                card.addEventListener("click", () => {
-                    // TODO -
-                    // $store.playlistId.set("");
-                    // $store.playlist.set([]);
-                    // $store.playlistIndex.set(0);
-                    clearQueryParams();
-                    loadVideo(id);
-                });
-
-                card.addEventListener("contextmenu", (e) => {
-                    e.preventDefault();
-                    window.open(window.location.origin + "/?v=" + id);
-                });
-
-                card.querySelector(`.author`)!.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    channelView.load(entry.authorId);
-                });
-
-
-                card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    e.shiftKey ? queuePanel.appendToNext(entry.id) : queuePanel.append(entry.id);
-                });
-
-                card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    metaControlView.toggleToPlayList(id, e);
-                });
+                cardHelpers.click(card, entry);
+                cardHelpers.rightClick(card, entry);
+                cardHelpers.author(card, entry.authorId);
+                cardHelpers.queue(card, entry);
+                cardHelpers.playlist(card, entry);
 
                 this.container.appendChild(card);
             });
