@@ -53,10 +53,10 @@ class RecommendationPanel implements UiComponent {
                     metaControlView.toggleToPlayList(_id, e);
                 });
 
-                card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
+                card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    queuePanel.append(_id);
+                    e.shiftKey ? queuePanel.appendToNext(_id) : queuePanel.append(_id);
                 });
                 
                 card.querySelector(`img`).addEventListener("error", () => {

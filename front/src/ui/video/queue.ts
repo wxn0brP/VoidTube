@@ -6,6 +6,7 @@ import { formatTime, getThumbnail } from "#utils";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import { fetchVQL } from "@wxn0brp/vql-client";
 import "./queue.scss";
+import uiFunc from "#ui/modal";
 
 class QueuePanel implements UiComponent {
     element: HTMLDivElement;
@@ -48,7 +49,7 @@ class QueuePanel implements UiComponent {
         this.element.innerHTML = "";
         this.element.style.display = "";
         this.cards.clear();
-        rendered.forEach((item) => {
+        rendered.forEach((item, i) => {
             const card = document.createElement("div");
             card.className = "queueCard";
             card.setAttribute("draggable", "true");
@@ -66,9 +67,17 @@ class QueuePanel implements UiComponent {
                     </div>
                 </div>
             `;
-            card.addEventListener("click", () => {
-                loadVideo(item._id);
+
+            card.addEventListener("click", async (e: MouseEvent) => {
+                if (!e.shiftKey) return loadVideo(item._id);
+                e.preventDefault();
+                this.element.clA("dragging");
+                let confirm = e.altKey || await uiFunc.confirm("Are you sure you want to remove this video from the queue?");
+                if (!confirm) return;   
+                this.remove(i);
+                setTimeout(() => this.element.clR("dragging"), 10);
             });
+
             card.addEventListener("contextmenu", (e) => {
                 e.preventDefault();
                 window.open(window.location.origin + "/?v=" + item._id);
@@ -151,15 +160,30 @@ class QueuePanel implements UiComponent {
         // if (playlistIndex) updateQueryParam("pi", playlistIndex.toString());
     }
 
-    public clear() {
+    public async clear(confirm = false) {
+        if (confirm && !await uiFunc.confirm("Are you sure you want to clear the queue?")) return;
         this.queue = [];
         this.videoMap.clear();
-        this.render();
+        this.queueIndex = 0;
+        if ($store.videoId.get()) this.append($store.videoId.get());
+        else this.render();
     }
 
     public append(ids: string | string[]) {
         const idsArray = Array.isArray(ids) ? ids : [ids];
         this.queue = [...this.queue, ...idsArray];
+        this.render();
+    }
+
+    public appendToNext(id: string) {
+        this.queue.splice(this.queueIndex + 1, 0, id);
+        this.render();
+    }
+
+    public remove(id: string | number) {
+        const index = typeof id === "number" ? id : this.queue.indexOf(id);
+        this.queue.splice(index, 1);
+        if (index >= this.queueIndex) this.queueIndex = this.queue.length - 1;
         this.render();
     }
 
