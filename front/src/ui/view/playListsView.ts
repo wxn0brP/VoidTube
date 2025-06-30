@@ -3,12 +3,12 @@ import { fetchPlaylists } from "#api/playlist";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { PlaylistsEntry } from "#types/video";
+import { cardHelpers } from "#ui/helpers/card";
 import uiFunc from "#ui/modal";
 import playListsModal from "#ui/modal/playlists";
 import navBarView from "#ui/navBar";
 import queuePanel from "#ui/video/queue";
-import playListSnapView from "#ui/view/playListSnap";
-import { fewItems, formatTime, getThumbnail, setTitle, updateQueryParam } from "#utils";
+import { fewItems, getThumbnail, setTitle, updateQueryParam } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 
@@ -51,15 +51,8 @@ class PlayListsView implements UiComponent {
             </div>
         `;
 
-        card.addEventListener("click", () => {
-            playListSnapView.loadPlaylist(item._id);
-            playListSnapView.show();
-        });
-
-        card.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-            window.open(window.location.origin + "/?p=" + item._id);
-        });
+        cardHelpers.click(card, item);
+        cardHelpers.rightClick(card, item);
 
         card.querySelector(`[data-id=play]`)!.addEventListener("click", (e) => {
             e.stopPropagation();

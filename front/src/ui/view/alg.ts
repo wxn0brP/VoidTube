@@ -1,16 +1,13 @@
-import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
-import { changeView } from "..";
 import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { AlgEntry } from "#types/video";
-import navBarView from "#ui/navBar";
-import metaControlView from "#ui/video/metaControl";
-import { loadVideo } from "#ui/video/player/status";
-import { fewItems, formatTime, numToLocale, clearQueryParams, updateQueryParam } from "#utils";
-import channelView from "./channel";
+import { cardHelpers } from "#ui/helpers/card";
 import { uiMsg } from "#ui/modal/message";
-import queuePanel from "#ui/video/queue";
+import navBarView from "#ui/navBar";
+import { fewItems, formatTime, numToLocale, updateQueryParam } from "#utils";
+import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
+import { changeView } from "..";
 
 class AlgView implements UiComponent {
     element: HTMLDivElement;
@@ -50,42 +47,12 @@ tags:
 ${entry.tags.map(t => `- ${t}`).join("\n")}
             `.trim();
 
-            card.addEventListener("click", () => {
-                // TODO -
-                // $store.playlistId.set("");
-                // $store.playlist.set([]);
-                // $store.playlistIndex.set(0);
-                clearQueryParams();
-                updateQueryParam("v", entry.id);
-                loadVideo(entry.id);
-            });
-
-            card.addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-                window.open(window.location.origin + "/?v=" + entry.id);
-            });
-
-            card.querySelector(`.author`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                channelView.load(entry.channel);
-            });
-
-            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
-                e.stopPropagation();
-                e.preventDefault();
-                e.shiftKey ? queuePanel.appendToNext(entry.id) : queuePanel.append(entry.id);
-            });
-
-            card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                metaControlView.toggleToPlayList(entry.id, e);
-            });
-
-            card.querySelector(`img`).addEventListener("error", () => {
-                card.querySelector(`img`).style.display = "none";
-            });
+            cardHelpers.click(card, entry);
+            cardHelpers.rightClick(card, entry);
+            cardHelpers.queue(card, entry);
+            cardHelpers.playlist(card, entry);
+            cardHelpers.author(card, entry.channel);
+            cardHelpers.avatarTry(card);
 
             this.container.appendChild(card);
         });
