@@ -6,14 +6,11 @@ import { SponsorSegment } from "#types/sponsorBlock";
 const initData = {
     video: null as VideoInfo,
     videoId: "",
-    nextVideoId: "",
     selectedVideoUrl: "",
     selectedAudioUrl: "",
     videoChannelName: "",
-    playlist: [] as string[],
-    playlistIndex: 0,
-    playlistId: "",
     videoMetaCache: null as { [key: string]: VideoCache },
+    recommendedId: "",
 
     view: {
         video: false,

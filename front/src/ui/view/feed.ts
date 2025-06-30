@@ -47,14 +47,16 @@ class FeedView implements UiComponent {
                         <a href="/?channel=${entry.authorId}">${entry.author}</a>
                     </div>
                     <div class="btns">
+                        <button class="btn" data-id="queue">Queue➕</button>
                         <button button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                     </div>
                 `
 
                 card.addEventListener("click", () => {
-                    $store.playlistId.set("");
-                    $store.playlist.set([]);
-                    $store.playlistIndex.set(0);
+                    // TODO -
+                    // $store.playlistId.set("");
+                    // $store.playlist.set([]);
+                    // $store.playlistIndex.set(0);
                     clearQueryParams();
                     loadVideo(id);
                 });
@@ -68,6 +70,13 @@ class FeedView implements UiComponent {
                     e.stopPropagation();
                     e.preventDefault();
                     channelView.load(entry.authorId);
+                });
+
+
+                card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    queuePanel.append(entry.id);
                 });
 
                 card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {

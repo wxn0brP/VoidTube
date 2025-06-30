@@ -8,6 +8,7 @@ import metaControlView from "#ui/video/metaControl";
 import { loadVideo } from "#ui/video/player/status";
 import { fewItems, formatTime, numToLocale, clearQueryParams, updateQueryParam } from "#utils";
 import channelView from "./channel";
+import queuePanel from "#ui/video/queue";
 
 class SearchView implements UiComponent {
     element: HTMLDivElement;
@@ -37,14 +38,16 @@ class SearchView implements UiComponent {
                     <a href="/?channel=${entry.channel}">${entry.channelName}</a>
                 </div>
                 <div class="btns">
+                    <button class="btn" data-id="queue">Queue➕</button>
                     <button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                 </div>
             `
 
             card.addEventListener("click", () => {
-                $store.playlistId.set("");
-                $store.playlist.set([]);
-                $store.playlistIndex.set(0);
+                // TODO -
+                // $store.playlistId.set("");
+                // $store.playlist.set([]);
+                // $store.playlistIndex.set(0);
                 clearQueryParams();
                 updateQueryParam("v", entry.id);
                 loadVideo(entry.id);
@@ -59,6 +62,12 @@ class SearchView implements UiComponent {
                 e.stopPropagation();
                 e.preventDefault();
                 channelView.load(entry.channel);
+            });
+
+            card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                queuePanel.append(entry.id);
             });
 
             card.querySelector(`[data-id=playlist]`)!.addEventListener("click", async (e) => {

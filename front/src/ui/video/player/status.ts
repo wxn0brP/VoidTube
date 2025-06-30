@@ -11,6 +11,7 @@ import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
 import recommendationPanel from "../recommendations";
 import { emitLastVideo, emitPlay } from "./tabs";
+import queuePanel from "../queue";
 
 export function changePlay() {
     playerView.paused = !playerView.paused;
@@ -74,13 +75,13 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
     updateQueryParam("v", id);
     navBarView.save("video");
 
-    $store.nextVideoId.set("");
     recommendationPanel.render([]);
     const recommendationsCount = +$store.settings.recommendations.get();
-    if (!$store.playlistId.get() && recommendationsCount > 0) {
+    // TODO -
+    if (recommendationsCount > 0) {
         const query = `api recommendations s._id = ${id} s.limit = ${recommendationsCount}`;
         fetchVQL<string[]>(query).then(data => {
-            if (data.length) $store.nextVideoId.set(data[0]);
+            $store.recommendedId.set(data[0]);
             recommendationPanel.render(data);
         });
     }
@@ -94,6 +95,8 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
         appendLastVideos(id);
         emitLastVideo();
     }
+
+    if (!queuePanel.queue.includes(id)) queuePanel.append(id);
 }
 
 export const loadVideo = utils.debounce<typeof loadVideoFn>(loadVideoFn, 200);
