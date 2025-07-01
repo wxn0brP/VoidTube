@@ -8,6 +8,10 @@ import { delay } from "@wxn0brp/flanker-ui/utils";
 export const cardHelpers = {
     click(card: HTMLElement, data: { id?: string, _id?: string }) {
         card.addEventListener("mousedown", async (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            // if button/link is clicked, do nothing
+            if (target.closest("button, .btn, a")) return;
+
             // TODO -
             // $store.playlistId.set("");
             // $store.playlist.set([]);
@@ -44,6 +48,7 @@ export const cardHelpers = {
     playlist(card: HTMLElement, data: { id?: string, _id?: string }) {
         card.querySelector(`[data-id=playlist]`)!.addEventListener("click", (e: MouseEvent) => {
             e.stopPropagation();
+            e.preventDefault();
             metaControlView.toggleToPlayList(data.id || data._id, e);
         });
     },
