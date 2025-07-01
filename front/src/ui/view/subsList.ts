@@ -9,6 +9,7 @@ import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import channelView, { followsFormatter } from "./channel";
 import "./subsList.scss";
+import { filterCards } from "#ui/helpers/card";
 
 class SubsListView implements UiComponent {
     element: HTMLDivElement;
@@ -65,12 +66,7 @@ class SubsListView implements UiComponent {
             this.load();
         }, 100);
 
-        this.searchInput.oninput = () => {
-            const query = this.searchInput.value;
-            this.filterSeeAll();
-            if (!query) return;
-            this.filter(query);
-        }
+        filterCards(this);
     }
 
     async load() {
@@ -94,28 +90,6 @@ many: true
         clearQueryParams();
         queuePanel.queryParams();
         navBarView.save("subs");
-    }
-
-    filterSeeAll() {
-        const cards = this.container.querySelectorAll<HTMLDivElement>(".subCard");
-        cards.forEach(card => {
-            card.style.display = "";
-        });
-    }
-
-    filter(query: string) {
-        const normalizedQuery = query.trim().toLowerCase();
-
-        const cards = this.container.querySelectorAll<HTMLDivElement>(".subCard");
-
-        cards.forEach(card => {
-            const title = card.querySelector("h3")!.textContent!.toLowerCase();
-
-            const dist = levenshtein(normalizedQuery, title);
-            const maxAllowed = Math.floor(title.length * 0.4);
-
-            card.style.display = dist <= maxAllowed || title.includes(normalizedQuery) ? "" : "none";
-        });
     }
 }
 

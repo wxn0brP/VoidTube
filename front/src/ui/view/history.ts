@@ -3,9 +3,9 @@ import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { HistoryEntry } from "#types/video";
-import { cardHelpers } from "#ui/helpers/card";
+import { cardHelpers, filterCards } from "#ui/helpers/card";
 import queuePanel from "#ui/video/queue";
-import { clearQueryParams, fewItems, formatTime, getThumbnail, levenshtein, numToLocale, setTitle } from "#utils";
+import { clearQueryParams, fewItems, formatTime, getThumbnail, numToLocale, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import uiFunc from "../modal";
@@ -109,13 +109,7 @@ class HistoryView implements UiComponent {
         setTimeout(() => {
             this.loadHistory();
         }, window.location.search.length > 0 ? 7_000 : 2_000);
-
-        this.searchInput.oninput = () => {
-            const query = this.searchInput.value;
-            this.filterSeeAll();
-            if (!query) return;
-            this.filter(query);
-        }
+        filterCards(this);
     }
 
     show() {
@@ -125,29 +119,6 @@ class HistoryView implements UiComponent {
         queuePanel.queryParams();
         navBarView.save("history");
     }
-
-    filterSeeAll() {
-        const cards = this.container.querySelectorAll<HTMLDivElement>(".historyCard");
-        cards.forEach(card => {
-            card.style.display = "";
-        });
-    }
-
-    filter(query: string) {
-        const normalizedQuery = query.trim().toLowerCase();
-
-        const cards = this.container.querySelectorAll<HTMLDivElement>(".historyCard");
-
-        cards.forEach(card => {
-            const title = card.querySelector("h3")!.textContent!.toLowerCase();
-
-            const dist = levenshtein(normalizedQuery, title);
-            const maxAllowed = Math.floor(title.length * 0.4);
-
-            card.style.display = dist <= maxAllowed || title.includes(normalizedQuery) ? "" : "none";
-        });
-    }
-
 }
 
 const historyView = new HistoryView();
