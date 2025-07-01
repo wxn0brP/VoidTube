@@ -70,30 +70,55 @@ class MetaControlView implements UiComponent {
 
     public async download() {
         const formats = $store.video.get().formats;
-        const options = formats.map(f => {
-        return `
-            ${f.ext.toUpperCase()} -
-            ${f.is_video ? "Video" : ""}
-            ${f.is_audio && f.is_video ? "+" : ""}
-            ${f.is_audio ? "Audio" : ""}
-            ${f.fileSize ? (f.fileSize / (1024 * 1024)).toFixed(1) + " MB" : ""}
-            ${f.fps ? " - " + f.fps + " FPS" : ""}
-            ${f.resolution ? " - " + f.resolution : ""}
+        const onlyAudio = [];
+        const onlyVideo = [];
+        const other = [];
+
+        formats.map(f => {
+            const option = `
+                ${f.ext.toUpperCase()} -
+                ${f.is_video ? "Video" : ""}
+                ${f.is_audio && f.is_video ? "+" : ""}
+                ${f.is_audio ? "Audio" : ""}
+                ${f.fileSize ? (f.fileSize / (1024 * 1024)).toFixed(1) + " MB" : ""}
+                ${f.fps ? " - " + f.fps + " FPS" : ""}
+                ${f.resolution ? " - " + f.resolution : ""}
             `;
+            if (f.is_audio && !f.is_video) onlyAudio.push([f.url, option]);
+            else if (f.is_video && !f.is_audio) onlyVideo.push([f.url, option]);
+            else other.push([f.url, option]);
         });
-        options.push("Download as mp3");
-        options.push("Download as mp4");
-        options.push("Cancel");
 
-        const urls = formats.map(f => f.url);
-        urls.push("mp3");
-        urls.push("mp4");
-        urls.push("");
+        other.push(["mp3", "Download as mp3"]);
+        other.push(["mp4", "Download as mp4"]);
+        other.push(["Cancel", "Cancel"]);
 
-        const url = await uiFunc.selectPrompt<string>("Select format", options, urls);
-        if (!url || url === "Cancel") return;
+        const url = await uiFunc.selectPrompt<string>({
+            text: "Select format",
+            defaultValue: "mp4",
+            cancelValue: "Cancel",
+            categories: [
+                {
+                    name: "Other",
+                    options: other.map(([_,name]) => name),
+                    values: other.map(([url]) => url),
+                },
+                {
+                    name: "Only Audio",
+                    options: onlyAudio.map(([_,name]) => name),
+                    values: onlyAudio.map(([url]) => url)[0],
+                },
+                {
+                    name: "Only Video",
+                    options: onlyVideo.map(([_,name]) => name),
+                    values: onlyVideo.map(([url]) => url),
+                },
+            ]
+        });
 
-        if (url === "mp3" || url === "mp4") {
+        if (!url || url.toLowerCase() === "cancel") return;
+
+        if (url.toLowerCase() === "mp3" || url.toLowerCase() === "mp4") {
             fetchVQL(`api +download d._id = ${$store.videoId.get()} d.format = ${url}`).then(res => {
                 uiMsg("Downloaded to " + res.path);
             });
