@@ -4,6 +4,14 @@ import ky from "ky";
 
 const cache = new Map();
 
+function padData(num: number, length = 2) {
+    return num.toString().padStart(length, "0");
+}
+
+function formatDate(date: Date) {
+    return `${padData(date.getFullYear(), 4)}${padData(date.getMonth() + 1)}${padData(date.getDate())}`;
+}
+
 export async function fetchQuick(videoId: string) {
     if (cache.has(videoId)) return cache.get(videoId);
     note("fetchQuick", "Fetching", videoId);
@@ -18,11 +26,9 @@ export async function fetchQuick(videoId: string) {
 
     if (!video) throw new Error("videoDetails missing");
 
-    const uploadDate = microformat?.uploadDate;
-    if (uploadDate) {
-        const date = new Date(uploadDate);
-        video.uploadDate = date.getFullYear() + (date.getMonth() + 1) + date.getDate();
-    }
+    let uploadDate = microformat?.uploadDate;
+    if (uploadDate) uploadDate = formatDate(new Date(uploadDate));
+    
     const thumbnails = video.thumbnail?.thumbnails;
     let thumbnailUrl = null;
     if (thumbnails) {
@@ -37,7 +43,7 @@ export async function fetchQuick(videoId: string) {
         duration: parseInt(video.lengthSeconds || "0", 10),
         channel: microformat?.externalChannelId || null,
         views: parseInt(video.viewCount, 10) || 0,
-        uploadDate: microformat?.uploadDate || null,
+        uploadDate: uploadDate || null,
         thumbnail: thumbnailUrl,
         channelName: microformat?.ownerChannelName || ""
     };
