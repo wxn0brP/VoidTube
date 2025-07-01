@@ -6,7 +6,7 @@ export function setDescription(el: HTMLDialogElement, text: string) {
 
     text = text
         .replace(/\>/g, "&gt;") // replace > with &gt; (security)
-        .replace(/(https?:\/\/[^\s]+)/g, url => `<a href="javascript:void(0)" onclick="mgl.openLink('${url}')">${url}</a>`)
+        .replace(/(https?:\/\/[^\s]+)/g, url => `<a href="${url}" onclick="mgl.openLink('${url}', event)">${url}</a>`)
         .replace(/#\s*([^\s#]+)/g, (match, hash) =>
             `<a href="/?query=${encodeURIComponent(hash).trim().replaceAll(" ", "+")}" onclick="mgl.searchShow('${hash}', event)">${match}</a>`
         )

@@ -125,7 +125,6 @@ relations:
             `
 
             cardHelpers.click(card, entry);
-            cardHelpers.rightClick(card, entry);
             cardHelpers.queue(card, entry);
             cardHelpers.playlist(card, entry);
 

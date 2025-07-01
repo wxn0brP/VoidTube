@@ -52,7 +52,6 @@ class PlayListsView implements UiComponent {
         `;
 
         cardHelpers.click(card, item);
-        cardHelpers.rightClick(card, item);
 
         card.querySelector(`[data-id=play]`)!.addEventListener("click", (e) => {
             e.stopPropagation();

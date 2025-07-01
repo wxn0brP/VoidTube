@@ -1,7 +1,8 @@
 import { mgl } from "#mgl";
 import uiFunc from ".";
 
-export async function openLinkPopUp(url: string) {
+export async function openLinkPopUp(url: string, e?: Event) {
+    if (e) e.preventDefault();
     const urlParts = url.split("/");
     if (urlParts.length < 2) return console.error("Invalid URL");
     const urlColored = `${urlParts[0]}//<span style="color: red">${urlParts[2]}</span>/${urlParts.slice(3).join("/")}`;

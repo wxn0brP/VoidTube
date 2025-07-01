@@ -25,15 +25,51 @@ class SearchBarView implements UiComponent {
         this.suggestionsList = document.getElementById("suggestions")!;
 
         this.searchBtn.onclick = this.search.bind(this);
-        this.searchInput.onkeydown = (e) => {
-            if (e.key === "Enter") {
-                this.search();
-            }
-        };
+        let selectedSuggestionIndex = -1;
 
-        this.searchInput.addEventListener("input", () => {
-            const query = this.searchInput.value.trim();
-            this.handleAutocomplete(query);
+        this.searchInput.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowRight") return;
+
+            const items = Array.from(this.suggestionsList.querySelectorAll("li"));
+
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                if (items.length === 0) return;
+
+                selectedSuggestionIndex = (selectedSuggestionIndex + 1) % items.length;
+                this.updateSuggestionHighlight(items, selectedSuggestionIndex);
+            }
+
+            if (e.key === "ArrowUp") {
+                e.preventDefault();
+                if (items.length === 0) return;
+
+                selectedSuggestionIndex = (selectedSuggestionIndex - 1 + items.length) % items.length;
+                this.updateSuggestionHighlight(items, selectedSuggestionIndex);
+            }
+
+            if (e.key === "Enter") {
+                if (selectedSuggestionIndex >= 0 && items[selectedSuggestionIndex]) {
+                    e.preventDefault();
+                    const selectedText = items[selectedSuggestionIndex].textContent?.replace(/X$/, "").trim();
+                    if (selectedText) {
+                        this.searchInput.value = selectedText;
+                        this.hideSuggestions();
+                        this.search();
+                    }
+                } else {
+                    this.search();
+                }
+            }
+
+            // reset selection and show suggestions when user types
+            if (["ArrowDown", "ArrowUp", "Enter"].includes(e.key) === false) {
+                selectedSuggestionIndex = -1;
+                this.updateSuggestionHighlight(items, -1);
+
+                const query = this.searchInput.value.trim();
+                this.handleAutocomplete(query);
+            }
         });
 
         this.searchInput.addEventListener("focus", () => {
@@ -53,6 +89,7 @@ class SearchBarView implements UiComponent {
     public async search() {
         const titleOrUrl = this.searchInput.value.trim();
         if (!titleOrUrl) return;
+        this.hideSuggestions();
 
         if (titleOrUrl.startsWith("https://")) {
             const id = getYouTubeVideoId(titleOrUrl);
@@ -131,7 +168,7 @@ class SearchBarView implements UiComponent {
                 remove.addEventListener("click", async (e) => {
                     e.stopPropagation();
                     e.preventDefault();
-                    
+
                     const confirm = await uiFunc.confirm("Are you sure you want to remove this search from history?");
                     if (!confirm) return;
 
@@ -164,6 +201,17 @@ class SearchBarView implements UiComponent {
     hideSuggestions() {
         this.suggestionsList.innerHTML = "";
         this.suggestionsList.style.display = "none";
+    }
+
+    private updateSuggestionHighlight(items: Element[], index: number) {
+        items.forEach((el, i) => {
+            if (i === index) {
+                el.classList.add("active");
+                el.scrollIntoView({ block: "nearest" });
+            } else {
+                el.classList.remove("active");
+            }
+        });
     }
 
     async loadSearchHistory() {
