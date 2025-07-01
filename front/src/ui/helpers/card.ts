@@ -2,7 +2,7 @@ import metaControlView from "#ui/video/metaControl";
 import { loadVideo } from "#ui/video/player/status";
 import queuePanel from "#ui/video/queue";
 import channelView from "#ui/view/channel";
-import { clearQueryParams } from "#utils";
+import { clearQueryParams, levenshtein } from "#utils";
 import { delay } from "@wxn0brp/flanker-ui/utils";
 
 export const cardHelpers = {
@@ -60,5 +60,47 @@ export const cardHelpers = {
         card.querySelector(`img`).addEventListener("error", () => {
             card.querySelector(`img`).style.display = "none";
         });
+    }
+}
+
+export interface filterSettings {
+    container: HTMLDivElement,
+    searchInput: HTMLInputElement,
+    selector?: string,
+    match?: number
+}
+
+function filterSeeAll({ container, selector }: filterSettings) {
+    const cards = container.querySelectorAll<HTMLDivElement>(selector);
+    cards.forEach(card => card.style.display = "");
+}
+
+function filter({ container, selector, match }: filterSettings, query: string) {
+    const normalizedQuery = query.trim().toLowerCase();
+
+    const cards = container.querySelectorAll<HTMLDivElement>(selector);
+
+    cards.forEach(card => {
+        const title = card.querySelector("h3")!.textContent!.toLowerCase();
+
+        const dist = levenshtein(normalizedQuery, title);
+        const maxAllowed = Math.floor(title.length * match);
+
+        card.style.display = dist <= maxAllowed || title.includes(normalizedQuery) ? "" : "none";
+    });
+}
+
+export function filterCards(settings: filterSettings) {
+    settings = {
+        match: 0.4,
+        selector: ".card",
+        ...settings
+    };
+
+    settings.searchInput.oninput = () => {
+        const query = settings.searchInput.value;
+        filterSeeAll(settings);
+        if (!query) return;
+        filter(settings, query);
     }
 }
