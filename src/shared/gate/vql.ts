@@ -1,5 +1,5 @@
 import { seeLogs } from "#echo/logger";
-import { getChannelVideos, getPlaylistIds, searchVideo } from "#relay/apiBack";
+import { getChannelVideos, getPlaylistIds, getPlaylistInfo, searchVideo } from "#relay/apiBack";
 import { getFeed, getQuickFeed } from "#relay/feed";
 import { getRecommended } from "#relay/getRecommended";
 import { createValtheraAdapter } from "@wxn0brp/vql";
@@ -50,7 +50,7 @@ export const YouTubeAdapter = createValtheraAdapter({
 
     async find(collection, search) {
         try {
-            if (collection === "playlist") return await getPlaylistIds(search.url || search._id);
+            if (collection === "playlistIds") return await getPlaylistIds(search.url || search._id);
             if (collection === "recommendations") return await getRecommended(search.url || search._id, search.limit || 10);
             if (collection === "video-static") return await retrieveVideoData$(search);
             if (collection === "channelVideos") return await getChannelVideos(search.url || search._id, search.flat ?? true);
@@ -58,6 +58,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "quickFeed") return await getQuickFeed();
             if (collection === "video-static-quick") return await fetchQuickCache$(search);
             if (collection === "suggestions") return await getSuggestions(search.q || search.query, search.hl || "en", search.gl || "US");
+            if (collection === "playlist") return await getPlaylistInfo(search.url || search._id);
         } catch (e) {
             console.error(e);
         }

@@ -1,4 +1,4 @@
-import { PlaylistEntry, PlaylistsEntry } from "#types/video";
+import { PlaylistEntry, PlaylistsEntry, PlaylistSnapEntry } from "#types/video";
 import { getThumbnail } from "#utils";
 import { fetchVQL } from ".";
 
@@ -65,7 +65,7 @@ export async function fetchPlaylistsContainingVideo(videoId: string) {
     return contains;
 }
 
-export async function fetchPlaylistSnap(id: string) {
+export async function fetchPlaylistSnap(id: string): Promise<PlaylistSnapEntry[]> {
     const query = `
 playlist ${id}
 relations:
@@ -90,4 +90,39 @@ select:
 `
     const data = await fetchVQL(query);
     return data;
+}
+
+export async function fetchPlaylistSnapYouTube(id: string): Promise<PlaylistSnapEntry[]> {
+    const data = await fetchVQL("api playlist s._id = " + id);
+
+    const historyMap = new Map<string, number>();
+    const ids = data.map(entry => entry.id);
+
+    const history = await fetchVQL({
+        query: `user history s.$in._id = $ids`,
+        var: {
+            ids
+        }
+    });
+
+    history.forEach(entry => historyMap.set(entry._id, entry.time));
+
+    return data.map(entry => {
+        const snap: PlaylistSnapEntry = {
+            _id: entry.id,
+            time: 0,
+            info: {
+                title: entry.title,
+                // channel: entry.channel,
+                // channelName: entry.channelName,
+                thumbnail: entry.thumbnail,
+                duration: entry.duration,
+                views: entry.views
+            },
+            history: {
+                time: historyMap.get(entry.id)
+            }
+        }
+        return snap;
+    });
 }

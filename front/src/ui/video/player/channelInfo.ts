@@ -1,7 +1,8 @@
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
 import { ChannelInfo } from "#types/channel";
-import channelView, { followsFormatter, thumbnailMiddle } from "#ui/view/channel";
+import channelView, { thumbnailMiddle } from "#ui/view/channel";
+import { number2HumanFormatter } from "#utils";
 import { loadMediaSession } from "./status";
 
 export function setupChannelInfo() {
@@ -16,7 +17,7 @@ export function setupChannelInfo() {
         $store.videoChannelName.set(channelData.name);
         img.src = thumbnailMiddle + channelData.avatar;
         name.innerHTML = channelData.name;
-        subs.innerHTML = followsFormatter.format(channelData.subscribers) + " subscribers";
+        subs.innerHTML = number2HumanFormatter.format(channelData.subscribers) + " subscribers";
         loadMediaSession();
     });
 

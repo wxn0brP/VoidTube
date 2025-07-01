@@ -55,8 +55,8 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
                 ext: format.ext,
                 fps: format.fps,
                 fileSize: format.filesize,
-                is_video: format.vcodec !== 'none',
-                is_audio: format.acodec !== 'none',
+                is_video: format.vcodec !== "none",
+                is_audio: format.acodec !== "none",
             }));
 
         return {
@@ -123,17 +123,17 @@ export async function download(url: string, format: string, dir: string) {
 
         note("scraper", "download", url);
 
-        const outputTemplate = dir + '/%(title)s.%(ext)s';
+        const outputTemplate = dir + "/%(title)s.%(ext)s";
 
         const opts: string[] = [
             '--output', "'" + outputTemplate + "'",
         ]
         if (format == "mp3") {
-            opts.push('--extract-audio');
-            opts.push('--audio-format', 'mp3');
-            opts.push('--audio-quality', '256K');
+            opts.push("--extract-audio");
+            opts.push("--audio-format", "mp3");
+            opts.push("--audio-quality", "256K");
         } else {
-            opts.push('--format', "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4");
+            opts.push("--format", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4");
         }
 
         await wrapper<string>(url, {
@@ -176,34 +176,38 @@ export async function getChannelInfo(channelUrl: string) {
             subscribers: result.channel_subscribers_count || result.channel_follower_count,
         };
     } catch (error) {
-        console.error('Error while fetching channel info:', error.message);
+        console.error("Error while fetching channel info:", error.message);
         throw error;
     }
 }
 
-// export async function getPlaylistInfo(playlistUrl: string) {
-//     try {
-//         const opts = Object.assign({}, options, { flatPlaylist: true, });
+export async function getPlaylistInfo(playlistUrl: string) {
+    try {
+        const opts = Object.assign({}, options, { flatPlaylist: true, });
 
-//         if (!playlistUrl.startsWith("https://www.youtube.com/playlist?list=")) {
-//             playlistUrl = `https://www.youtube.com/playlist?list=${playlistUrl}`;
-//         }
+        if (!playlistUrl.startsWith("https://www.youtube.com/playlist?list=")) {
+            playlistUrl = `https://www.youtube.com/playlist?list=${playlistUrl}`;
+        }
 
-//         const result = await wrapper(playlistUrl, opts);
-//         // @ts-ignore
-//         console.log(result.entries);
-//         // @ts-ignore
-//         return result.entries.map(entry => ({
-//             title: entry.title,
-//             url: entry.url,
-//             thumbnail: entry.thumbnail,
-//             duration: entry.duration,
-//         }));
-//     } catch (error) {
-//         console.error('Error while fetching playlist info:', error.message);
-//         throw error;
-//     }
-// }
+        note("scraper", "getPlaylistInfo", playlistUrl);
+
+        const result = await wrapper(playlistUrl, opts);
+        // @ts-ignore
+        return result.entries.map(entry => ({
+            id: entry.id,
+            title: entry.title,
+            url: entry.url,
+            channel: entry.channel_id,
+            channelName: entry.channel || entry.uploader,
+            thumbnail: entry.thumbnails[entry.thumbnails.length - 1].url,
+            duration: entry.duration,
+            views: entry.view_count
+        }));
+    } catch (error) {
+        console.error("Error while fetching playlist info:", error.message);
+        throw error;
+    }
+}
 
 export async function getChannelVideos(channelUrl: string, flat: boolean = true) {
     try {
@@ -227,7 +231,7 @@ export async function getChannelVideos(channelUrl: string, flat: boolean = true)
             views: entry.view_count,
         }));
     } catch (error) {
-        console.error('Error while fetching channel videos:', error.message);
+        console.error("Error while fetching channel videos:", error.message);
         throw error;
     }
 }

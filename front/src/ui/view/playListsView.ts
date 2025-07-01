@@ -3,7 +3,6 @@ import { fetchPlaylists } from "#api/playlist";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { PlaylistsEntry } from "#types/video";
-import { cardHelpers } from "#ui/helpers/card";
 import uiFunc from "#ui/modal";
 import playListsModal from "#ui/modal/playlists";
 import navBarView from "#ui/navBar";
@@ -11,6 +10,7 @@ import queuePanel from "#ui/video/queue";
 import { fewItems, getThumbnail, setTitle, updateQueryParam } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
+import playListSnapView from "./playListSnap";
 
 class PlayListsView implements UiComponent {
     element: HTMLDivElement;
@@ -51,7 +51,10 @@ class PlayListsView implements UiComponent {
             </div>
         `;
 
-        cardHelpers.click(card, item);
+        card.addEventListener("click", () => {
+            playListSnapView.loadPlaylist(item._id);
+            playListSnapView.show();
+        });
 
         card.querySelector(`[data-id=play]`)!.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -141,7 +144,7 @@ class PlayListsView implements UiComponent {
                 const url = new URL(playlistUrl);
                 const listId = url.searchParams.get("list");
 
-                ids = await fetchVQL<string[]>(`api playlist s._id = ${listId}`);
+                ids = await fetchVQL<string[]>(`api playlistIds s._id = ${listId}`);
             } else if (from === "URLs/IDs") {
                 const playlistUrls = await uiFunc.prompt("Playlist URLs/IDs");
                 if (!playlistUrls) return;
