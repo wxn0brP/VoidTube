@@ -3,7 +3,7 @@ import { $store } from "#store";
 import { ChannelInfo, ChannelVideo } from "#types/channel";
 import { cardHelpers } from "#ui/helpers/card";
 import { uiMsg } from "#ui/modal/message";
-import { clearQueryParams, formatTime, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { clearQueryParams, formatTime, number2HumanFormatter, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import navBarView from "../navBar";
@@ -11,11 +11,6 @@ import "./channel.scss";
 
 export const thumbnailMiddle = "/avatar?link=";
 
-export const followsFormatter = new Intl.NumberFormat(undefined, {
-    notation: "compact",
-    compactDisplay: "short",
-    maximumFractionDigits: 1,
-});
 
 class ChannelView implements UiComponent {
     element: HTMLDivElement;
@@ -31,7 +26,7 @@ class ChannelView implements UiComponent {
 
     render(data: ChannelInfo) {
         this.name.innerHTML = data.name;
-        this.subscriptions.innerHTML = `${followsFormatter.format(data.subscribers || 0)} subscribers`;
+        this.subscriptions.innerHTML = `${number2HumanFormatter.format(data.subscribers || 0)} subscribers`;
         this.info.innerHTML = `<p>${data.description.replace(/\n/g, "<br>")}</p>`;
         this.videos.innerHTML = "";
 

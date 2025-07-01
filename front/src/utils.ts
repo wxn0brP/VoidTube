@@ -90,3 +90,9 @@ export function getThumbnail(data: string, id: string) {
     if (data.startsWith("http")) return data;
     return "https://i.ytimg.com/vi/" + id + "/" + data + ".jpg";
 }
+
+export const number2HumanFormatter = new Intl.NumberFormat(undefined, {
+    notation: "compact",
+    compactDisplay: "short",
+    maximumFractionDigits: 1,
+});

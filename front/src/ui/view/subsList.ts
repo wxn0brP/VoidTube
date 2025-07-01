@@ -2,14 +2,14 @@ import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UserSub } from "#types/channel";
+import { filterCards } from "#ui/helpers/card";
 import navBarView from "#ui/navBar";
 import queuePanel from "#ui/video/queue";
-import { clearQueryParams, levenshtein, setTitle } from "#utils";
+import { clearQueryParams, number2HumanFormatter, setTitle } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
-import channelView, { followsFormatter } from "./channel";
+import channelView from "./channel";
 import "./subsList.scss";
-import { filterCards } from "#ui/helpers/card";
 
 class SubsListView implements UiComponent {
     element: HTMLDivElement;
@@ -34,7 +34,7 @@ class SubsListView implements UiComponent {
             card.innerHTML = `
                 <div style="background-image: url(${sub.channel.avatar})" class="img"></div>
                 <h3 title="${sub.channel.name}">${sub.channel.name}</h3>
-                <span>${followsFormatter.format(sub.channel.subscribers)} subs</span>
+                <span>${number2HumanFormatter.format(sub.channel.subscribers)} subs</span>
             `;
             this.container.appendChild(card);
 

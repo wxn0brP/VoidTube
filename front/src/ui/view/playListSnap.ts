@@ -1,8 +1,8 @@
-import { fetchPlaylistSnap } from "#api/playlist";
+import { fetchPlaylistSnap, fetchPlaylistSnapYouTube } from "#api/playlist";
 import { $store } from "#store";
 import { PlaylistSnapEntry } from "#types/video";
 import { cardHelpers } from "#ui/helpers/card";
-import { fewItems, formatTime, getThumbnail, numToLocale, setTitle, updateQueryParam } from "#utils";
+import { fewItems, formatTime, getThumbnail, number2HumanFormatter, numToLocale, setTitle, updateQueryParam } from "#utils";
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import navBarView from "../navBar";
@@ -28,7 +28,7 @@ class PlayListSnapView implements UiComponent {
                 <div style="background-image: url(${getThumbnail(entry.info.thumbnail, entry._id)})" class="img"></div>
                 <h3 title="${entry.info.title}">${entry.info.title}</h3>
                 ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
-                ${numToLocale(entry.info.views)} views -
+                ${number2HumanFormatter.format(entry.info.views)} views
                 <div class="btns">
                     <button class="btn" data-id="queue">Queue➕</button>
                     <button button title="Playlist" class="btn" data-id="playlist">📂</button>
@@ -62,6 +62,11 @@ class PlayListSnapView implements UiComponent {
 
     async loadPlaylist(id: string) {
         const playlist = await fetchPlaylistSnap(id);
+        this.render(playlist);
+    }
+
+    async loadYoutubePlaylist(id: string) {
+        const playlist = await fetchPlaylistSnapYouTube(id);
         this.render(playlist);
     }
 }

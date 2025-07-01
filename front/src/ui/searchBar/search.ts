@@ -1,5 +1,6 @@
 import { searchVideo } from "#api/video";
 import { loadVideo } from "#ui/video/player/status";
+import playListSnapView from "#ui/view/playListSnap";
 import searchView from "#ui/view/search";
 import { getYouTubeVideoId, updateQueryParam, clearQueryParams, setTitle } from "#utils";
 import { SearchBarView } from ".";
@@ -12,9 +13,15 @@ export async function search(cmp: SearchBarView) {
     hideSuggestions(cmp);
 
     if (titleOrUrl.startsWith("https://")) {
-        const id = getYouTubeVideoId(titleOrUrl);
-        updateQueryParam("v", id);
-        loadVideo(id);
+        const url = new URL(titleOrUrl);
+        const playlist = url.searchParams.get("list");
+        if (playlist) {
+            playListSnapView.loadYoutubePlaylist(playlist).then(playListSnapView.show);
+        } else {
+            const id = getYouTubeVideoId(titleOrUrl);
+            updateQueryParam("v", id);
+            loadVideo(id);
+        }
         return;
     }
 
