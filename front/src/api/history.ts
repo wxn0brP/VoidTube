@@ -14,7 +14,7 @@ export async function fetchVideoHistoryTime(id: string): Promise<number> {
     return res.watched ? res.time : 0;
 }
 
-export async function fetchHistory(options?: VQLFind["options"]) {
+export async function fetchHistory(options?: VQLFind["options"], id?: string) {
     const query = `
 user history
 relations:
@@ -30,6 +30,7 @@ relations:
 many: true
 search:
   watched: true
+  ${id ? `_id: ${id}` : ""}
 ${options ? `
 options:
   ${Object.entries(options).map(([key, value]) => `${key}: ${value}`).join("\n  ")}

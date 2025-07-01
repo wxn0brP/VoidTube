@@ -8,8 +8,15 @@ class AsideView implements UiComponent {
     mount(): void {
         this.element = document.querySelector<HTMLDivElement>("aside")!;
 
-        this.element.querySelector<HTMLButtonElement>("#show-history-button").addEventListener("dblclick", () => {
-            historyView.loadHistory();
+        const showHistoryBtn = this.element.querySelector<HTMLButtonElement>("#show-history-button");
+        showHistoryBtn.addEventListener("dblclick", () => {
+            historyView.clearAndLoad(32);
+        });
+        showHistoryBtn.addEventListener("mousedown", (e: MouseEvent) => {
+            if (e.button === 1) {
+                e.preventDefault();
+                historyView.clearAndLoad(0);
+            }
         });
 
         this.element.querySelector<HTMLButtonElement>("#show-playlists-button").addEventListener("dblclick", () => {
