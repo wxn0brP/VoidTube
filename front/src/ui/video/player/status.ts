@@ -69,7 +69,8 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
     playerView.videoEl.currentTime = 0;
 
     fetchVQL(`user updateOneOrAdd history s._id=${id} u.watched=true u.last=${Math.floor(Date.now() / 1000)}`).then(() => {
-        historyView.loadHistory(); // refresh history
+        // historyView.loadHistory(); // refresh history
+        historyView.appendLastVideo(id);
     });
     changeView("video");
     updateQueryParam("v", id);
