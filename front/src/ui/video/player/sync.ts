@@ -28,8 +28,12 @@ export function getNextVideoId() {
     const index = queuePanel.queueIndex + 1;
     if (index >= length) {
         if ($store.queueLoop.get()) return queuePanel.queue[0];
-        else if($store.recommendedId.get()) return $store.recommendedId.get();
-        else return null;
+        else if($store.recommendedId.get()) {
+            const id = $store.recommendedId.get();
+            const index = queuePanel.queue.indexOf(id);
+            if (index !== -1) queuePanel.append(id);
+            return id;
+        } else return null;
     }
 
     return queuePanel.queue[index];
