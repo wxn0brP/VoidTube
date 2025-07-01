@@ -120,10 +120,12 @@ class PlayListsView implements UiComponent {
         };
 
         this.importPlaylistBtn.onclick = async () => {
-            const from = await uiFunc.selectPrompt(
-                "Import playlist from",
-                ["YouTube", "URLs/IDs", "VoidTube", "FreeTube", "Cancel"]
-            );
+            const from = await uiFunc.selectPrompt({
+                text: "Import playlist from",
+                options: ["YouTube", "URLs/IDs", "VoidTube", "FreeTube", "Cancel"],
+                defaultValue: "YouTube",
+                cancelValue: "Cancel"
+            });
             if (!from || from === "Cancel") return;
 
             let ids = [];

@@ -1,6 +1,16 @@
 export const promptDiv = document.querySelector<HTMLDivElement>("#prompt");
 import "./openLink";
 
+export interface uiFunc_Select {
+    text: string;
+    options?: string[];
+    optionsValues?: string[];
+    categories?: { name: string; options: string[], values?: string }[];
+    defaultValue?: string;
+    cancelValue?: string;
+    cancelText?: string;
+}
+
 const uiFunc = {
     prompt(text: string, defaultValue: string = ""): Promise<string> {
         return new Promise((resolve) => {
@@ -40,7 +50,7 @@ const uiFunc = {
         });
     },
 
-    confirm(text: string, yesText: string="OK", noText: string="Cancel"): Promise<boolean> {
+    confirm(text: string, yesText: string = "OK", noText: string = "Cancel"): Promise<boolean> {
         return new Promise((resolve) => {
             function end(accept: boolean) {
                 return () => {
@@ -77,48 +87,78 @@ const uiFunc = {
         });
     },
 
-    selectPrompt<T>(text: string, options, optionsValues = [], categories: { name: string; options: T[], value?: T }[] = []): Promise<string | T> {
+    selectPrompt<T = string>(opts: uiFunc_Select): Promise<T> {
         return new Promise((resolve) => {
-            function end() {
-                resolve(select.value);
+            function end(value: string) {
+                resolve(value as T);
                 div.fadeOut();
                 setTimeout(() => {
                     div.remove();
                 }, 2000);
             }
 
+            const {
+                text,
+                options = [],
+                optionsValues = [],
+                categories = [],
+                defaultValue,
+                cancelValue,
+                cancelText
+            } = opts;
+
             const div = document.createElement("div");
             div.style.opacity = "0";
             div.classList.add("prompt");
             div.innerHTML = "<p>" + text + "<p><br />";
             const select = document.createElement("select");
-            for (let i = 0; i < categories.length; i++) {
-                const category = categories[i];
-                const selectElement = document.createElement("optgroup");
-                selectElement.label = category.name;
-                for (let j = 0; j < category.options.length; j++) {
-                    const optionElement = document.createElement("option");
-                    optionElement.value = category.options[j] as string || category.options[j] as string;
-                    optionElement.innerHTML = category.options[j] as string;
-                    selectElement.appendChild(optionElement);
+
+            if (categories?.length > 0) {
+                for (let i = 0; i < categories.length; i++) {
+                    const category = categories[i];
+                    const selectElement = document.createElement("optgroup");
+                    selectElement.label = category.name;
+                    for (let j = 0; j < category.options.length; j++) {
+                        const optionElement = document.createElement("option");
+                        optionElement.value = category.values[j] as string || category.options[j] as string;
+                        optionElement.innerHTML = category.options[j] as string;
+                        selectElement.appendChild(optionElement);
+                    }
+                    select.appendChild(selectElement);
                 }
-                select.appendChild(selectElement);
             }
-            for (let i = 0; i < options.length; i++) {
-                const optionElement = document.createElement("option");
-                optionElement.value = optionsValues[i] || options[i];
-                optionElement.innerHTML = options[i];
-                select.appendChild(optionElement);
+
+            if (options?.length > 0) {
+                for (let i = 0; i < options.length; i++) {
+                    const optionElement = document.createElement("option");
+                    optionElement.value = optionsValues[i] || options[i];
+                    optionElement.innerHTML = options[i];
+                    select.appendChild(optionElement);
+                }
             }
-            select.querySelector("option").selected = true;
+
+            if (defaultValue) {
+                const ele = select.querySelector<HTMLOptionElement>("option[value='" + defaultValue + "']");
+                if (ele) ele.selected = true;
+            } else {
+                select.querySelector("option").selected = true;
+            }
 
             div.appendChild(select);
             div.appendChild(document.createElement("br"));
 
+            if (cancelValue || defaultValue) {
+                const cancel = document.createElement("button");
+                cancel.css("margin-right", "10px");
+                cancel.innerHTML = cancelText || "Cancel";
+                cancel.addEventListener("click", () => end(cancelValue || defaultValue));
+                div.appendChild(cancel);
+            }
+
             const btn = document.createElement("button");
             btn.innerHTML = "OK";
             div.appendChild(btn);
-            btn.addEventListener("click", end);
+            btn.addEventListener("click", () => end(select.value));
 
             promptDiv.appendChild(div);
             div.fadeIn();
