@@ -27,8 +27,10 @@ export function getNextVideoId() {
     const length = queuePanel.queue.length;
     const index = queuePanel.queueIndex + 1;
     if (index >= length) {
-        if ($store.queueLoop.get()) return queuePanel.queue[0];
-        else if($store.recommendedId.get()) {
+        if ($store.queueLoop.get()) {
+            queuePanel.queueIndex = 0;
+            return queuePanel.queue[0];
+        } else if($store.recommendedId.get()) {
             const id = $store.recommendedId.get();
             const index = queuePanel.queue.indexOf(id);
             if (index !== -1) queuePanel.append(id);
@@ -60,8 +62,10 @@ export function playPrev() {
     if (length) {
         let prev = --queuePanel.queueIndex;
         if (prev < 0) {
-            if ($store.queueLoop.get()) prev = length - 1;
-            else {
+            if ($store.queueLoop.get()) {
+                prev = length - 1;
+                queuePanel.queueIndex = prev;
+            } else {
                 prev = 0;
                 queuePanel.queueIndex = 0;
             }
