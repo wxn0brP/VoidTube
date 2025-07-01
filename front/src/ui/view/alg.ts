@@ -48,7 +48,6 @@ ${entry.tags.map(t => `- ${t}`).join("\n")}
             `.trim();
 
             cardHelpers.click(card, entry);
-            cardHelpers.rightClick(card, entry);
             cardHelpers.queue(card, entry);
             cardHelpers.playlist(card, entry);
             cardHelpers.author(card, entry.channel);

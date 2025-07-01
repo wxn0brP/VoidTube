@@ -6,6 +6,7 @@ import { getThumbnail, formatTime } from "#utils";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import metaControlView from "./metaControl";
 import queuePanel from "./queue";
+import { cardHelpers } from "#ui/helpers/card";
 
 class RecommendationPanel implements UiComponent {
     element: HTMLDivElement;
@@ -48,32 +49,14 @@ class RecommendationPanel implements UiComponent {
                     </div>
                 `;
 
-                card.querySelector(`[data-id=playlist]`)!.addEventListener("click", (e) => {
-                    e.stopPropagation();
-                    metaControlView.toggleToPlayList(_id, e);
-                });
-
-                card.querySelector(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    e.shiftKey ? queuePanel.appendToNext(_id) : queuePanel.append(_id);
-                });
-                
-                card.querySelector(`img`).addEventListener("error", () => {
-                    card.querySelector(`img`).style.display = "none";
-                });
+                cardHelpers.playlist(card, { _id });
+                cardHelpers.queue(card, { _id });
+                cardHelpers.author(card, item.channel);
+                cardHelpers.avatarTry(card);
             }
 
             this.element.appendChild(card);
-
-            card.onclick = () => {
-                loadVideo(_id);
-            };
-
-            card.oncontextmenu = (e) => {
-                e.preventDefault();
-                window.open(window.location.origin + "/?v=" + _id);
-            };
+            cardHelpers.click(card, { _id });
 
             html({} as any);
             setTimeout(() => fetchVQL(`api video-static-quick! s._id = ${_id}`).then(html), i * 10);

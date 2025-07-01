@@ -57,7 +57,6 @@ class HistoryView implements UiComponent {
                 `
 
                 cardHelpers.click(card, entry);
-                cardHelpers.rightClick(card, entry);
                 cardHelpers.author(card, entry.info.channel);
                 cardHelpers.queue(card, entry);
                 cardHelpers.playlist(card, entry);

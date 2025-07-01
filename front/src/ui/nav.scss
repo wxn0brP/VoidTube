@@ -82,7 +82,8 @@ nav {
             display: flex;
             justify-content: space-between;
 
-            &:hover {
+            &:hover,
+            &.active {
                 text-decoration: underline;
             }
         }

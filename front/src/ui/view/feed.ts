@@ -51,7 +51,6 @@ class FeedView implements UiComponent {
                 `;
 
                 cardHelpers.click(card, entry);
-                cardHelpers.rightClick(card, entry);
                 cardHelpers.author(card, entry.authorId);
                 cardHelpers.queue(card, entry);
                 cardHelpers.playlist(card, entry);
