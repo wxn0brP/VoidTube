@@ -23,6 +23,8 @@ export function setupBar() {
     const fullscreenBtn = playerView.bar.querySelector<HTMLButtonElement>(".fullscreen-btn");
     const loopQueue = playerView.bar.querySelector<HTMLInputElement>("#loop-queue");
     $store.queueLoop.set(loopQueue.checked);
+    const audioFadeEnabled = playerView.bar.querySelector<HTMLInputElement>("#audio-fade");
+    uiHelpers.watchCheckbox(audioFadeEnabled, $store.settings.audioFadeEnabled);
 
     playerView.bar.querySelector("#previous-video")!.addEventListener("click", () => playPrev());
     playerView.bar.querySelector("#next-video")!.addEventListener("click", () => playNext());

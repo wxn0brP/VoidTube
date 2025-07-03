@@ -63,6 +63,21 @@ export const settingsData: Setting[] = [
         storeField: $store.settings.antiRecommendationLoop,
     },
     {
+        type: "checkbox",
+        id: "app_audioFade",
+        text: "Audio Fade Enabled",
+        storeField: $store.settings.audioFadeEnabled,
+    },
+    {
+        type: "input",
+        id: "app_audioFade",
+        text: "Audio Fade Time",
+        storeField: $store.settings.audioFade,
+        input_type: "number",
+        min: 0,
+        max: 3_000,
+    },
+    {
         type: "button",
         onClick: () => {
             fetchVQL("api seeLogs! s._id=1");
