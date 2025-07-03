@@ -23,6 +23,7 @@ import algView from "./view/alg";
 import subsListView from "./view/subsList";
 import queuePanel from "./video/queue";
 import recommendationPanel from "./video/recommendations";
+import queueView from "./view/queues";
 
 export const components = [
     playerView,
@@ -48,6 +49,7 @@ export const components = [
     messageView,
     algView,
     subsListView,
+    queueView,
 ]
 
 components.forEach(component => component.mount());

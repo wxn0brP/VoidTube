@@ -2,6 +2,7 @@ import { createStore } from "@wxn0brp/flanker-ui";
 import { mgl } from "../mgl";
 import { PlaylistsEntry, VideoCache, VideoInfo } from "../types/video";
 import { SponsorSegment } from "#types/sponsorBlock";
+import { generateName } from "#utils/names";
 
 const initData = {
     video: null as VideoInfo,
@@ -24,8 +25,10 @@ const initData = {
         settings: false,
         alg: false,
         subs: false,
+        queues: false
     },
     loader: 0,
+    queueGroup: generateName(),
 
     playlistsCache: [] as PlaylistsEntry[],
     channelId: "",

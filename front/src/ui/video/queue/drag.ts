@@ -1,5 +1,6 @@
 import { $store } from "#store";
 import { QueuePanel } from ".";
+import { emitQueueMessage } from "./sync";
 
 let draggingId: string | null = null;
 
@@ -43,6 +44,7 @@ export function handleDrop(cmp: QueuePanel) {
             const index = cmp.queue.indexOf(cardId);
             cmp.queueIndex = index;
         }
+        emitQueueMessage("post", { q: cmp.queue });
     }
     draggingId = null;
     setTimeout(() => {
