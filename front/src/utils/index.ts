@@ -86,6 +86,7 @@ export function numToLocale(num: number) {
 
 export function getThumbnail(data: string, id: string) {
     if (!id) return "/favicon.svg";
+    if (data === "/favicon.svg") return "/favicon.svg";
     if (!data) return "https://i.ytimg.com/vi/" + id + "/maxresdefault.jpg";
     if (data.startsWith("http")) return data;
     return "https://i.ytimg.com/vi/" + id + "/" + data + ".jpg";

@@ -6,14 +6,20 @@ import { fewItems, formatTime, getThumbnail, number2HumanFormatter, numToLocale,
 import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 import navBarView from "../navBar";
+import playListsModal from "#ui/modal/playlists";
+import { fetchVQL } from "@wxn0brp/vql-client";
+import playListsView from "./playListsView";
+import { uiMsg } from "#ui/modal/message";
 
 class PlayListSnapView implements UiComponent {
     element: HTMLDivElement;
     container: HTMLDivElement;
+    ids: string[] = [];
 
     render(data: PlaylistSnapEntry[]) {
         this.container.innerHTML = "";
         fewItems(this.container, data.length);
+        this.ids = data.map(entry => entry._id);
 
         if (!data.length) {
             this.container.innerHTML = `<h1 style="text-align: center;">No Videos</h1>`;
@@ -50,6 +56,10 @@ class PlayListSnapView implements UiComponent {
         this.container = this.element.querySelector("#playlist-snap-container")!;
         uiHelpers.storeHide(this.element, $store.view.playlistSnap);
         $store.view.playlistSnap.set(false);
+
+        this.element.querySelector("#save-snap-playlist").addEventListener("click", () => {
+            this.saveTo();
+        });
     }
 
     show() {
@@ -63,11 +73,31 @@ class PlayListSnapView implements UiComponent {
     async loadPlaylist(id: string) {
         const playlist = await fetchPlaylistSnap(id);
         this.render(playlist);
+
     }
 
     async loadYoutubePlaylist(id: string) {
         const playlist = await fetchPlaylistSnapYouTube(id);
         this.render(playlist);
+    }
+
+    async saveTo() {
+        if (!this.ids.length) {
+            uiMsg("No available videos");
+            return;
+        }
+
+        const playlist = await new Promise(r => {
+            playListsModal.show({ callback: r });
+        });
+        if (!playlist) return;
+
+        const ids = this.ids;
+        for (let i = 0; i < ids.length; i++) {
+            await fetchVQL(`playlist +${playlist} d._id = ${ids[i]}`);
+        }
+        await fetchVQL(`user ~playlist s._id=${playlist} u.last=${Math.floor(Date.now() / 1000)}`);
+        await playListsView.loadPlaylists();
     }
 }
 

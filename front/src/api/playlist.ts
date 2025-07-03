@@ -14,8 +14,12 @@ export async function fetchPlaylists(
     await Promise.all(
         playlists.map(async (playlist: { _id: string, name: string, last: number }) => {
             const videosRes = await fetchVQL(`playlist ${playlist._id}`);
-            const firstVideo = await fetchVQL(`api video-static-quick! s._id = ${videosRes[0]._id}`);
-            const thumbnail = firstVideo ? getThumbnail(firstVideo.thumbnail, firstVideo._id) : "/favicon.svg";
+            let thumbnail = "/favicon.svg";
+            if (videosRes.length) {
+                const firstVideo = await fetchVQL(`api video-static-quick! s._id = ${videosRes[0]._id}`);
+                console.log(firstVideo);
+                if (firstVideo) thumbnail = getThumbnail(firstVideo.thumbnail, firstVideo._id)
+            }
 
             const entry: PlaylistsEntry = {
                 ...playlist,
@@ -113,6 +117,7 @@ export async function fetchPlaylistSnapYouTube(id: string): Promise<PlaylistSnap
             time: 0,
             info: {
                 title: entry.title,
+                // TODO add support for channel
                 // channel: entry.channel,
                 // channelName: entry.channelName,
                 thumbnail: entry.thumbnail,
