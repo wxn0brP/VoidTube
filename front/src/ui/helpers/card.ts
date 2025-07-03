@@ -1,3 +1,4 @@
+import { $store } from "#store";
 import metaControlView from "#ui/video/metaControl";
 import { loadVideo } from "#ui/video/player/status";
 import queuePanel from "#ui/video/queue";
@@ -25,10 +26,7 @@ export const cardHelpers = {
             } else {
                 await delay(50); // UX
                 if (e.shiftKey || e.metaKey || e.ctrlKey || e.altKey) {
-                    localStorage.setItem("cache.queue", JSON.stringify({
-                        i: queuePanel.queueIndex,
-                        q: queuePanel.queue
-                    }));
+                    localStorage.setItem("cache.queueName", $store.queueGroup.get());
                 }
 
                 window.open(`/?v=${data.id || data._id}`, "_blank");

@@ -109,6 +109,7 @@ export class PlayerView implements UiComponent {
                 i: queuePanel.queueIndex,
                 q: queuePanel.queue
             }));
+            localStorage.setItem("cache.queueName", $store.queueGroup.get());
         });
     }
 

@@ -1,4 +1,4 @@
-import { mgl } from "./mgl";
+import { mgl } from "../mgl";
 
 export function updateQueryParam(key: string, value: string | undefined): void {
     const url = new URL(window.location.href);
