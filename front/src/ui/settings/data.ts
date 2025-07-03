@@ -70,7 +70,7 @@ export const settingsData: Setting[] = [
     },
     {
         type: "input",
-        id: "app_audioFade",
+        id: "app_audioFadeTime",
         text: "Audio Fade Time",
         storeField: $store.settings.audioFade,
         input_type: "number",
