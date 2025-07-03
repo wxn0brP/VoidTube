@@ -1,3 +1,4 @@
+import { $store } from "#store";
 import playerView from ".";
 import { playNext, playPrev } from "./sync";
 import { emitPlay } from "./tabs";
@@ -5,13 +6,14 @@ import { emitPlay } from "./tabs";
 export function setupAudioSync() {
     playerView.videoEl.addEventListener("play", () => {
         playerView.audioEl.currentTime = playerView.videoEl.currentTime;
+        fadeAudioIn();
         playerView.audioEl.play().catch(err => console.error("Audio play error:", err));
         playerView.paused = false;
         emitPlay();
     });
 
     playerView.videoEl.addEventListener("pause", () => {
-        playerView.audioEl.pause();
+        fadeAudioOut().then(() => playerView.audioEl.pause());
         playerView.paused = true;
     });
 
@@ -71,6 +73,76 @@ export function setupAudioSync() {
         navigator.mediaSession.setActionHandler("seekto", (e) => {
             playerView.videoEl.currentTime = e.seekTime;
             playerView.audioEl.currentTime = playerView.videoEl.currentTime;
-        });          
+        });
     }
+}
+
+function getFadeAudio() {
+    if (!$store.settings.audioFadeEnabled.get()) return 0;
+    const fadeAudio = +$store.settings.audioFade.get() || 0;
+    if (isNaN(fadeAudio)) return 0;
+    if (fadeAudio > 3_000) return 3_000;
+    if (fadeAudio < 0) return 0;
+    return fadeAudio;
+}
+
+function fadeAudioIn() {
+    const targetVolume = playerView.videoEl.volume;
+    const fadeAudio = getFadeAudio();
+    if (!fadeAudio) return Promise.resolve();
+
+    return new Promise<void>(resolve => {
+        let startVolume = playerView.audioEl.volume;
+        if (startVolume === targetVolume) {
+            resolve();
+            return;
+        }
+
+        let start = null;
+
+        function step(timestamp: number) {
+            if (!start) start = timestamp;
+            let progress = timestamp - start;
+            let percentage = Math.min(progress / fadeAudio, 1);
+
+            playerView.audioEl.volume = startVolume + (targetVolume - startVolume) * percentage;
+
+            if (percentage < 1)
+                requestAnimationFrame(step);
+            else
+                resolve();
+
+        }
+
+        requestAnimationFrame(step);
+    });
+}
+
+function fadeAudioOut() {
+    const fadeAudio = getFadeAudio();
+    if (!fadeAudio) return Promise.resolve();
+
+    return new Promise<void>(resolve => {
+        let startVolume = playerView.audioEl.volume;
+        if (startVolume <= 0) {
+            resolve();
+            return;
+        }
+
+        let start = null;
+
+        function step(timestamp: number) {
+            if (!start) start = timestamp;
+            let progress = timestamp - start;
+            let percentage = Math.min(progress / fadeAudio, 1);
+            playerView.audioEl.volume = startVolume * (1 - percentage);
+
+            if (percentage < 1)
+                requestAnimationFrame(step);
+            else
+                resolve();
+        }
+
+        requestAnimationFrame(step);
+    });
 }

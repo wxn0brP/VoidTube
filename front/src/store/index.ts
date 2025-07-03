@@ -41,6 +41,8 @@ const initData = {
             enabled: true
         },
         antiRecommendationLoop: true,
+        audioFadeEnabled: false,
+        audioFade: "300",
         alg: {
             minHistory: "20",
             maxKeywords: "10",
