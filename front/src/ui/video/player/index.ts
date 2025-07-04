@@ -12,6 +12,7 @@ import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
 import { loadMediaSession, loadVideo } from "./status";
 import { setUpSponsorBlock } from "./sync";
+import { loadCaps, removeCaps } from "./caps";
 
 export class PlayerView implements UiComponent {
     public element: HTMLDivElement;
@@ -130,3 +131,5 @@ export default playerView;
 mgl.playerShow = playerView.show;
 mgl.player = {}
 mgl.player.setTime = (time: number) => playerView.videoEl.currentTime = time;
+mgl.player.loadCaps = loadCaps;
+mgl.player.removeCaps = removeCaps;

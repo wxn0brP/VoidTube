@@ -1,5 +1,5 @@
 import { seeLogs } from "#echo/logger";
-import { getChannelVideos, getPlaylistIds, getPlaylistInfo, searchVideo } from "#relay/apiBack";
+import { getCaps, getChannelVideos, getPlaylistIds, getPlaylistInfo, searchVideo } from "#relay/apiBack";
 import { getFeed, getQuickFeed } from "#relay/feed";
 import { getRecommended } from "#relay/getRecommended";
 import { createValtheraAdapter } from "@wxn0brp/vql";
@@ -75,6 +75,7 @@ export const YouTubeAdapter = createValtheraAdapter({
             if (collection === "algRun") return await runFeedVQL();
             if (collection === "seeLogs") return seeLogs();
             if (collection === "video-static-quick") return await fetchQuickCache(search._id || search.id);
+            if (collection === "caps") return await getCaps(search.url || search._id);
         } catch (e) {
             console.error(e);
         }

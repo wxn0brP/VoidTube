@@ -8,6 +8,7 @@ import playListsModal from "../modal/playlists";
 import { uiMsg } from "#ui/modal/message";
 import "./metaControl.scss";
 import queuePanel from "./queue";
+import { setUpCaps } from "./player/caps";
 
 class MetaControlView implements UiComponent {
     element: HTMLDivElement;
@@ -27,6 +28,7 @@ class MetaControlView implements UiComponent {
         this.toggleToPlayListBtn.onclick = (e) => this.toggleToPlayList($store.videoId.get(), e);
         this.shareBtn.onclick = () => this.share();
         this.downloadBtn.onclick = () => this.download();
+        setUpCaps(this.element.querySelector("#captions-select")!);
     }
 
     public async toggleToPlayList(id = $store.videoId.get(), e?: Event) {
