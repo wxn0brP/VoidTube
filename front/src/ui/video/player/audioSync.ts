@@ -92,8 +92,7 @@ function fadeAudioIn() {
     if (!fadeAudio) return Promise.resolve();
 
     return new Promise<void>(resolve => {
-        let startVolume = playerView.audioEl.volume;
-        if (startVolume === targetVolume) {
+        if (!targetVolume) { // 0
             resolve();
             return;
         }
@@ -105,7 +104,7 @@ function fadeAudioIn() {
             let progress = timestamp - start;
             let percentage = Math.min(progress / fadeAudio, 1);
 
-            playerView.audioEl.volume = startVolume + (targetVolume - startVolume) * percentage;
+            playerView.audioEl.volume = targetVolume * percentage;
 
             if (percentage < 1)
                 requestAnimationFrame(step);
@@ -123,7 +122,7 @@ function fadeAudioOut() {
     if (!fadeAudio) return Promise.resolve();
 
     return new Promise<void>(resolve => {
-        let startVolume = playerView.audioEl.volume;
+        let startVolume = playerView.videoEl.volume;
         if (startVolume <= 0) {
             resolve();
             return;
@@ -139,8 +138,12 @@ function fadeAudioOut() {
 
             if (percentage < 1)
                 requestAnimationFrame(step);
-            else
+            else {
                 resolve();
+                setTimeout(() => {
+                    playerView.audioEl.volume = playerView.videoEl.volume;
+                }, fadeAudio + 100);
+            }
         }
 
         requestAnimationFrame(step);
