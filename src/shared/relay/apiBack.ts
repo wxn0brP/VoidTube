@@ -235,3 +235,26 @@ export async function getChannelVideos(channelUrl: string, flat: boolean = true)
         throw error;
     }
 }
+
+export async function getCaps(videoUrl: string) {
+    try {
+        if (videoUrl === "undefined") throw new Error("Unknown video");
+        if (
+            !videoUrl.startsWith("https://www.youtube.com/watch?v=") && !videoUrl.startsWith("https://youtu.be/")
+        ) {
+            videoUrl = `https://www.youtube.com/watch?v=${videoUrl}`;
+        }
+
+        const opts = Object.assign({}, options, { flatPlaylist: true, });
+
+        note("scraper", "getCaps", videoUrl);
+
+        const result = await wrapper(videoUrl, opts);
+
+        // @ts-ignore
+        return result.automatic_captions || {};
+    } catch (error) {
+        console.error('Error while fetching channel videos:', error.message);
+        throw error;
+    }
+}
