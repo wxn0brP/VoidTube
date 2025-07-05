@@ -93,7 +93,7 @@ class HistoryView implements UiComponent {
 
         this.loading = true;
         const history = await fetchHistory(cfg);
-        this.hasMore = false;
+        this.hasMore = count > 0;
         this.page = Math.ceil(history.length / 32);
         
         this.container.innerHTML = "";
