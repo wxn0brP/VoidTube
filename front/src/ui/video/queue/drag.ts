@@ -43,7 +43,7 @@ export function handleDrop(cmp: QueuePanel) {
         if (cardId === $store.videoId.get()) {
             const cards = Array.from(cmp.element.querySelectorAll(".queueCard"));
             const index = cards.indexOf(card);
-            cmp.queueIndex = index;
+            $store.queueIndex.set(index);
         }
         emitQueueMessage("post", { q: cmp.queue });
     }

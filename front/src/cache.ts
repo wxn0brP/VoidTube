@@ -1,4 +1,5 @@
 import { updateVideoHistoryTime } from "#api/history";
+import { $store } from "#store";
 import queuePanel from "#ui/video/queue";
 import { joinGroup, queuesMesh } from "#ui/video/queue/sync";
 import { delay } from "@wxn0brp/flanker-ui/utils";
@@ -33,7 +34,7 @@ async function lastQueue() {
 
     const payload = JSON.parse(lastQueue);
     queuePanel.append(payload.q);
-    queuePanel.queueIndex = payload.i;
+    $store.queueIndex.set(payload.i);
 }
 
 lastProgres();

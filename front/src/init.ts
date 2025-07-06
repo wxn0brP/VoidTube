@@ -1,3 +1,4 @@
+import { $store } from "#store";
 import navBarView from "#ui/navBar";
 import playerView from "#ui/video/player";
 import { loadVideo } from "#ui/video/player/status";
@@ -34,8 +35,8 @@ export function initParma(autoPlay = false) {
         const index = urlParams.get("pi") || "0";
         setTimeout(() => queuePanel.loadPlaylist(playlistId), 1000);
         setTimeout(() => {
-            queuePanel.queueIndex = +index;
-            loadVideo(queuePanel.queue[queuePanel.queueIndex]);
+            $store.queueIndex.set(+index);
+            loadVideo(queuePanel.queue[$store.queueIndex.get()]);
         }, 1000);
         return;
     }

@@ -107,7 +107,7 @@ export class PlayerView implements UiComponent {
                 time: Math.floor(this.videoEl.currentTime)
             }));
             localStorage.setItem("cache.queue", JSON.stringify({
-                i: queuePanel.queueIndex,
+                i: $store.queueIndex.get(),
                 q: queuePanel.queue
             }));
             localStorage.setItem("cache.queueName", $store.queueGroup.get());
