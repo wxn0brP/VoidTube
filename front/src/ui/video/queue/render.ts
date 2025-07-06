@@ -46,22 +46,26 @@ export async function render(cmp: QueuePanel) {
         card.className = "queueCard";
         card.setAttribute("draggable", "true");
         card.setAttribute("data-id", item._id);
-        if (item._id === $store.videoId.get()) card.clA("playing");
+        card.setAttribute("data-index", i.toString());
+        if (cmp.queueIndex === i) card.clA("playing");
         card.innerHTML = `
-                <div class="img">
-                    <img src="${getThumbnail(item.thumbnail, item._id)}"></div>
+            <div class="img">
+                <img src="${getThumbnail(item.thumbnail, item._id)}"></div>
+            </div>
+            <div class="info">
+                <div class="title" title="${item.title}">${item.title}</div>
+                <div class="meta">
+                    <div class="channel">${item.channelName}</div>
+                    <div class="duration">${formatTime(item.duration, null)}</div>
                 </div>
-                <div class="info">
-                    <div class="title" title="${item.title}">${item.title}</div>
-                    <div class="meta">
-                        <div class="channel">${item.channelName}</div>
-                        <div class="duration">${formatTime(item.duration, null)}</div>
-                    </div>
-                </div>
-            `;
+            </div>
+        `;
 
         card.addEventListener("click", async (e: MouseEvent) => {
-            if (!e.shiftKey) return loadVideo(item._id);
+            if (!e.shiftKey) {
+                cmp.queueIndex = +card.getAttribute("data-index");
+                return loadVideo(item._id);
+            }
             e.preventDefault();
             cmp.element.clA("dragging");
             let confirm = e.altKey || await uiFunc.confirm("Are you sure you want to remove cmp video from the queue?");

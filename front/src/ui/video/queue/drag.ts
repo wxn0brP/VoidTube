@@ -20,8 +20,8 @@ export function handleDragOver(cmp: QueuePanel, e: DragEvent) {
     const card = target.closest(".queueCard") as HTMLElement;
     if (!card || !draggingId) return;
 
-    const draggedCard = cmp.element.qi(draggingId);
-    if (draggedCard === card) return;
+    const draggedCard = cmp.element.querySelector(".dragging") as HTMLElement;
+    if (!draggedCard || draggedCard === card) return;
 
     const rect = card.getBoundingClientRect();
     const offset = rect.y + rect.height / 2;
@@ -41,7 +41,8 @@ export function handleDrop(cmp: QueuePanel) {
         card.clR("dragging");
         const cardId = card.getAttribute("data-id");
         if (cardId === $store.videoId.get()) {
-            const index = cmp.queue.indexOf(cardId);
+            const cards = Array.from(cmp.element.querySelectorAll(".queueCard"));
+            const index = cards.indexOf(card);
             cmp.queueIndex = index;
         }
         emitQueueMessage("post", { q: cmp.queue });
@@ -53,6 +54,7 @@ export function handleDrop(cmp: QueuePanel) {
 }
 
 export function updateQueueOrder(cmp: QueuePanel) {
-    const cards = cmp.element.querySelectorAll(".queueCard");
-    cmp.queue = Array.from(cards).map(c => c.getAttribute("data-id")).filter(Boolean) as string[];
+    const cards = Array.from(cmp.element.querySelectorAll(".queueCard"));
+    cmp.queue = cards.map(c => c.getAttribute("data-id")).filter(Boolean) as string[];
+    cards.forEach((c, i) => c.setAttribute("data-index", i.toString()));
 }
