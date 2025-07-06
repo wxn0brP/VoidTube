@@ -18,17 +18,17 @@ export function playNext() {
         uiMsg("End of queue");
         return;
     }
-    queuePanel.queueIndex++;
+    $store.queueIndex.set($store.queueIndex.get() + 1);
 
     loadVideo(nextVideoId);
 }
 
 export function getNextVideoId() {
     const length = queuePanel.queue.length;
-    const index = queuePanel.queueIndex + 1;
+    const index = $store.queueIndex.get() + 1;
     if (index >= length) {
         if ($store.queueLoop.get()) {
-            queuePanel.queueIndex = 0;
+            $store.queueIndex.set(0);
             return queuePanel.queue[0];
         } else if($store.recommendedId.get()) {
             const id = $store.recommendedId.get();
@@ -60,15 +60,17 @@ export function playPrev() {
 
     const length = queuePanel.queue.length;
     if (length) {
-        let prev = --queuePanel.queueIndex;
+        let prev = $store.queueIndex.get() - 1;
         if (prev < 0) {
             if ($store.queueLoop.get()) {
                 prev = length - 1;
-                queuePanel.queueIndex = prev;
+                $store.queueIndex.set(prev);
             } else {
                 prev = 0;
-                queuePanel.queueIndex = 0;
+                $store.queueIndex.set(0);
             }
+        } else {
+            $store.queueIndex.set(prev);
         }
         prevVideoId = queuePanel.queue[prev];
     }

@@ -12,7 +12,6 @@ export class QueuePanel implements UiComponent {
 
     queue: string[] = [];
     videoMap = new Map<string, VideoQuickInfo>();
-    queueIndex = 0;
     cards = new Map<string, HTMLDivElement>();
 
     public queryParams() {
@@ -33,9 +32,9 @@ export class QueuePanel implements UiComponent {
         this.element.addEventListener("mouseenter", () => scrollToPlayCard(this));
         this.element.addEventListener("mouseleave", () => scrollToPlayCard(this));
         $store.videoId.subscribe(() => scrollToPlayCard(this));
-        $store.videoId.subscribe((id) => {
+        $store.queueIndex.subscribe((index) => {
             this.element.querySelectorAll<HTMLDivElement>(".playing").forEach(c => c.clR("playing"));
-            this.element.qi(id)?.clA("playing");
+            this.element.qs("[data-index='" + index + "']")?.clA("playing");
         });
     }
 }

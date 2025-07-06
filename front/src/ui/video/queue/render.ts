@@ -47,7 +47,7 @@ export async function render(cmp: QueuePanel) {
         card.setAttribute("draggable", "true");
         card.setAttribute("data-id", item._id);
         card.setAttribute("data-index", i.toString());
-        if (cmp.queueIndex === i) card.clA("playing");
+        if ($store.queueIndex.get() === i) card.clA("playing");
         card.innerHTML = `
             <div class="img">
                 <img src="${getThumbnail(item.thumbnail, item._id)}"></div>
@@ -63,12 +63,12 @@ export async function render(cmp: QueuePanel) {
 
         card.addEventListener("click", async (e: MouseEvent) => {
             if (!e.shiftKey) {
-                cmp.queueIndex = +card.getAttribute("data-index");
+                $store.queueIndex.set(+card.getAttribute("data-index"));
                 return loadVideo(item._id);
             }
             e.preventDefault();
             cmp.element.clA("dragging");
-            let confirm = e.altKey || await uiFunc.confirm("Are you sure you want to remove cmp video from the queue?");
+            let confirm = e.altKey || await uiFunc.confirm("Are you sure you want to remove this video from the queue?");
             if (!confirm) return;
             remove(cmp, i);
             setTimeout(() => cmp.element.clR("dragging"), 10);

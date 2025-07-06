@@ -35,7 +35,7 @@ export function renderSuggestions(cmp: SearchBarView, suggestions: string[], fro
                 e.stopPropagation();
                 e.preventDefault();
 
-                const confirm = await uiFunc.confirm("Are you sure you want to remove cmp search from history?");
+                const confirm = await uiFunc.confirm("Are you sure you want to remove this search from history?");
                 if (!confirm) return;
 
                 cmp.searchHistory = cmp.searchHistory.filter(h => h !== s);
