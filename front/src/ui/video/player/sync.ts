@@ -61,17 +61,9 @@ export function playPrev() {
     const length = queuePanel.queue.length;
     if (length) {
         let prev = $store.queueIndex.get() - 1;
-        if (prev < 0) {
-            if ($store.queueLoop.get()) {
-                prev = length - 1;
-                $store.queueIndex.set(prev);
-            } else {
-                prev = 0;
-                $store.queueIndex.set(0);
-            }
-        } else {
-            $store.queueIndex.set(prev);
-        }
+        if (prev < 0) 
+            prev = $store.queueLoop.get() ? length - 1 : 0;
+        $store.queueIndex.set(prev);
         prevVideoId = queuePanel.queue[prev];
     }
         
