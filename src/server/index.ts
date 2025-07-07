@@ -1,6 +1,6 @@
 import { note } from "#echo/logger";
 import VQL from "#gate";
-import { parseStringQuery } from "@@vql/cpu/string/index";
+import { FF_VQL } from "@@vql/falconFrame";
 import FalconFrame from "@wxn0brp/falcon-frame";
 import { LogLevelName } from "@wxn0brp/lucerna-log";
 import { avatarHandler, avatarTryHandler } from "./avatar";
@@ -22,33 +22,10 @@ app.get("/", (req, res) => {
     res.render(__cwd + "public/index.html", {});
 });
 
+FF_VQL(app, VQL);
 app.static("/", __cwd + "public");
 app.static("/js", __cwd + "front/dist");
 app.static("/src", __cwd + "front/src");
-
-app.post("/VQL", async (req, res) => {
-    try {
-        const query = req.body.query;
-        const result = await VQL.execute(query, {});
-        if (result && result.err) return result;
-        return { err: false, result };
-    } catch (e) {
-        // console.error(e);
-        return { err: true, msg: e.message };
-    }
-});
-
-app.post("/VQL2", async (req, res) => {
-    try {
-        const query = req.body.query;
-        const result = parseStringQuery(query);
-        return { err: false, result };
-    } catch (e) {
-        // console.error(e);
-        return { err: true, msg: e.message };
-    }
-});
-
 app.get("/avatar", avatarHandler);
 app.get("/avatarTry", avatarTryHandler);
 
