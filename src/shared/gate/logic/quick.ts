@@ -7,9 +7,9 @@ export async function fetchQuickCache(id: string) {
     const cached = await db.cache.findOne("video-static-quick", { _id: id });
     if (cached) return cached;
 
-    const staticData = await db.cache.findOne("video-static", { _id: id });
+    const staticData = await db.cache.findOne<any>("video-static", { _id: id });
     if (staticData) {
-        staticData.channelName = (await channelInfo(staticData.channel)).name;
+        staticData.channelName = await channelInfo(staticData.channel).then(c => c.name);
         return staticData;
     }
 
@@ -25,13 +25,13 @@ export async function fetchQuickCache(id: string) {
 export async function fetchQuickCache$(search: { $in: { _id: string[] } }) {
     const map = new Map<string, any>();
 
-    const cached = await db.cache.find("video-static-quick", { $in: { _id: search.$in._id } });
+    const cached = await db.cache.find<any>("video-static-quick", { $in: { _id: search.$in._id } });
     for (const data of cached) {
         map.set(data._id, data);
     }
 
     const missingIds = search.$in._id.filter(id => !map.has(id));
-    const staticData = await db.cache.find("video-static", { $in: { _id: missingIds } });
+    const staticData = await db.cache.find<any>("video-static", { $in: { _id: missingIds } });
     const channelName = new Map<string, string>();
     for (const data of staticData) {
         if (channelName.has(data.channel)) {

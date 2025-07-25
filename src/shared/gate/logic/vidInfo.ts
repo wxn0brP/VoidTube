@@ -3,15 +3,16 @@ import { getVideoInfo } from "#relay/apiBack";
 import { getTTL } from "#utils";
 import { note } from "#echo/logger";
 import Executor from "#utils/executor";
+import { VideoInfo, StaticVideoInfo, DynamicVideoInfo } from "#relay/types";
 
 export const apiExecutor = new Executor();
 
-export async function retrieveVideoData(url: string, dynamic = true, staticData?: any) {
-    if (staticData !== false) staticData = await db.cache.findOne("video-static", { _id: url });
+export async function retrieveVideoData(url: string, dynamic = true, staticData?: any): Promise<VideoInfo | null> {
+    if (staticData !== false) staticData = await db.cache.findOne<StaticVideoInfo>("video-static", { _id: url });
     if (!dynamic && staticData) return staticData;
 
-    async function fn(i = 0) {
-        const dynamicData = dynamic && await db.cache.findOne("video-dynamic", { _id: url });
+    async function fn(i = 0): Promise<VideoInfo | null> {
+        const dynamicData = dynamic && await db.cache.findOne<DynamicVideoInfo>("video-dynamic", { _id: url });
 
         if (dynamic && staticData && dynamicData) {
             if (dynamicData.ttl > Math.floor(new Date().getTime() / 1000)) {
@@ -33,7 +34,7 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
             return null;
         }
 
-        const staticDataPayload = {
+        const staticDataPayload: StaticVideoInfo = {
             _id: url,
             title: data.title,
             description: data.description,
@@ -47,7 +48,7 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
         await db.cache.updateOneOrAdd("video-static", { url }, staticDataPayload);
 
         if ("formats" in data && data.formats.length > 3) {
-            const dynamicDataPayload = {
+            const dynamicDataPayload: DynamicVideoInfo = {
                 _id: url,
                 formats: data.formats,
                 ttl: getTTL(),
@@ -70,15 +71,15 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
     return await apiExecutor.add(url, fn, dynamic ? 1 : 0);
 }
 
-export async function retrieveVideoData$(search: any) {
-    const staticData = await db.cache.find("video-static", search);
+export async function retrieveVideoData$(search: any): Promise<StaticVideoInfo[]> {
+    const staticData = await db.cache.find<StaticVideoInfo>("video-static", search);
     const ids = search.$in._id;
 
     if (ids.length !== staticData.length) {
         const missingIds = ids.filter(id => !staticData.find(d => d._id === id));
         if (missingIds.length) {
             const missingData = await Promise.all(missingIds.map(id => retrieveVideoData(id, false, false)));
-            staticData.push(...missingData);
+            staticData.push(...missingData.filter(Boolean) as StaticVideoInfo[]);
         }
     }
 

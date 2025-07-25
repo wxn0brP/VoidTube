@@ -1,3 +1,4 @@
+import { ChannelInfo } from "#relay/types";
 import db from "#db";
 import { getExternalResourcePath } from "#utils/path";
 import { FFResponse } from "@wxn0brp/falcon-frame/res";
@@ -35,7 +36,7 @@ export async function avatarTryHandler(req: FFRequest, res: FFResponse) {
     if (!channel_id || channel_id === "undefined")
         return res.status(404).end();
 
-    const hasCache = await db.cache.findOne("channel", { id: channel_id });
+    const hasCache = await db.cache.findOne<ChannelInfo>("channel", { id: channel_id });
     if (!hasCache) return res.status(404).end();
 
     req.query.link = hasCache.avatar;

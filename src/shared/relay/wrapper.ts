@@ -1,7 +1,7 @@
 import { exec } from "child_process";
-import { YtFlags, YtResponse } from "./yt.types";
 import { checkIsFileEmpty, getYtDlpPath } from "#deps/yt-dlp";
 import { note } from "#echo/logger";
+import { YoutubeDlOptions } from "./types";
 
 let ytDlp: string = "yt-dlp";
 try {
@@ -19,13 +19,13 @@ function camelToKebab(str: string): string {
     return str.replace(/([A-Z])/g, "-$1").toLowerCase();
 }
 
-function flagsConvert(flags: YtFlags): string[] {
+function flagsConvert(flags: YoutubeDlOptions): string[] {
     return Object.entries(flags)
         .filter(([_, value]) => Boolean(value))
         .map(([key, _]) => `--${camelToKebab(key)}`);
 }
 
-export async function wrapper<T = YtResponse>(url: string, flags: YtFlags, unknownFlags?: string[]): Promise<T> {
+export async function wrapper<T = any>(url: string, flags: YoutubeDlOptions, unknownFlags?: string[]): Promise<T> {
     return new Promise((resolve, reject) => {
         const cmd = `${ytDlp} ${flagsConvert(flags).join(" ")} ${url}` + (unknownFlags ? " " + unknownFlags.join(" ") : "");
         exec(cmd, { maxBuffer: 1024 * 1024 * 100 }, (error, stdout, stderr) => {

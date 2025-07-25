@@ -16,7 +16,7 @@ export async function getConfig(): Promise<Config> {
         noiseBoost:         await getSetting("noiseBoost",      15),
         hashTagBoost:       await getSetting("hashTagBoost",    3),
         minScore:           await getSetting("minScore",        0),
-        irrelevant:         await getSetting("irrelevant",      []).then(v => Array.isArray(v) ? v : v.split(",")),
+        irrelevant:         await getSetting("irrelevant",      "").then(v => Array.isArray(v) ? v : v.split(",")),
         userTags:           await getSetting("userTags",        []),
     };
 }
@@ -29,7 +29,7 @@ export async function runFeed() {
     note("alg", "Config:", config);
 
     const feedback: FeedbackMap = new Map();
-    const feedbackRaw = await db.alg.find("feedback", {});
+    const feedbackRaw = await db.alg.find<{ _id: string, v: number }>("feedback", {});
     for (const f of feedbackRaw) feedback.set(f._id, f.v);
 
     const candidates = await buildInitialCandidates(history, config);

@@ -4,11 +4,12 @@ import { getTTL } from "#utils";
 
 export async function channelInfo(id: string, update = false) {
     if (!id) return {};
-    const channel = await db.cache.findOne("channel", { id });
+    const channel = await db.cache.findOne<any>("channel", { id });
 
     if (!update) {
         if (channel) return channel;
     } else {
+        // @ts-ignore
         if (channel && channel.ttl > Math.floor(Date.now() / 1000)) {
             return channel;
         }

@@ -1,13 +1,14 @@
 import { note } from "#echo/logger";
 import { wrapper } from "./wrapper";
+import { YoutubeDlOptions, VideoInfo, SearchResult, PlaylistInfo, ChannelInfo, ChannelVideo, YoutubeDlResult } from "./types";
 
-const options = {
+const options: YoutubeDlOptions = {
     dumpSingleJson: true,
     noCheckCertificates: true,
     noWarnings: true,
 }
 
-export async function getVideoInfo(videoUrl: string, withFormats: boolean = false) {
+export async function getVideoInfo(videoUrl: string, withFormats: boolean = false): Promise<VideoInfo> {
     try {
         if (
             typeof videoUrl !== "string" ||
@@ -23,16 +24,16 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
 
         note("scraper", "getVideoInfo", videoUrl, withFormats);
 
-        const opts = Object.assign({}, options, {
+        const opts: YoutubeDlOptions = Object.assign({}, options, {
             preferFreeFormats: true,
             youtubeSkipDashManifest: true,
             skipDownload: true,
             noCheckFormats: !withFormats,
         });
 
-        const result = await wrapper(videoUrl, opts);
+        const result = await wrapper<YoutubeDlResult>(videoUrl, opts);
 
-        const baseInfo = {
+        const baseInfo: VideoInfo = {
             title: result.title,
             description: result.description,
             thumbnail: result.thumbnail,
@@ -69,15 +70,15 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
     }
 }
 
-export async function searchVideo(title: string, size: number) {
+export async function searchVideo(title: string, size: number): Promise<SearchResult[]> {
     try {
         if (title === "undefined") throw new Error("Unknown video");
         note("scraper", "searchVideo", title);
 
-        const opts = Object.assign({}, options, {
+        const opts: YoutubeDlOptions = Object.assign({}, options, {
             flatPlaylist: true,
         })
-        const result = await wrapper(`ytsearch${size}:"${title}"`, opts) as any;
+        const result = await wrapper<YoutubeDlResult>(`ytsearch${size}:"${title}"`, opts);
         return result.entries.map(entry => ({
             title: entry.title,
             id: entry.id,
@@ -93,7 +94,7 @@ export async function searchVideo(title: string, size: number) {
     }
 }
 
-export async function getPlaylistIds(playlist: string) {
+export async function getPlaylistIds(playlist: string): Promise<string[]> {
     try {
         if (playlist === "undefined") throw new Error("Unknown playlist");
         if (!playlist.startsWith("https://www.youtube.com/playlist?list=")) {
@@ -101,10 +102,10 @@ export async function getPlaylistIds(playlist: string) {
         }
         note("scraper", "getPlaylistIds", playlist);
 
-        const opts = Object.assign({}, options, {
+        const opts: YoutubeDlOptions = Object.assign({}, options, {
             flatPlaylist: true,
         })
-        const result = await wrapper(playlist, opts) as any;
+        const result = await wrapper<YoutubeDlResult>(playlist, opts);
         return result.entries.map(entry => entry.id);
     } catch (error) {
         console.error("Error while getting playlist ids:", error.message);
@@ -112,7 +113,7 @@ export async function getPlaylistIds(playlist: string) {
     }
 }
 
-export async function download(url: string, format: string, dir: string) {
+export async function download(url: string, format: string, dir: string): Promise<void> {
     try {
         if (url === "undefined") throw new Error("Unknown video");
         if (
@@ -146,7 +147,7 @@ export async function download(url: string, format: string, dir: string) {
     }
 }
 
-export async function getChannelInfo(channelUrl: string) {
+export async function getChannelInfo(channelUrl: string): Promise<ChannelInfo> {
     try {
         if (channelUrl === "undefined") throw new Error("Unknown channel");
         if (channelUrl.startsWith("@")) {
@@ -158,21 +159,19 @@ export async function getChannelInfo(channelUrl: string) {
 
         note("scraper", "getChnlInfo", channelUrl);
 
-        const opts = Object.assign({}, options, { flatPlaylist: true, });
+        const opts: YoutubeDlOptions = Object.assign({}, options, { flatPlaylist: true, });
 
-        const result = await wrapper(channelUrl + "/about", opts);
+        const result = await wrapper<YoutubeDlResult>(channelUrl + "/about", opts);
 
         const avatar = result.thumbnails.find(t => t.id == "avatar_uncropped")?.url || result.thumbnails[result.thumbnails.length - 1]?.url;
         const banner = result.thumbnails.find(t => t.id == "banner_uncropped")?.url;
         return {
             short_id: result.id,
             id: result.channel_id,
-            // @ts-ignore
             name: result.title || result.name,
             description: result.description,
             avatar,
             banner,
-            // @ts-ignore
             subscribers: result.channel_subscribers_count || result.channel_follower_count,
         };
     } catch (error) {
@@ -181,9 +180,9 @@ export async function getChannelInfo(channelUrl: string) {
     }
 }
 
-export async function getPlaylistInfo(playlistUrl: string) {
+export async function getPlaylistInfo(playlistUrl: string): Promise<PlaylistInfo[]> {
     try {
-        const opts = Object.assign({}, options, { flatPlaylist: true, });
+        const opts: YoutubeDlOptions = Object.assign({}, options, { flatPlaylist: true, });
 
         if (!playlistUrl.startsWith("https://www.youtube.com/playlist?list=")) {
             playlistUrl = `https://www.youtube.com/playlist?list=${playlistUrl}`;
@@ -191,8 +190,7 @@ export async function getPlaylistInfo(playlistUrl: string) {
 
         note("scraper", "getPlaylistInfo", playlistUrl);
 
-        const result = await wrapper(playlistUrl, opts);
-        // @ts-ignore
+        const result = await wrapper<YoutubeDlResult>(playlistUrl, opts);
         return result.entries.map(entry => ({
             id: entry.id,
             title: entry.title,
@@ -209,10 +207,10 @@ export async function getPlaylistInfo(playlistUrl: string) {
     }
 }
 
-export async function getChannelVideos(channelUrl: string, flat: boolean = true) {
+export async function getChannelVideos(channelUrl: string, flat: boolean = true): Promise<ChannelVideo[]> {
     try {
         if (channelUrl === "undefined") throw new Error("Unknown channel");
-        const opts = Object.assign({}, options, { flatPlaylist: flat, });
+        const opts: YoutubeDlOptions = Object.assign({}, options, { flatPlaylist: flat, });
 
         if (!channelUrl.startsWith("https://www.youtube.com/")) {
             channelUrl = `https://www.youtube.com/channel/${channelUrl}`;
@@ -220,9 +218,8 @@ export async function getChannelVideos(channelUrl: string, flat: boolean = true)
 
         note("scraper", "getChnlVid", channelUrl);
 
-        const result = await wrapper(channelUrl + "/videos", opts);
+        const result = await wrapper<YoutubeDlResult>(channelUrl + "/videos", opts);
 
-        // @ts-ignore
         return result.entries.map(entry => ({
             title: entry.title,
             id: entry.id,
@@ -236,7 +233,7 @@ export async function getChannelVideos(channelUrl: string, flat: boolean = true)
     }
 }
 
-export async function getCaps(videoUrl: string) {
+export async function getCaps(videoUrl: string): Promise<any> {
     try {
         if (videoUrl === "undefined") throw new Error("Unknown video");
         if (
@@ -245,13 +242,12 @@ export async function getCaps(videoUrl: string) {
             videoUrl = `https://www.youtube.com/watch?v=${videoUrl}`;
         }
 
-        const opts = Object.assign({}, options, { flatPlaylist: true, });
+        const opts: YoutubeDlOptions = Object.assign({}, options, { flatPlaylist: true, });
 
         note("scraper", "getCaps", videoUrl);
 
-        const result = await wrapper(videoUrl, opts);
+        const result = await wrapper<YoutubeDlResult>(videoUrl, opts);
 
-        // @ts-ignore
         return result.automatic_captions || {};
     } catch (error) {
         console.error('Error while fetching channel videos:', error.message);
