@@ -1,19 +1,12 @@
 import db from "#db";
 import { XMLParser } from "fast-xml-parser";
 import ky from "ky";
+import { FeedItem } from "./types";
 
 const parser = new XMLParser();
 const baseUrl = "https://www.youtube.com/feeds/videos.xml?channel_id=";
 
-interface FeedItem {
-    title: string;
-    pubDate: string;
-    author: string;
-    authorId: string;
-    id: string;
-}
-
-export async function getFeed(channelId: string) {
+export async function getFeed(channelId: string): Promise<FeedItem[] | null> {
     if (!channelId) return null;
     const dataXML = await ky.get(baseUrl + channelId).text();
     const data = parser.parse(dataXML);
@@ -27,11 +20,11 @@ export async function getFeed(channelId: string) {
             authorId: channelId
         }
         return feedEntry;
-    }) as FeedItem[];
+    })
 }
 
-export async function getQuickFeed() {
+export async function getQuickFeed(): Promise<FeedItem[]> {
     const channels = await db.user.find<{ _id: string }>("subs", {}).then(res => res.map(c => c._id));
     const feeds = await Promise.all(channels.map(c => getFeed(c)));
-    return feeds.flat();
+    return feeds.flat().filter(Boolean) as FeedItem[];
 }

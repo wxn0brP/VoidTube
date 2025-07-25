@@ -1,7 +1,7 @@
 import { note } from "#echo/logger";
 import ky from "ky";
 
-export async function getSuggestions(query: string, hl="en", gl="US"): Promise<string[]> {
+export async function getSuggestions(query: string, hl = "en", gl = "US"): Promise<string[]> {
     if (!query || !query.trim()) return [];
 
     try {
