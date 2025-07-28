@@ -60,31 +60,31 @@ export function setupBar() {
         }
 
         if (e.code === "ArrowRight") {
-            const time = Math.min(playerView.videoEl.duration, playerView.videoEl.currentTime + 5);
-            playerView.videoEl.currentTime = playerView.audioEl.currentTime = time;
+            const time = Math.min(playerView.videoEl.duration, playerView.mediaSync.currentTime + 5);
+            playerView.mediaSync.seek(time);
         }
 
         if (e.code === "ArrowLeft") {
-            const time = Math.max(0, playerView.videoEl.currentTime - 5);
-            playerView.videoEl.currentTime = playerView.audioEl.currentTime = time;
+            const time = Math.max(0, playerView.mediaSync.currentTime - 5);
+            playerView.mediaSync.seek(time);
         }
 
         if (e.code === "ArrowUp") {
             const vol = Math.min(1, playerView.videoEl.volume + 0.05);
-            playerView.videoEl.volume = playerView.audioEl.volume = vol;
+            playerView.videoEl.volume = vol;
             e.preventDefault();
         }
 
         if (e.code === "ArrowDown") {
             const vol = Math.max(0, playerView.videoEl.volume - 0.05);
-            playerView.videoEl.volume = playerView.audioEl.volume = vol;
+            playerView.videoEl.volume = vol;
             e.preventDefault();
         }
 
         if (!isNaN(parseInt(e.key))) {
             const value = parseInt(e.key) * 10;
             const time = clamp(0, playerView.videoEl.duration * (value / 100), playerView.videoEl.duration);
-            playerView.videoEl.currentTime = playerView.audioEl.currentTime = time;
+            playerView.mediaSync.seek(time);
         }
 
         if (e.key === "l") {
@@ -111,8 +111,7 @@ export function setupBar() {
         const duration = playerView.videoEl.duration;
         if (!isNaN(duration)) {
             const newTime = parseFloat(playerView.progressInput.value);
-            playerView.videoEl.currentTime = newTime;
-            playerView.audioEl.currentTime = newTime;
+            playerView.mediaSync.seek(newTime);
         }
     });
 
@@ -154,48 +153,49 @@ export function setupBar() {
         updateVideoHistoryTime($store.videoId.get(), 0);
     });
 
+    // TODO refactor to new media sync
     playerView.videoEl.addEventListener("progress", () => updateProgressBars());
     playerView.videoEl.addEventListener("timeupdate", () => {
         updateProgressBars();
         timeSpan.textContent =
-            formatTime(playerView.videoEl.currentTime, hasHours) + " / " +
+            formatTime(playerView.mediaSync.currentTime, hasHours) + " / " +
             formatTime(playerView.videoEl.duration, hasHours);
 
         if (playerView.lastUpdateTime + 10_000 < Date.now()) {
             playerView.lastUpdateTime = Date.now();
-            updateVideoHistoryTime($store.videoId.get(), Math.floor(playerView.videoEl.currentTime));
+            updateVideoHistoryTime($store.videoId.get(), Math.floor(playerView.mediaSync.currentTime));
         }
 
         // if video was watched of last 3 seconds then start from the beginning
-        if (Math.floor(playerView.videoEl.currentTime) + 3 >= Math.floor(playerView.videoEl.duration)) {
+        if (Math.floor(playerView.mediaSync.currentTime) + 3 >= Math.floor(playerView.videoEl.duration)) {
             updateVideoHistoryTimeToZero();
         }
 
         // play next video
-        if (playerView.videoEl.currentTime + 0.1 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
+        if (playerView.mediaSync.currentTime + 0.1 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
             playNextDebounced();
         }
 
         // if video was watched of last 13 seconds then buffer next (server side)
-        if (playerView.videoEl.currentTime + 13 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
+        if (playerView.mediaSync.currentTime + 13 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
             bufferNextThrottled();
         }
     });
 
     playerView.videoEl.addEventListener("play", () => {
         playPauseBtn.textContent = "⏸️";
-        playerView.paused = false;
+        playerView.mediaSync.play();
     });
 
     playerView.videoEl.addEventListener("pause", () => {
         playPauseBtn.textContent = "▶️";
-        playerView.paused = true;
+        playerView.mediaSync.pause();
     });
 }
 
 export function updateProgressBars() {
     const duration = playerView.videoEl.duration;
-    const currentTime = playerView.videoEl.currentTime;
+    const currentTime = playerView.mediaSync.currentTime;
 
     if (isNaN(duration) || duration === Infinity) return;
 

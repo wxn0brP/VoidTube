@@ -14,10 +14,10 @@ import { emitLastVideo, emitPlay } from "./tabs";
 import queuePanel from "../queue";
 
 export function changePlay() {
-    playerView.paused = !playerView.paused;
-    playerView.paused ? playerView.videoEl.pause() : playerView.videoEl.play();
-    playerView.controls.playPauseBtn.textContent = playerView.paused ? "▶️" : "⏸️";
-    if (playerView.paused) saveProgress();
+    const action = playerView.mediaSync.isPlaying;
+    playerView.mediaSync[action ? "pause" : "play"]();
+    playerView.controls.playPauseBtn.textContent = action ? "▶️" : "⏸️";
+    if (!action) saveProgress();
     else emitPlay();
 }
 
@@ -31,7 +31,7 @@ export async function saveProgress() {
     playerView.lastUpdateTime = Date.now();
     await updateVideoHistoryTime(
         $store.videoId.get(),
-        Math.floor(playerView.videoEl.currentTime)
+        Math.floor(playerView.mediaSync.currentTime)
     )
 }
 
@@ -41,8 +41,7 @@ export async function loadProgress() {
     if (time) {
         // if video was watched of last 3 seconds then start from the beginning
         if (time + 3 > (playerView.videoEl.duration || $store.video.get().duration || 0)) time = 0;
-        playerView.videoEl.currentTime = time;
-        playerView.audioEl.currentTime = time;
+        playerView.mediaSync.seek(time);
     }
 }
 
@@ -65,8 +64,8 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
 
     $store.video.set(data);
     $store.videoId.set(id);
-    playerView.paused = true;
-    playerView.videoEl.currentTime = 0;
+    playerView.mediaSync.pause();
+    playerView.mediaSync.seek(0);
 
     fetchVQL(`user updateOneOrAdd history s._id=${id} u.watched=true u.last=${Math.floor(Date.now() / 1000)}`).then(() => {
         // historyView.loadHistory(); // refresh history
@@ -89,7 +88,7 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
 
     playerView.videoEl.addEventListener("loadedmetadata", async () => {
         await loadProgress();
-        if (opts.autoPlay) playerView.videoEl.play();
+        if (opts.autoPlay) playerView.mediaSync.play();
     }, { once: true });
 
     if ($store.settings.antiRecommendationLoop.get()) {
@@ -103,14 +102,18 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
 export const loadVideo = utils.debounce<typeof loadVideoFn>(loadVideoFn, 200);
 
 export function loadMediaSession() {
-    const video = $store.video.get();
-    if (!video) return;
+    if (!$store.videoId.get()) return;
+    const baseUrl = `https://i.ytimg.com/vi/${$store.videoId.get()}/`;
     navigator.mediaSession.metadata = new MediaMetadata({
-        title: video.title,
+        title: $store.video.get()?.title || "Unknown",
         artist: $store.videoChannelName.get() || "Unknown",
-        // album: 'Album',
+        // album: "Album",
         artwork: [
-            { src: video.thumbnail, sizes: '480x360', type: 'image/png' }
+            { src: baseUrl + "default.jpg", sizes: "120x90", type: "image/jpeg" },
+            { src: baseUrl + "hqdefault.jpg", sizes: "480x360", type: "image/jpeg" },
+            { src: baseUrl + "mqdefault.jpg", sizes: "320x180", type: "image/jpeg" },
+            { src: baseUrl + "sddefault.jpg", sizes: "640x480", type: "image/jpeg" },
+            { src: baseUrl + "maxresdefault.jpg", sizes: "1280x720", type: "image/jpeg" }
         ]
     });
 }

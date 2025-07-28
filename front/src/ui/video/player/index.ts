@@ -7,22 +7,22 @@ import navBarView from "#ui/navBar";
 import { clearQueryParams, setTitle, updateQueryParam } from "#utils";
 import utils, { UiComponent } from "@wxn0brp/flanker-ui";
 import queuePanel from "../queue";
-import { setupAudioSync } from "./audioSync";
 import { setupBar } from "./bar";
 import { setupChannelInfo } from "./channelInfo";
 import { loadMediaSession, loadVideo } from "./status";
 import { setUpSponsorBlock } from "./sync";
 import { loadCaps, removeCaps } from "./caps";
+import MediaSyncController from "./mediaSync";
 
 export class PlayerView implements UiComponent {
-    public element: HTMLDivElement;
-    public bar: HTMLDivElement;
+	public element: HTMLDivElement;
+	public bar: HTMLDivElement;
 
-    public lastUpdateTime = Date.now();
-    public videoEl: HTMLVideoElement;
-    public audioEl: HTMLAudioElement;
-    public savedTime: number = 0;
-    public paused: boolean = true;
+	public lastUpdateTime = Date.now();
+	public videoEl: HTMLVideoElement;
+	public audioEl: HTMLAudioElement;
+	public savedTime: number = 0;
+	public mediaSync: MediaSyncController;
 
     public controls!: {
         playPauseBtn: HTMLButtonElement;
@@ -45,6 +45,11 @@ export class PlayerView implements UiComponent {
         this.bar = document.querySelector("#player-bar")!;
         this.videoEl = this.element.querySelector("video")!;
 
+        this.mediaSync = new MediaSyncController({
+            audio: this.audioEl,
+            video: this.videoEl,
+        });
+
         this.videoEl.controls = false;
         this.element.appendChild(this.videoEl);
         this.element.appendChild(this.bar);
@@ -65,9 +70,8 @@ export class PlayerView implements UiComponent {
             }
 
             try {
-                this.savedTime = this.videoEl.currentTime;
-                this.videoEl.pause();
-                this.audioEl.pause();
+                this.savedTime = this.mediaSync.currentTime;
+                this.mediaSync.pause();
 
                 this.videoEl.src = videoUrl;
                 this.audioEl.src = audioUrl;
@@ -86,17 +90,16 @@ export class PlayerView implements UiComponent {
         });
 
         this.videoEl.addEventListener("loadeddata", () => {
-            this.videoEl.currentTime = this.savedTime;
-            this.audioEl.currentTime = this.savedTime;
+            this.mediaSync.seek(this.savedTime);
+            loadMediaSession();
 
-            if (!this.paused) this.videoEl.play();
+            if (this.mediaSync.isPlaying) this.mediaSync.play();
         });
 
         const loadMediaDebounce = utils.debounce(loadMedia, 100);
         $store.selectedVideoUrl.subscribe(() => loadMediaDebounce());
         $store.selectedAudioUrl.subscribe(() => loadMediaDebounce());
 
-        setupAudioSync();
         setupBar();
         setupChannelInfo();
         setUpSponsorBlock();
@@ -104,7 +107,7 @@ export class PlayerView implements UiComponent {
         window.addEventListener("beforeunload", () => {
             localStorage.setItem("cache.progress", JSON.stringify({
                 id: $store.videoId.get(),
-                time: Math.floor(this.videoEl.currentTime)
+                time: Math.floor(this.mediaSync.currentTime)
             }));
             localStorage.setItem("cache.queue", JSON.stringify({
                 i: $store.queueIndex.get(),
@@ -130,6 +133,6 @@ export default playerView;
 
 mgl.playerShow = playerView.show;
 mgl.player = {}
-mgl.player.setTime = (time: number) => playerView.videoEl.currentTime = time;
+mgl.player.setTime = (time: number) => playerView.mediaSync.seek(time);
 mgl.player.loadCaps = loadCaps;
 mgl.player.removeCaps = removeCaps;
