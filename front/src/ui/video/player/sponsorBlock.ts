@@ -7,7 +7,7 @@ export async function sponsorBlock() {
     if (!$store.settings.sponsorBlock.get()) return;
     const segments = $store.sponsorBlock.segments.get();
     if (!segments || !segments.length) return;
-    const current = playerView.videoEl.currentTime;
+    const current = playerView.mediaSync.currentTime;
 
     for (const seg of segments) {
         const [start, end] = seg.segment;
@@ -18,7 +18,7 @@ export async function sponsorBlock() {
 
         if (condition) {
             uiMsg(`Skipping via sponsor block (${seg.category})`);
-            playerView.videoEl.currentTime = end;
+            playerView.mediaSync.seek(end);
             break;
         }
     }
