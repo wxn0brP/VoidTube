@@ -1,10 +1,11 @@
 import { clamp } from "@wxn0brp/flanker-ui/utils";
 import { fadeAudioIn, fadeAudioOut } from "./audioSync";
 import { playNext, playPrev } from "./sync";
+import { UniversalEventEmitter } from "#utils/eventEmitter";
 
 interface MediaSyncControllerConfig {
-    audio?: HTMLAudioElement;
-    video?: HTMLVideoElement;
+    audio: HTMLAudioElement;
+    video: HTMLVideoElement;
 }
 
 type MediaClient = HTMLAudioElement | HTMLVideoElement;
@@ -15,8 +16,8 @@ class MediaSyncController {
     private duration = 0;
     private clockTime = 0;
     private playing = false;
-    public audioEnabled = true;
     public videoEnabled = true;
+    public eventEmitter = new UniversalEventEmitter();
 
     constructor(config: MediaSyncControllerConfig) {
         this.audio = config.audio;
@@ -26,27 +27,33 @@ class MediaSyncController {
             this.setupMediaSessionHandlers();
         }
 
-        if (this.audio) this.monitorMedia(this.audio);
-        if (this.video) this.monitorMedia(this.video);
+        this.events();
 
         setInterval(() => {
             this.tick();
         }, 333);
     }
 
-    private monitorMedia(el: MediaClient) {
-        el.addEventListener("loadedmetadata", () => {
-            this.onMediaLoadedMetadata();
-        });
+    private events() {
+        const audio = this.audio;
+        audio.addEventListener("loadedmetadata", () => this.onMediaLoadedMetadata());
+        audio.addEventListener("loadedmetadata", (...args) => this.eventEmitter.emit("loadedmetadata", ...args));
+        audio.addEventListener("loadeddata", (...args) => this.eventEmitter.emit("loadeddata", ...args));
+        audio.addEventListener("timeupdate", (...args) => this.eventEmitter.emit("timeupdate", ...args));
+        audio.addEventListener("seeking", (...args) => this.eventEmitter.emit("seeking", ...args));
+        audio.addEventListener("ended", (...args) => this.eventEmitter.emit("ended", ...args));
+        audio.addEventListener("pause", (...args) => this.eventEmitter.emit("pause", ...args));
+        audio.addEventListener("play", (...args) => this.eventEmitter.emit("play", ...args));
+        audio.addEventListener("error", (...args) => this.eventEmitter.emit("error", ...args));
+        audio.addEventListener("progress", (...args) => this.eventEmitter.emit("progress", ...args));
     }
 
     private onMediaLoadedMetadata() {
-        if (this.audioEnabled && this.audio?.duration) this.setDuration(this.audio.duration);
-        else if (this.videoEnabled && this.video?.duration) this.setDuration(this.video.duration); 
+        if (this.audio.duration) this.setDuration(this.audio.duration);
         this.syncClients();
 
         if (this.playing) {
-            if (this.audioEnabled) this.audio?.play().catch(() => { });
+            this.audio.play().catch(() => { });
             if (this.videoEnabled) this.video?.play().catch(() => { });
         }
     }
@@ -54,8 +61,8 @@ class MediaSyncController {
     play() {
         if (this.playing) return;
         this.playing = true;
-        if (this.audioEnabled) this.audio?.play().catch(() => { });
-        if (this.videoEnabled) this.video?.play().catch(() => { });
+        this.audio.play().catch(() => { });
+        if (this.videoEnabled) this.video.play().catch(() => { });
         fadeAudioIn();
     }
 
@@ -63,7 +70,7 @@ class MediaSyncController {
         if (!this.playing) return;
         this.playing = false;
         this.video?.pause();
-        fadeAudioOut().then(() => this.audio?.pause());
+        fadeAudioOut().then(() => this.audio.pause());
     }
 
     seek(time: number) {
@@ -76,7 +83,7 @@ class MediaSyncController {
     }
 
     private syncClients() {
-        if (this.audioEnabled && this.isUnSync(this.audio)) this.audio.currentTime = this.clockTime;
+        if (this.isUnSync(this.audio)) this.audio.currentTime = this.clockTime;
         if (this.videoEnabled && this.isUnSync(this.video)) this.video.currentTime = this.clockTime;
     }
 
@@ -86,7 +93,7 @@ class MediaSyncController {
 
     private tick() {
         if (!this.playing) return;
-        this.clockTime = this.audio?.currentTime ?? this.video?.currentTime ?? 0;
+        this.clockTime = this.audio.currentTime ?? this.video.currentTime ?? 0;
     }
 
     private setupMediaSessionHandlers() {

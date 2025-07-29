@@ -89,7 +89,7 @@ export class PlayerView implements UiComponent {
             setTitle(video ? video.title : "");
         });
 
-        this.videoEl.addEventListener("loadeddata", () => {
+        this.mediaSync.eventEmitter.on("loadeddata", () => {
             this.mediaSync.seek(this.savedTime);
             loadMediaSession();
 
