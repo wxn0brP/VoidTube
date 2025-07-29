@@ -75,7 +75,8 @@ class MediaSyncController {
 
     seek(time: number) {
         this.clockTime = clamp(0, time, this.duration);
-        this.syncClients();
+        this.audio.currentTime = this.clockTime;
+        if (this.videoEnabled) this.video.currentTime = this.clockTime;
     }
 
     setDuration(sec: number) {
@@ -88,7 +89,7 @@ class MediaSyncController {
     }
 
     isUnSync(source: MediaClient) {
-        return Math.abs(source.currentTime - this.clockTime) > 0.3;
+        return Math.abs(source.currentTime - this.clockTime) > 0.2;
     }
 
     private tick() {
