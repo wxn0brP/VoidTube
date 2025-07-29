@@ -1,12 +1,13 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
-import { clamp, formatTime } from "#utils";
+import { formatTime } from "#utils";
 import utils, { uiHelpers } from "@wxn0brp/flanker-ui";
+import { clamp } from "@wxn0brp/flanker-ui/utils";
 import playerView from ".";
-import { getNextVideoId, playNext, playPrev } from "./sync";
-import { changePlay, toggleFullscreen } from "./status";
 import "./bar.scss";
+import { changePlay, toggleFullscreen } from "./status";
+import { getNextVideoId, playNext, playPrev } from "./sync";
 
 export function setupBar() {
     let hasHours = false;
@@ -171,16 +172,12 @@ export function setupBar() {
             updateVideoHistoryTimeToZero();
         }
 
-        // play next video
-        if (playerView.mediaSync.currentTime + 0.1 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
-            playNextDebounced();
-        }
-
         // if video was watched of last 13 seconds then buffer next (server side)
         if (playerView.mediaSync.currentTime + 13 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
             bufferNextThrottled();
         }
     });
+    playerView.videoEl.addEventListener("ended", () => !playerView.videoEl.loop && playNextDebounced());
 
     playerView.videoEl.addEventListener("play", () => {
         playPauseBtn.textContent = "⏸️";

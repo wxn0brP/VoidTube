@@ -21,7 +21,7 @@ channel.addEventListener("message", (event: MessageEvent<ChannelMessage>) => {
     console.log("[Tabs]", event.data);
     const type = event.data.type;
     if (type === "play") {
-        if ($store.settings.onePlay.get() && !playerView.videoEl.paused) changePlay();
+        if ($store.settings.onePlay.get() && playerView.mediaSync.isPlaying) changePlay();
     } else if (type === "lastVideo") {
         appendLastVideos(event.data.payload.id);
     } else if (type === "emitLastVideos") {

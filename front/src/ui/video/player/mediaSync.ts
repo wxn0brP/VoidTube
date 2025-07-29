@@ -1,3 +1,4 @@
+import { clamp } from "@wxn0brp/flanker-ui/utils";
 import { fadeAudioIn, fadeAudioOut } from "./audioSync";
 import { playNext, playPrev } from "./sync";
 
@@ -40,10 +41,8 @@ class MediaSyncController {
     }
 
     private onMediaLoadedMetadata() {
-        const duration = this.audio?.duration ?? this.video?.duration ?? 0;
-        if (isFinite(duration) && duration > 0) {
-            this.setDuration(duration);
-        }
+        if (this.audioEnabled && this.audio?.duration) this.setDuration(this.audio.duration);
+        else if (this.videoEnabled && this.video?.duration) this.setDuration(this.video.duration); 
         this.syncClients();
 
         if (this.playing) {
@@ -68,7 +67,7 @@ class MediaSyncController {
     }
 
     seek(time: number) {
-        this.clockTime = Math.max(0, Math.min(this.duration, time));
+        this.clockTime = clamp(0, time, this.duration);
         this.syncClients();
     }
 
@@ -116,6 +115,10 @@ class MediaSyncController {
 
     get isPlaying() {
         return this.playing;
+    }
+
+    getDuration() {
+        return this.duration;
     }
 }
 

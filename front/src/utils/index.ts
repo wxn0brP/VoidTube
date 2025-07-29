@@ -68,8 +68,6 @@ export function levenshtein(a: string, b: string): number {
     return dp[b.length];
 }
 
-export const clamp = (min: number, num: number, max: number) => Math.min(Math.max(num, min), max);
-
 export function setTitle(title: string) {
     const baseTitle = "Void Tube";
     if (title && title.trim() !== "") title = " | " + title;
