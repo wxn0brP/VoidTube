@@ -57,8 +57,7 @@ export function initParma(autoPlay = false) {
     const time = urlParams.get("t");
     if (time) {
         setTimeout(() => {
-            playerView.videoEl.currentTime = Number(time);
-            playerView.audioEl.currentTime = Number(time)
+            playerView.mediaSync.seek(+time);
         }, 1000);
     }
 }
