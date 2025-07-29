@@ -24,18 +24,6 @@ export class PlayerView implements UiComponent {
 	public savedTime: number = 0;
 	public mediaSync: MediaSyncController;
 
-    public controls!: {
-        playPauseBtn: HTMLButtonElement;
-        progressInput: HTMLInputElement;
-        volumeInput: HTMLInputElement;
-        fullscreenBtn: HTMLButtonElement;
-    };
-
-    // Buffered & played ranges
-    public bufferedRange!: HTMLDivElement;
-    public playedRange!: HTMLDivElement;
-    public progressInput!: HTMLInputElement;
-
     constructor() {
         this.audioEl = new Audio();
     }

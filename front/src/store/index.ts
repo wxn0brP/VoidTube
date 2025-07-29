@@ -15,6 +15,11 @@ const initData = {
     queueLoop: false,
     queueIndex: 0,
 
+    player: {
+        loop: false,
+        volume: 1
+    },
+
     view: {
         video: false,
         history: false,

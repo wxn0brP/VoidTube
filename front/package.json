@@ -18,7 +18,7 @@
         "typescript": "^5.7.3"
     },
     "dependencies": {
-        "@wxn0brp/flanker-ui": "^0.2.4",
+        "@wxn0brp/flanker-ui": "^0.2.5",
         "@wxn0brp/vql-client": "^0.0.13"
     }
 }

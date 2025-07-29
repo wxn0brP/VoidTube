@@ -4,25 +4,25 @@
             <video id="player-video"></video>
             <div id="player-bar">
                 <div class="custom-progress-container">
-                    <div class="buffered-range"></div>
-                    <div class="played-range"></div>
-                    <input type="range" class="progress" min="0" max="100" value="0" />
+                    <div class="buffered-range" data-id="buffered-range"></div>
+                    <div class="played-range" data-id="played-range"></div>
+                    <input type="range" class="progress" min="0" max="100" value="0" data-id="progress" />
                 </div>
 
                 <div class="control-bar">
                     <div class="left-bar">
-                        <button class="play-pause-btn" title="Play / Pause">▶️</button>
-                        <label title="Loop">L <input type="checkbox" id="loop"></label>
-                        <label title="Loop Queue">LQ <input type="checkbox" id="loop-queue"></label>
-                        <label title="Audio Fade Enabled">AF <input type="checkbox" id="audio-fade"></label>
-                        <button class="btn" id="previous-video" title="Previous video">⬅️</button>
-                        <button class="btn" id="next-video" title="Next video">➡️</button>
+                        <button data-id="play-pause" class="play-pause-btn" title="Play / Pause">▶️</button>
+                        <label title="Loop">L <input type="checkbox" data-id="loop"></label>
+                        <label title="Loop Queue">LQ <input type="checkbox" data-id="loop-queue"></label>
+                        <label title="Audio Fade Enabled">AF <input type="checkbox" data-id="audio-fade"></label>
+                        <button data-id="previous-video" class="btn" title="Previous video">⬅️</button>
+                        <button data-id="next-video" class="btn" title="Next video">➡️</button>
                     </div>
                     
                     <div class="right-bar">
-                        <input type="range" class="volume" title="Volume" min="0" max="1" step="0.01" value="1" />
-                        <span class="time">00:00 / 00:00</span>
-                        <button class="fullscreen-btn" title="Fullscreen">⛶</button>
+                        <input type="range" class="volume" title="Volume" min="0" max="1" step="0.01" value="1" data-id="volume" />
+                        <span class="time" data-id="time">00:00 / 00:00</span>
+                        <button class="fullscreen-btn" title="Fullscreen" data-id="toggle-fullscreen">⛶</button>
                     </div>
                 </div>
             </div>

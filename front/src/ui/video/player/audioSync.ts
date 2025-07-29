@@ -11,7 +11,7 @@ function getFadeAudio() {
 }
 
 export function fadeAudioIn() {
-    const targetVolume = playerView.videoEl.volume;
+    const targetVolume = $store.player.volume.get();
     const fadeAudio = getFadeAudio();
     if (!fadeAudio) return Promise.resolve();
 
@@ -46,7 +46,7 @@ export function fadeAudioOut() {
     if (!fadeAudio) return Promise.resolve();
 
     return new Promise<void>(resolve => {
-        let startVolume = playerView.videoEl.volume;
+        let startVolume = $store.player.volume.get();
         if (startVolume <= 0) {
             resolve();
             return;
