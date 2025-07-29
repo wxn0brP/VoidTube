@@ -59,6 +59,7 @@ export class PlayerView implements UiComponent {
 
             try {
                 this.savedTime = this.mediaSync.currentTime;
+                const isPlaying = this.mediaSync.isPlaying;
                 this.mediaSync.pause();
 
                 this.videoEl.src = videoUrl;
@@ -68,6 +69,8 @@ export class PlayerView implements UiComponent {
                 this.audioEl.load();
 
                 loadMediaSession();
+
+                if (isPlaying) this.mediaSync.play();
             } catch (err) {
                 uiMsg("Failed to load video: " + err.message);
             }
@@ -124,3 +127,4 @@ mgl.player = {}
 mgl.player.setTime = (time: number) => playerView.mediaSync.seek(time);
 mgl.player.loadCaps = loadCaps;
 mgl.player.removeCaps = removeCaps;
+mgl.player.view = playerView;

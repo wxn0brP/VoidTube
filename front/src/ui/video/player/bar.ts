@@ -4,7 +4,7 @@ import { $store } from "#store";
 import { formatTime } from "#utils";
 import { watchCheckbox } from "@wxn0brp/flanker-ui/component/helpers";
 import { toggleBoolean } from "@wxn0brp/flanker-ui/storeUtils";
-import { clamp, debounce, throttle } from "@wxn0brp/flanker-ui/utils";
+import { clamp, debounce, round, throttle } from "@wxn0brp/flanker-ui/utils";
 import playerView from ".";
 import "./bar.scss";
 import { changePlay, toggleFullscreen } from "./status";
@@ -42,10 +42,14 @@ export function setupBar() {
     playedRange = playerView.bar.qi("played-range");
     progressInput = playerView.bar.qi("progress");
 
-    $store.queueLoop.set(loopQueue.checked);
-    $store.player.loop.set(loopInput.checked);
     watchCheckbox(audioFadeEnabled, $store.settings.audioFadeEnabled);
     watchCheckbox(loopInput, $store.player.loop);
+    $store.player.loop.subscribe((val) => {
+        playerView.videoEl.loop = val;
+        playerView.audioEl.loop = val;
+    });
+    $store.queueLoop.set(loopQueue.checked);
+    $store.player.loop.set(loopInput.checked);
 
     playerView.bar.qi("previous-video").addEventListener("click", () => playPrev());
     playerView.bar.qi("next-video").addEventListener("click", () => playNext());
@@ -108,6 +112,11 @@ export function setupBar() {
         // if video was watched of last 3 seconds then start from the beginning
         if (Math.floor(playerView.mediaSync.currentTime) + 3 >= Math.floor(playerView.mediaSync.getDuration())) {
             updateVideoHistoryTimeToZero();
+        }
+
+        // if video was watched of last 0.1 seconds then play next
+        if (!$store.player.loop.get() && round(playerView.mediaSync.currentTime, 1) + 0.1 >= round(playerView.mediaSync.getDuration(), 1)) {
+            playNextDebounced();
         }
 
         // if video was watched of last 13 seconds then buffer next (server side)
