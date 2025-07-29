@@ -40,7 +40,7 @@ export async function loadProgress() {
     let time = await fetchVideoHistoryTime(videoId);
     if (time) {
         // if video was watched of last 3 seconds then start from the beginning
-        if (time + 3 > (playerView.videoEl.duration || $store.video.get().duration || 0)) time = 0;
+        if (time + 3 > (playerView.mediaSync.getDuration() || $store.video.get().duration || 0)) time = 0;
         playerView.mediaSync.seek(time);
     }
 }
@@ -86,10 +86,10 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
         });
     }
 
-    playerView.videoEl.addEventListener("loadedmetadata", async () => {
+    playerView.mediaSync.eventEmitter.once("loadedmetadata", async () => {
         await loadProgress();
         if (opts.autoPlay) playerView.mediaSync.play();
-    }, { once: true });
+    });
 
     if ($store.settings.antiRecommendationLoop.get()) {
         appendLastVideos(id);

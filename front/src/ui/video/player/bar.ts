@@ -61,7 +61,7 @@ export function setupBar() {
         }
 
         if (e.code === "ArrowRight") {
-            const time = Math.min(playerView.videoEl.duration, playerView.mediaSync.currentTime + 5);
+            const time = Math.min(playerView.mediaSync.getDuration(), playerView.mediaSync.currentTime + 5);
             playerView.mediaSync.seek(time);
         }
 
@@ -84,7 +84,7 @@ export function setupBar() {
 
         if (!isNaN(parseInt(e.key))) {
             const value = parseInt(e.key) * 10;
-            const time = clamp(0, playerView.videoEl.duration * (value / 100), playerView.videoEl.duration);
+            const time = clamp(0, playerView.mediaSync.getDuration() * (value / 100), playerView.mediaSync.getDuration());
             playerView.mediaSync.seek(time);
         }
 
@@ -109,7 +109,7 @@ export function setupBar() {
     });
 
     playerView.progressInput.addEventListener("input", () => {
-        const duration = playerView.videoEl.duration;
+        const duration = playerView.mediaSync.getDuration();
         if (!isNaN(duration)) {
             const newTime = parseFloat(playerView.progressInput.value);
             playerView.mediaSync.seek(newTime);
@@ -134,9 +134,9 @@ export function setupBar() {
     }, 100);
 
     // UI sync
-    playerView.videoEl.addEventListener("loadedmetadata", () => {
-        playerView.progressInput.max = playerView.videoEl.duration.toString();
-        hasHours = playerView.videoEl.duration >= 3600;
+    playerView.mediaSync.eventEmitter.on("loadedmetadata", () => {
+        playerView.progressInput.max = playerView.mediaSync.getDuration().toString();
+        hasHours = playerView.mediaSync.getDuration() >= 3600;
         updateProgressBars();
     });
 
@@ -155,12 +155,12 @@ export function setupBar() {
     });
 
     // TODO refactor to new media sync
-    playerView.videoEl.addEventListener("progress", () => updateProgressBars());
-    playerView.videoEl.addEventListener("timeupdate", () => {
+    playerView.mediaSync.eventEmitter.on("progress", () => updateProgressBars());
+    playerView.mediaSync.eventEmitter.on("timeupdate", () => {
         updateProgressBars();
         timeSpan.textContent =
             formatTime(playerView.mediaSync.currentTime, hasHours) + " / " +
-            formatTime(playerView.videoEl.duration, hasHours);
+            formatTime(playerView.mediaSync.getDuration(), hasHours);
 
         if (playerView.lastUpdateTime + 10_000 < Date.now()) {
             playerView.lastUpdateTime = Date.now();
@@ -168,30 +168,30 @@ export function setupBar() {
         }
 
         // if video was watched of last 3 seconds then start from the beginning
-        if (Math.floor(playerView.mediaSync.currentTime) + 3 >= Math.floor(playerView.videoEl.duration)) {
+        if (Math.floor(playerView.mediaSync.currentTime) + 3 >= Math.floor(playerView.mediaSync.getDuration())) {
             updateVideoHistoryTimeToZero();
         }
 
         // if video was watched of last 13 seconds then buffer next (server side)
-        if (playerView.mediaSync.currentTime + 13 >= playerView.videoEl.duration && !playerView.videoEl.loop) {
+        if (playerView.mediaSync.currentTime + 13 >= playerView.mediaSync.getDuration() && !playerView.videoEl.loop) {
             bufferNextThrottled();
         }
     });
-    playerView.videoEl.addEventListener("ended", () => !playerView.videoEl.loop && playNextDebounced());
+    playerView.mediaSync.eventEmitter.on("ended", () => !playerView.videoEl.loop && playNextDebounced());
 
-    playerView.videoEl.addEventListener("play", () => {
+    playerView.mediaSync.eventEmitter.on("play", () => {
         playPauseBtn.textContent = "⏸️";
         playerView.mediaSync.play();
     });
 
-    playerView.videoEl.addEventListener("pause", () => {
+    playerView.mediaSync.eventEmitter.on("pause", () => {
         playPauseBtn.textContent = "▶️";
         playerView.mediaSync.pause();
     });
 }
 
 export function updateProgressBars() {
-    const duration = playerView.videoEl.duration;
+    const duration = playerView.mediaSync.getDuration();
     const currentTime = playerView.mediaSync.currentTime;
 
     if (isNaN(duration) || duration === Infinity) return;

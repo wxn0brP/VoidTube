@@ -74,9 +74,9 @@ export function playPrev() {
 }
 
 export function setUpSponsorBlock() {
-    playerView.videoEl.addEventListener("timeupdate", sponsorBlock);
-    playerView.videoEl.addEventListener("seeking", sponsorBlock);
-    playerView.videoEl.addEventListener("loadedmetadata", async () => {
+    playerView.mediaSync.eventEmitter.on("timeupdate", sponsorBlock);
+    playerView.mediaSync.eventEmitter.on("seeking", sponsorBlock);
+    playerView.mediaSync.eventEmitter.on("loadedmetadata", async () => {
         if (!$store.settings.sponsorBlock.get()) return;
         const id = $store.videoId.get();
         const segmentsId = $store.sponsorBlock.id.get();
