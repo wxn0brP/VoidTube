@@ -9,14 +9,15 @@ import historyView from "#ui/view/history";
 import { updateQueryParam } from "#utils";
 import utils from "@wxn0brp/flanker-ui";
 import playerView from ".";
-import recommendationPanel from "../recommendations";
-import { emitLastVideo, emitPlay } from "./tabs";
 import queuePanel from "../queue";
+import recommendationPanel from "../recommendations";
+import { playPauseBtn } from "./bar";
+import { emitLastVideo, emitPlay } from "./tabs";
 
 export function changePlay() {
     const action = playerView.mediaSync.isPlaying;
     playerView.mediaSync[action ? "pause" : "play"]();
-    playerView.controls.playPauseBtn.textContent = action ? "▶️" : "⏸️";
+    playPauseBtn.textContent = action ? "▶️" : "⏸️";
     if (!action) saveProgress();
     else emitPlay();
 }
