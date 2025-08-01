@@ -1,7 +1,13 @@
 import esbuild from "esbuild";
 import stylePlugin from "esbuild-style-plugin";
+import { writeFileSync } from "fs";
 
 const isDev = process.env.NODE_ENV === "development" || process.argv.includes("--dev");
+if (isDev) {
+    await import("./gen.js");
+} else {
+    writeFileSync("src/__all_modules.ts", "export {}");
+}
 
 esbuild.build({
     entryPoints: [
