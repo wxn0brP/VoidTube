@@ -52,7 +52,7 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
             .map(format => ({
                 url: format.url,
                 formatId: format.format_id,
-                resolution: format.resolution ?? `${format.width}x${format.height}` ?? null,
+                resolution: format.resolution ?? `${format.width}x${format.height}`,
                 ext: format.ext,
                 fps: format.fps,
                 fileSize: format.filesize,
