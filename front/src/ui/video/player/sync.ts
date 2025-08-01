@@ -23,8 +23,10 @@ export function playNext() {
     if (store !== undefined)
         $store.queueIndex.set(store);
     
-    if (nextVideo.append) 
+    if (nextVideo.append) {
+        $store.recommendedId.set("");
         queuePanel.append(id);
+    }
 
     loadVideo(id);
 }
