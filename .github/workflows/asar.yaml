@@ -22,6 +22,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ">=23"
+
       - name: Build app
         run: |
           npm install -g typescript tsc-alias asar
