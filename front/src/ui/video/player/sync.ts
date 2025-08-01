@@ -8,11 +8,6 @@ import { fetchSponsorSegments, sponsorBlock } from "./sponsorBlock";
 import { loadVideo } from "./status";
 
 export function playNext() {
-    const oldId = $store.videoId.get();
-    setTimeout(() => {
-        updateVideoHistoryTime(oldId, 0);
-    }, 3000);
-
     const nextVideo = getNextVideoId();
     if (!nextVideo) {
         uiMsg("End of queue");
