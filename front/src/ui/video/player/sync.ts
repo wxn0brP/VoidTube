@@ -13,32 +13,51 @@ export function playNext() {
         updateVideoHistoryTime(oldId, 0);
     }, 3000);
 
-    const nextVideoId = getNextVideoId();
-    if (!nextVideoId) {
+    const nextVideo = getNextVideoId();
+    if (!nextVideo) {
         uiMsg("End of queue");
         return;
     }
-    $store.queueIndex.set($store.queueIndex.get() + 1);
+    const { id, store } = nextVideo;
 
-    loadVideo(nextVideoId);
+    if (store !== undefined)
+        $store.queueIndex.set(store);
+    
+    if (nextVideo.append) 
+        queuePanel.append(id);
+
+    loadVideo(id);
 }
 
 export function getNextVideoId() {
     const length = queuePanel.queue.length;
-    const index = $store.queueIndex.get() + 1;
-    if (index >= length) {
+    const nextVideoIndex = $store.queueIndex.get() + 1;
+
+    if (nextVideoIndex >= length) {
+        // If end of queue and looping is enabled, reset to the first video
         if ($store.queueLoop.get()) {
-            $store.queueIndex.set(0);
-            return queuePanel.queue[0];
-        } else if($store.recommendedId.get()) {
+            return {
+                id: queuePanel.queue[0],
+                store: 0
+            };
+        }
+        // If a recommended video is available, append it to the queue if not present
+        else if ($store.recommendedId.get()) {
             const id = $store.recommendedId.get();
-            const index = queuePanel.queue.indexOf(id);
-            if (index !== -1) queuePanel.append(id);
-            return id;
-        } else return null;
+            return {
+                id,
+                store: Math.max(queuePanel.queue.length, 1),
+                append: true
+            };
+        }
+        // No next video available
+        else return null;
     }
 
-    return queuePanel.queue[index];
+    return {
+        id: queuePanel.queue[nextVideoIndex],
+        store: nextVideoIndex
+    };
 }
 
 function getPrevVideoIdFromStack(i = navBarView.stack.length - 2) {
@@ -46,7 +65,7 @@ function getPrevVideoIdFromStack(i = navBarView.stack.length - 2) {
     const item = navBarView.stack[i];
     if (item.view === "video")
         return new URL(location.origin + item.search).searchParams.get("v");
-    
+
     return getPrevVideoIdFromStack(i - 1);
 }
 
@@ -61,12 +80,12 @@ export function playPrev() {
     const length = queuePanel.queue.length;
     if (length) {
         let prev = $store.queueIndex.get() - 1;
-        if (prev < 0) 
+        if (prev < 0)
             prev = $store.queueLoop.get() ? length - 1 : 0;
         $store.queueIndex.set(prev);
         prevVideoId = queuePanel.queue[prev];
     }
-        
+
     if (!prevVideoId) prevVideoId = getPrevVideoIdFromStack();
     if (!prevVideoId) return;
 
