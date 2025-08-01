@@ -135,9 +135,9 @@ class HistoryView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#history-view");
+        this.element = qs("#history-view");
         this.container = this.element.querySelector("#history-container")!;
-        this.searchInput = document.querySelector("#history-search")!;
+        this.searchInput = qs("#history-search")!;
         this.searchInput.style.display = "none";
 
         uiHelpers.storeHide(this.element, $store.view.history);

@@ -39,7 +39,7 @@ class PlayListsModal implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#playlists-modal")!;
+        this.element = qs("#playlists-modal")!;
         this.container = this.element.querySelector("#playlists-modal-container")!;
         this.createPlaylistBtn = this.element.querySelector("[data-id=create]")!;
         this.element.querySelector<HTMLButtonElement>("[data-id=cancel]")!.onclick = () => {

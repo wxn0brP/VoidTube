@@ -1,4 +1,4 @@
-export const promptDiv = document.querySelector<HTMLDivElement>("#prompt");
+export const promptDiv = qs("#prompt");
 import "./openLink";
 
 export interface uiFunc_Select {

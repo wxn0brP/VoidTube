@@ -40,7 +40,7 @@ class ChannelView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#channel-view");
+        this.element = qs("#channel-view");
         this.info = this.element.querySelector("#channel-info");
         this.name = this.element.querySelector("#channel-name");
         this.subscriptions = this.element.querySelector("#channel-subscriptions");

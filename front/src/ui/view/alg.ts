@@ -59,10 +59,10 @@ ${entry.tags.map(t => `- ${t}`).join("\n")}
     }
 
     mount(): void {
-        this.element = document.querySelector("#alg-view");
+        this.element = qs("#alg-view");
         this.container = this.element.querySelector("#alg-container")!;
 
-        document.querySelector("#show-alg-button").addEventListener("dblclick", () => {
+        qs("#show-alg-button").addEventListener("dblclick", () => {
             this.load();
         });
 

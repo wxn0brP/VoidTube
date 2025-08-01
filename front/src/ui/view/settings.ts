@@ -13,7 +13,7 @@ class SettingsView implements UiComponent {
     container: HTMLDivElement;
 
     mount() {
-        this.element = document.querySelector("#settings-view")!;
+        this.element = qs("#settings-view")!;
         this.container = this.element.querySelector("#settings-container")!;
 
         uiHelpers.storeHide(this.element, $store.view.settings);

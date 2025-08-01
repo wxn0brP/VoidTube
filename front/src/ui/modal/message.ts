@@ -76,7 +76,7 @@ class MessageView implements UiComponent {
     element: HTMLDivElement;
 
     mount() {
-        this.element = document.querySelector("#err")!;
+        this.element = qs("#err")!;
     }
 }
 

@@ -109,7 +109,7 @@ class PlayListsView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#playlists-view");
+        this.element = qs("#playlists-view");
         this.container = this.element.querySelector("#playlists-container")!;
         this.createPlaylistBtn = this.element.querySelector("#create-playlist")!;
         this.importPlaylistBtn = this.element.querySelector("#import-playlist")!;

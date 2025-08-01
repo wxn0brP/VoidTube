@@ -50,12 +50,12 @@ class SubsListView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#subs-list-view");
+        this.element = qs("#subs-list-view");
         this.container = this.element.querySelector("#subs-list-container")!;
         this.searchInput = this.element.querySelector("#subs-list-search")!;
         this.searchInput.style.display = "none";
 
-        document.querySelector("#show-subs-button").addEventListener("dblclick", () => {
+        qs("#show-subs-button").addEventListener("dblclick", () => {
             this.load();
         });
 

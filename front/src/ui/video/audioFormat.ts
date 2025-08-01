@@ -5,7 +5,7 @@ export class AudioFormatsView implements UiComponent {
     element: HTMLSelectElement;
 
     mount(): void {
-        this.element = document.querySelector("#audio-formats")!;
+        this.element = qs("#audio-formats")!;
 
         $store.video.subscribe(video => {
             if (!video) return;

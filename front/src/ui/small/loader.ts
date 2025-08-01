@@ -6,8 +6,8 @@ class LoaderView implements UiComponent {
     valueSpan: HTMLSpanElement;
 
     mount(): void {
-        this.element = document.querySelector("#loader")!;
-        this.valueSpan = document.querySelector("#loader-value")!;
+        this.element = qs("#loader")!;
+        this.valueSpan = qs("#loader-value")!;
 
         $store.loader.subscribe((open) => {
             this.element.style.opacity = open > 0 ? "1" : "0";
