@@ -81,7 +81,7 @@ class PlayListsView implements UiComponent {
             e.preventDefault();
             const name = await uiFunc.prompt("Playlist name", item.name);
             if (!name) return;
-            await fetchVQL(`user updateOne playlist s._id = ${item._id} u.name = ${name} u.last = ${Math.floor(Date.now() / 1000)}`);
+            await fetchVQL(`user updateOne playlist s._id = ${item._id} u.name = ${name} u.last = $_nowShort`);
             await this.loadPlaylists();
         });
 
@@ -196,7 +196,7 @@ class PlayListsView implements UiComponent {
             for (let i = 0; i < ids.length; i++) {
                 await fetchVQL(`playlist +${playlist} d._id = ${ids[i]}`);
             }
-            await fetchVQL(`user ~playlist s._id=${playlist} u.last=${Math.floor(Date.now() / 1000)}`);
+            await fetchVQL(`user ~playlist s._id=${playlist} u.last=$_nowShort`);
             this.loadPlaylists();
         };
 
