@@ -34,7 +34,7 @@ class MetaControlView implements UiComponent {
     public async toggleToPlayList(id = $store.videoId.get(), e?: Event) {
         if (e && e instanceof MouseEvent && e.shiftKey) {
             fetchVQL(`playlist updateOneOrAdd later s._id = ${id} u._id = ${id}`);
-            fetchVQL(`user updateOneOrAdd playlist s._id=later u.last=${Math.floor(Date.now() / 1000)} add_arg.name = "Watch later"`);
+            fetchVQL(`user updateOneOrAdd playlist s._id=later u.last=$_nowShort add_arg.name = "Watch later"`);
             uiMsg("Added to watch later playlist");
             return;
         }
@@ -51,7 +51,7 @@ class MetaControlView implements UiComponent {
                 const op = playlist.has ? "removeOne" : "add";
 
                 await fetchVQL(`playlist ${op} ${playlistId} ${playlist.has ? "s" : "d"}._id = ${id}`);
-                await fetchVQL(`user ~playlist s._id=${playlistId} u.last=${Math.floor(Date.now() / 1000)}`)
+                await fetchVQL(`user ~playlist s._id=${playlistId} u.last=$_nowShort`)
                 await playListsView.loadPlaylists();
             },
             reRenderCallback: () => {

@@ -63,13 +63,13 @@ async function loadVideoFn(id: string, opts: Partial<LoadVideoOpts> = {}) {
 
     if (!data.formats?.length) return uiMsg("Failed to load video");
 
+    playerView.mediaSync.setDuration(data.duration);
     $store.video.set(data);
     $store.videoId.set(id);
     playerView.mediaSync.pause();
     playerView.mediaSync.seek(0);
 
-    fetchVQL(`user updateOneOrAdd history s._id=${id} u.watched=true u.last=${Math.floor(Date.now() / 1000)}`).then(() => {
-        // historyView.loadHistory(); // refresh history
+    fetchVQL(`user updateOneOrAdd history s._id=${id} u.watched=true u.last=$_nowShort`).then(() => {
         historyView.appendLastVideo(id);
     });
     changeView("video");

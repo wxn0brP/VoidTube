@@ -64,6 +64,7 @@ class MediaSyncController {
         this.audio.play().catch(() => { });
         if (this.videoEnabled) this.video.play().catch(() => { });
         fadeAudioIn();
+        console.trace("[MediaSync]", "play");
     }
 
     pause() {
@@ -71,6 +72,7 @@ class MediaSyncController {
         this.playing = false;
         this.video?.pause();
         fadeAudioOut().then(() => this.audio.pause());
+        console.trace("[MediaSync]", "pause");
     }
 
     seek(time: number) {

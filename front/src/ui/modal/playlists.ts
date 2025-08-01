@@ -50,7 +50,7 @@ class PlayListsModal implements UiComponent {
         this.createPlaylistBtn.onclick = async () => {
             const name = await uiFunc.prompt("Playlist name");
             if (!name) return;
-            fetchVQL(`user +playlist d.name = ${name} d.last = ${Math.floor(Date.now() / 1000)}`).then(async () => {
+            fetchVQL(`user +playlist d.name = ${name} d.last=$_nowShort`).then(async () => {
                 const playlists = await playListsView.loadPlaylists();
                 this.render(playlists);
                 this.reRenderCallback?.();

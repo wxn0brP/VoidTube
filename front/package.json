@@ -15,10 +15,10 @@
         "esbuild": "^0.25.8",
         "esbuild-style-plugin": "^1.6.3",
         "sass": "^1.89.2",
-        "typescript": "^5.7.3"
+        "typescript": "^5.9.2"
     },
     "dependencies": {
-        "@wxn0brp/flanker-ui": "^0.2.5",
-        "@wxn0brp/vql-client": "^0.0.13"
+        "@wxn0brp/flanker-ui": "^0.3.0",
+        "@wxn0brp/vql-client": "^0.1.0"
     }
 }

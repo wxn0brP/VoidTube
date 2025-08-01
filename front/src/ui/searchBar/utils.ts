@@ -20,5 +20,5 @@ export async function loadSearchHistory(cmp: SearchBarView) {
 }
 
 export async function saveSearchHistory(cmp: SearchBarView, data = cmp.searchInput.value) {
-    await fetchVQL(`user updateOneOrAdd search-history s._id = "${data}" u.last = ${Math.floor(Date.now() / 1000)}`, { silent: true });
+    await fetchVQL(`user updateOneOrAdd search-history s._id = "${data}" u.last=$_nowShort`, { silent: true });
 }
