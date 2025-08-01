@@ -6,7 +6,7 @@ import { number2HumanFormatter } from "#utils";
 import { loadMediaSession } from "./status";
 
 export function setupChannelInfo() {
-    const playerInfoDiv = document.querySelector("#video-channel-info");
+    const playerInfoDiv = qs("#video-channel-info");
     const img = playerInfoDiv.querySelector("img");
     const name = playerInfoDiv.querySelector("#video-channel-name");
     const subs = playerInfoDiv.querySelector("#video-channel-subscriptions");

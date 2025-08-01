@@ -27,7 +27,7 @@ export class QueuePanel implements UiComponent {
     loadPlaylist = (...args: Shift<Parameters<typeof loadPlaylist>>) => loadPlaylist(this, ...args);
 
     mount(): void {
-        this.element = document.querySelector("#queue-panel");
+        this.element = qs("#queue-panel");
 
         this.element.addEventListener("mouseenter", () => scrollToPlayCard(this));
         this.element.addEventListener("mouseleave", () => scrollToPlayCard(this));

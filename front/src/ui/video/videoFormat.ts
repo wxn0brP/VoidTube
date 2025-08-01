@@ -6,7 +6,7 @@ export class VideoFormatsView implements UiComponent {
     element: HTMLSelectElement;
 
     mount(): void {
-        this.element = document.querySelector("#video-formats")!;
+        this.element = qs("#video-formats")!;
 
         $store.video.subscribe(video => {
             if (!video) return;

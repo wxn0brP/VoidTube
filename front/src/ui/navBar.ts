@@ -21,7 +21,7 @@ class NavBarView implements UiComponent {
     redoStack: StackItem[] = [];
 
     mount() {
-        this.element = document.querySelector("#nav-bar");
+        this.element = qs("#nav-bar");
         this.undoBtn = this.element.querySelector("#undo")!;
         this.redoBtn = this.element.querySelector("#redo")!;
 

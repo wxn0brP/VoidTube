@@ -8,7 +8,7 @@ class VideoInfoView implements UiComponent {
     element: HTMLElement;
 
     mount(): void {
-        this.element = document.querySelector("#video-info");
+        this.element = qs("#video-info");
 
         $store.video.subscribe(data => {
             data ? this.renderVideoInfo(data) : (this.element.innerHTML = "");

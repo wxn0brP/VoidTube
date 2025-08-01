@@ -18,7 +18,7 @@ class MetaControlView implements UiComponent {
     downloadBtn: HTMLButtonElement;
 
     mount(): void {
-        this.element = document.querySelector("#meta-control-bar")!;
+        this.element = qs("#meta-control-bar")!;
 
         this.toggleToPlayListBtn = this.element.querySelector("#toggle-to-playlist")!;
         this.shareBtn = this.element.querySelector("#share")!;

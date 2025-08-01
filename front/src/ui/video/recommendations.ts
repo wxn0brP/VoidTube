@@ -64,7 +64,7 @@ class RecommendationPanel implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#recommendations")!;
+        this.element = qs("#recommendations")!;
     }
 }
 

@@ -15,11 +15,11 @@ export class SearchBarView implements UiComponent {
     public searchHistory: string[] = [];
 
     mount(): void {
-        this.element = document.querySelector("#search-bar");
+        this.element = qs("#search-bar");
         this.searchInput = this.element.querySelector("#search-input")!;
         this.searchBtn = this.element.querySelector("#search-btn")!;
         this.searchSizeInput = this.element.querySelector("#search-size")!;
-        this.suggestionsList = document.getElementById("suggestions")!;
+        this.suggestionsList = qs("#suggestions")!;
 
         this.searchBtn.onclick = this.search.bind(this);
 

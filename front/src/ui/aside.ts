@@ -6,7 +6,7 @@ class AsideView implements UiComponent {
     element: HTMLDivElement;
 
     mount(): void {
-        this.element = document.querySelector<HTMLDivElement>("aside")!;
+        this.element = qs("aside");
 
         const showHistoryBtn = this.element.querySelector<HTMLButtonElement>("#show-history-button");
         showHistoryBtn.addEventListener("dblclick", () => {

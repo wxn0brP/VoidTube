@@ -5,7 +5,7 @@ class VideoView implements UiComponent {
     element: HTMLElement;
 
     mount(): void {
-        this.element = document.querySelector("#video-view");
+        this.element = qs("#video-view");
         uiHelpers.storeHide(this.element, $store.view.video);
         $store.view.video.set(false);
     }

@@ -52,7 +52,7 @@ class PlayListSnapView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#playlist-snap")!;
+        this.element = qs("#playlist-snap")!;
         this.container = this.element.querySelector("#playlist-snap-container")!;
         uiHelpers.storeHide(this.element, $store.view.playlistSnap);
         $store.view.playlistSnap.set(false);

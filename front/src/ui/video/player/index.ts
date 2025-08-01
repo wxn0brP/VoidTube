@@ -29,8 +29,8 @@ export class PlayerView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#player")!;
-        this.bar = document.querySelector("#player-bar")!;
+        this.element = qs("#player")!;
+        this.bar = qs("#player-bar")!;
         this.videoEl = this.element.querySelector("video")!;
 
         this.mediaSync = new MediaSyncController({

@@ -52,7 +52,7 @@ class SearchView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#search-view");
+        this.element = qs("#search-view");
         this.container = this.element.querySelector("#search-container")!;
 
         uiHelpers.storeHide(this.element, $store.view.search);

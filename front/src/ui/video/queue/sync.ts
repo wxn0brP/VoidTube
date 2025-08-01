@@ -71,7 +71,7 @@ export function joinGroup(id: string = generateName()) {
     if (!id) return;
     $store.queueGroup.set(id);
     emitQueueMessage("get");
-    document.querySelector("#queues-exit-name").textContent = id;
+    qs("#queues-exit-name").textContent = id;
 }
 
 function emitQueue() {

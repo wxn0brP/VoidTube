@@ -79,7 +79,7 @@ many: true
     }
 
     mount(): void {
-        this.element = document.querySelector("#feed-view");
+        this.element = qs("#feed-view");
         this.container = this.element.querySelector("#feed-container")!;
 
         uiHelpers.storeHide(this.element, $store.view.feed);
@@ -87,7 +87,7 @@ many: true
 
         setTimeout(() => this.loadFeed(), window.location.search.length > 0 ? 5_000 : 10);
 
-        document.querySelector("#show-feed-button").addEventListener("dblclick", () => {
+        qs("#show-feed-button").addEventListener("dblclick", () => {
             this.loadFeed();
         });
     }

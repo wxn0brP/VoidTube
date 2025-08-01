@@ -81,13 +81,13 @@ class QueueView implements UiComponent {
     }
 
     mount(): void {
-        this.element = document.querySelector("#queues-view");
+        this.element = qs("#queues-view");
         this.container = this.element.querySelector("#queues-container")!;
 
         uiHelpers.storeHide(this.element, $store.view.queues);
         $store.view.queues.set(false);
 
-        const btn = document.querySelector("#show-queues-button");
+        const btn = qs("#show-queues-button");
         btn.addEventListener("click", () => {
             this.fetchQueues();
             this.show();
