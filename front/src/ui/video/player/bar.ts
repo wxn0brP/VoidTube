@@ -17,12 +17,13 @@ export let playPauseBtn: HTMLButtonElement;
 const playNextDebounced = debounce(playNext);
 
 const bufferNextThrottled = throttle(() => {
-    let nextVideoId = getNextVideoId();
-    if (!nextVideoId) return;
+    let nextVideo = getNextVideoId();
+    if (!nextVideo) return;
+    const { id } = nextVideo;
 
     // if server don't have buffered video then fetch it
-    fetchVQL(`api video! s.url = ${nextVideoId}`, { silent: true });
-    console.debug("[player] buffering next video on server", nextVideoId);
+    fetchVQL(`api video! s.url = ${id}`, { silent: true });
+    console.debug("[player] buffering next video on server", id);
 }, 25_000);
 
 const updateVideoHistoryTimeToZero = debounce(() => {
