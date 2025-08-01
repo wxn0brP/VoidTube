@@ -26,10 +26,6 @@ const bufferNextThrottled = throttle(() => {
     console.debug("[player] buffering next video on server", id);
 }, 25_000);
 
-const updateVideoHistoryTimeToZero = debounce(() => {
-    updateVideoHistoryTime($store.videoId.get(), 0);
-});
-
 export function setupBar() {
     let hasHours = false;
     playPauseBtn = playerView.bar.qi<HTMLButtonElement>("play-pause");
@@ -110,11 +106,6 @@ export function setupBar() {
             updateVideoHistoryTime($store.videoId.get(), Math.floor(playerView.mediaSync.currentTime));
         }
 
-        // if video was watched of last 3 seconds then start from the beginning
-        if (Math.floor(playerView.mediaSync.currentTime) + 3 >= Math.floor(playerView.mediaSync.getDuration())) {
-            updateVideoHistoryTimeToZero();
-        }
-
         // if video was watched of last 0.1 seconds then play next
         if (!$store.player.loop.get() && round(playerView.mediaSync.currentTime, 1) + 0.1 >= round(playerView.mediaSync.getDuration(), 1)) {
             playNextDebounced();
@@ -126,6 +117,7 @@ export function setupBar() {
         }
     });
     playerView.mediaSync.eventEmitter.on("ended", () => !$store.player.loop.get() && playNextDebounced());
+    playerView.mediaSync.eventEmitter.on("ended", () => updateVideoHistoryTime($store.videoId.get(), 0));
 
     playerView.mediaSync.eventEmitter.on("play", () => {
         playPauseBtn.textContent = "⏸️";
@@ -160,6 +152,7 @@ export function updateProgressBars() {
         bufferedRange.style.width = `${bufferedPercent}%`;
     }
 }
+
 document.addEventListener("keydown", (e) => {
     if (e.code === "Escape") {
         document.exitFullscreen();
