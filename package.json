@@ -29,7 +29,7 @@
     },
     "dependencies": {
         "@wxn0brp/db": "^0.30.0",
-        "@wxn0brp/falcon-frame": "^0.0.20",
+        "@wxn0brp/falcon-frame": "^0.0.21",
         "@wxn0brp/lucerna-log": "^0.1.1",
         "@wxn0brp/vql": "^0.5.1",
         "fast-xml-parser": "^5.2.5",
