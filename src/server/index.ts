@@ -1,8 +1,8 @@
 import { note } from "#echo/logger";
 import VQL from "#gate";
-import { FF_VQL } from "@@vql/falconFrame";
 import FalconFrame from "@wxn0brp/falcon-frame";
 import { LogLevelName } from "@wxn0brp/lucerna-log";
+import { FF_VQL } from "@wxn0brp/vql";
 import { avatarHandler, avatarTryHandler } from "./avatar";
 
 const isDev = process.env.NODE_ENV === "development";

@@ -1,5 +1,5 @@
 {
-    "cmd": "tsc && yarn build --dev",
+    "cmd": "tsc --noEmit && yarn build --dev",
     "watch": [
         "src"
     ],

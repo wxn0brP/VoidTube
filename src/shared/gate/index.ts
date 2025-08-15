@@ -1,12 +1,7 @@
-import VQLProcessor, { VQLConfig } from "@wxn0brp/vql";
+import VQLProcessor from "@wxn0brp/vql";
 import db from "#db";
 import { YouTubeAdapter } from "./vql";
-import { VqlQueryRaw } from "@@vql/vql";
-
-const vqlConfig = new VQLConfig({
-    noCheckPermissions: true,
-    strictSelect: false
-});
+import { VQLUQ } from "@wxn0brp/vql/vql";
 
 const vqlDb = Object.assign(
     {},
@@ -16,11 +11,11 @@ const vqlDb = Object.assign(
     }
 );
 
-const VQL = new VQLProcessor(vqlDb, null as any, vqlConfig);
+const VQL = new VQLProcessor(vqlDb);
 
 export default VQL;
 
-export async function fetchVQL<T=any>(query: VqlQueryRaw<T>) {
+export async function fetchVQL<T = any>(query: VQLUQ<T>) {
     const res = await VQL.execute(query, {});
     // @ts-ignore
     if (res.err) throw new Error(res.err);

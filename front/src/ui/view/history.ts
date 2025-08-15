@@ -11,7 +11,7 @@ import { changeView } from "..";
 import uiFunc from "../modal";
 import navBarView from "../navBar";
 import { thumbnailMiddle } from "./channel";
-import { VQLFind } from "@wxn0brp/vql-client/vql";
+import { VQL_OP_Find } from "@wxn0brp/vql-client/vql";
 
 class HistoryView implements UiComponent {
     element: HTMLDivElement;
@@ -85,7 +85,7 @@ class HistoryView implements UiComponent {
     }
 
     public async clearAndLoad(count = 0) {
-        const cfg: VQLFind["options"] = {
+        const cfg: VQL_OP_Find["options"] = {
             sortBy: "last",
             sortAsc: false,
         }
@@ -95,7 +95,7 @@ class HistoryView implements UiComponent {
         const history = await fetchHistory(cfg);
         this.hasMore = count > 0;
         this.page = Math.ceil(history.length / 32);
-        
+
         this.container.innerHTML = "";
         this.render(history);
         this.container.scrollTop = 0;

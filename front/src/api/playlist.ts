@@ -1,5 +1,6 @@
 import { PlaylistEntry, PlaylistsEntry, PlaylistSnapEntry } from "#types/video";
 import { getThumbnail } from "#utils";
+import { VQLUQ } from "@wxn0brp/vql-client/vql";
 import { fetchVQL } from ".";
 
 export async function fetchPlaylists(
@@ -37,22 +38,25 @@ export async function fetchPlaylists(
 
 export async function fetchPlaylistInfo(id: string) {
     if (!id) return null;
-    const query = `
-playlist ${id}
-relations:
-  info:
-    path: [api, video-static-quick]
-    select: [title,duration,thumbnail]
-
-many: true
-search: {}
-select:
-  _id: 1
-  info:
-    title: 1
-    duration: 1
-    thumbnail: 1
-    `
+    const query: VQLUQ = {
+        r: {
+            path: ["playlist", id],
+            relations: {
+                info: {
+                    path: ["api", "video-static-quick"],
+                    select: ["title", "duration", "thumbnail"],
+                },
+            },
+            many: true,
+            search: {},
+            select: [
+                ["_id"],
+                ["info", "title"],
+                ["info", "duration"],
+                ["info", "thumbnail"]
+            ],
+        }
+    }
     return await fetchVQL<PlaylistEntry[]>(query);
 }
 
@@ -70,28 +74,31 @@ export async function fetchPlaylistsContainingVideo(videoId: string) {
 }
 
 export async function fetchPlaylistSnap(id: string): Promise<PlaylistSnapEntry[]> {
-    const query = `
-playlist ${id}
-relations:
-  info:
-    path: [api, video-static-quick]
-    select: [title,duration,thumbnail,views]
-  history:
-    path: [user, history]
-    select: [time]
-
-many: true
-search: {}
-select:
-  _id: 1
-  info:
-    title: 1
-    duration: 1
-    thumbnail: 1
-    views: 1
-  history:
-    time: 1    
-`
+    const query: VQLUQ = {
+        r: {
+            path: ["playlist", id],
+            relations: {
+                info: {
+                    path: ["api", "video-static-quick"],
+                    select: ["title", "duration", "thumbnail", "views"],
+                },
+                history: {
+                    path: ["user", "history"],
+                    select: ["time"],
+                },
+            },
+            many: true,
+            search: {},
+            select: [
+                ["_id"],
+                ["info", "title"],
+                ["info", "duration"],
+                ["info", "thumbnail"],
+                ["info", "views"],
+                ["history", "time"],
+            ],
+        }
+    }
     const data = await fetchVQL(query);
     return data;
 }
