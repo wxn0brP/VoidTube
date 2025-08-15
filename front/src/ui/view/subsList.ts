@@ -70,17 +70,20 @@ class SubsListView implements UiComponent {
     }
 
     async load() {
-        const subs = await fetchVQL<UserSub[]>(`
-user subs
-relations:
-  channel:
-    path: [api, channelInfo]
-    fk: id
-    type: "11"
-
-search: {}
-many: true
-`);
+        const subs = await fetchVQL<UserSub[]>({
+            r: {
+                path: ["user", "subs"],
+                relations: {
+                    channel: {
+                        path: ["api", "channelInfo"],
+                        fk: "id",
+                        type: "11"
+                    }
+                },
+                search: {},
+                many: true
+            }
+        });
         this.render(subs);
     }
 

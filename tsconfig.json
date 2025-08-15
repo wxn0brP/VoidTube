@@ -4,9 +4,9 @@
         "target": "ES2022",
         "moduleResolution": "bundler",
         "paths": {
-            "@@vql/*": ["./node_modules/@wxn0brp/vql/dist/*"],
-            "@@db/*": ["./node_modules/@wxn0brp/db/dist/*"],
-            "#*": ["./src/shared/*"],
+            "#*": [
+                "./src/shared/*"
+            ],
         },
         "esModuleInterop": true,
         "skipLibCheck": true,
@@ -14,7 +14,7 @@
         "inlineSourceMap": true
     },
     "include": [
-       "./src"
+        "./src"
     ],
     "exclude": [
         "node_modules"

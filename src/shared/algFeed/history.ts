@@ -1,5 +1,5 @@
 import { fetchVQL } from "#gate";
-import { VQLR } from "@@vql/types/vql";
+import { VQL_Query_Relation } from "@wxn0brp/vql/vql";
 import { Video } from "./final/types";
 
 export interface HistoryEntry {
@@ -22,7 +22,7 @@ export interface HistoryEntry {
 }
 
 async function fetchHistory() {
-    const query: VQLR = {
+    const query: VQL_Query_Relation = {
         r: {
             path: [
                 "user",

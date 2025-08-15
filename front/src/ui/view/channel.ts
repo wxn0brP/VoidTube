@@ -90,18 +90,23 @@ class ChannelView implements UiComponent {
     }
 
     async loadVideos(id: string, flat = true) {
-        const data = await fetchVQL<ChannelVideo[]>(`
-api channelVideos
-search:
-  _id: ${id}
-  flat: ${flat}
-many: true
-relations:
-  history:
-    path: [user, history]
-    pk: id
-    select: [time]
-`);
+        const data = await fetchVQL<ChannelVideo[]>({
+            r: {
+                path: ["api", "channelVideos"],
+                search: {
+                    _id: id,
+                    flat: flat
+                },
+                many: true,
+                relations: {
+                    history: {
+                        path: ["user", "history"],
+                        pk: "id",
+                        select: ["time"]
+                    }
+                }
+            }
+        });
         this.videos.innerHTML = "";
         for (const entry of data) {
             const card = document.createElement("div");

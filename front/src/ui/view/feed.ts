@@ -60,20 +60,24 @@ class FeedView implements UiComponent {
     }
 
     public async loadFeed() {
-        const feed = await fetchVQL<FeedEntry[]>(`
-api quickFeed
-search:
-  id: 0
-relations:
-  channel:
-    path: [api, channelInfo]
-    fk: id
-    pk: authorId
-    select: [avatar]
-    type: "11"
-
-many: true
-`);
+        const feed = await fetchVQL<FeedEntry[]>({
+            r: {
+                path: ["api", "quickFeed"],
+                search: {
+                    id: 0
+                },
+                relations: {
+                    channel: {
+                        path: ["api", "channelInfo"],
+                        fk: "id",
+                        pk: "authorId",
+                        select: ["avatar"],
+                        type: "11"
+                    }
+                },
+                many: true
+            }
+        })
         this.render(feed);
         return feed;
     }
