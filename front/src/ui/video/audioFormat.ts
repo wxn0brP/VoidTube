@@ -1,5 +1,6 @@
 import { $store } from "#store";
 import { UiComponent } from "@wxn0brp/flanker-ui";
+import { watchSelect } from "@wxn0brp/flanker-ui/component/helpers";
 
 export class AudioFormatsView implements UiComponent {
     element: HTMLSelectElement;
@@ -28,9 +29,7 @@ export class AudioFormatsView implements UiComponent {
             }
         });
 
-        this.element.addEventListener("change", () => {
-            $store.selectedAudioUrl.set(this.element.value);
-        });
+        watchSelect(this.element, $store.selectedAudioUrl);
     }
 }
 
