@@ -40,3 +40,13 @@ process.on("uncaughtException", (err) => {
 });
 
 app.listen(port);
+
+if (isDev || process.argv.join(" ").includes("bun")) {
+    try {
+        const { DevPanelBackend } = await import("@wxn0brp/vql-dev");
+        const devPanel = new DevPanelBackend(VQL);
+        devPanel.start();
+    } catch (e) {
+        console.error("Error while starting dev panel:", e);
+    }
+}
