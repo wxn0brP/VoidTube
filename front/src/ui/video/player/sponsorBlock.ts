@@ -3,11 +3,18 @@ import { SponsorSegment } from "#types/sponsorBlock";
 import { uiMsg } from "#ui/modal/message";
 import playerView from ".";
 
+let sponsorBlockLock = false;
+
 export async function sponsorBlock() {
     if (!$store.settings.sponsorBlock.get()) return;
+
+    if ($store.sponsorBlock.id.get() !== $store.videoId.get()) return;
+
     const segments = $store.sponsorBlock.segments.get();
     if (!segments || !segments.length) return;
+
     const current = playerView.mediaSync.currentTime;
+    if (sponsorBlockLock) return;
 
     for (const seg of segments) {
         const [start, end] = seg.segment;
@@ -19,6 +26,10 @@ export async function sponsorBlock() {
         if (condition) {
             uiMsg(`Skipping via sponsor block (${seg.category})`);
             playerView.mediaSync.seek(end);
+
+            sponsorBlockLock = true;
+            setTimeout(() => sponsorBlockLock = false, 1500);
+
             break;
         }
     }
