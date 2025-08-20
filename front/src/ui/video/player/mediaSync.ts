@@ -36,13 +36,20 @@ class MediaSyncController {
 
     private events() {
         const audio = this.audio;
-        audio.addEventListener("loadedmetadata", () => this.onMediaLoadedMetadata());
-        audio.addEventListener("loadedmetadata", (...args) => this.eventEmitter.emit("loadedmetadata", ...args));
+        let loadedTime = 0;
+        audio.addEventListener("loadedmetadata", (...args) => {
+            this.onMediaLoadedMetadata();
+            this.eventEmitter.emit("loadedmetadata", ...args)
+            loadedTime = Date.now();
+        });
         audio.addEventListener("loadeddata", (...args) => this.eventEmitter.emit("loadeddata", ...args));
         audio.addEventListener("timeupdate", (...args) => this.eventEmitter.emit("timeupdate", ...args));
         audio.addEventListener("seeking", (...args) => this.eventEmitter.emit("seeking", ...args));
         audio.addEventListener("ended", (...args) => this.eventEmitter.emit("ended", ...args));
-        audio.addEventListener("pause", (...args) => this.eventEmitter.emit("pause", ...args));
+        audio.addEventListener("pause", (...args) => {
+            if (loadedTime + 1000 > Date.now()) return this.eventEmitter.emit("play", ...args);
+            this.eventEmitter.emit("pause", ...args)
+        });
         audio.addEventListener("play", (...args) => this.eventEmitter.emit("play", ...args));
         audio.addEventListener("error", (...args) => this.eventEmitter.emit("error", ...args));
         audio.addEventListener("progress", (...args) => this.eventEmitter.emit("progress", ...args));

@@ -15,14 +15,14 @@ import { loadCaps, removeCaps } from "./caps";
 import MediaSyncController from "./mediaSync";
 
 export class PlayerView implements UiComponent {
-	public element: HTMLDivElement;
-	public bar: HTMLDivElement;
+    public element: HTMLDivElement;
+    public bar: HTMLDivElement;
 
-	public lastUpdateTime = Date.now();
-	public videoEl: HTMLVideoElement;
-	public audioEl: HTMLAudioElement;
-	public savedTime: number = 0;
-	public mediaSync: MediaSyncController;
+    public lastUpdateTime = Date.now();
+    public videoEl: HTMLVideoElement;
+    public audioEl: HTMLAudioElement;
+    public savedTime: number = 0;
+    public mediaSync: MediaSyncController;
 
     constructor() {
         this.audioEl = new Audio();
@@ -59,8 +59,6 @@ export class PlayerView implements UiComponent {
 
             try {
                 this.savedTime = this.mediaSync.currentTime;
-                const isPlaying = this.mediaSync.isPlaying;
-                this.mediaSync.pause();
 
                 this.videoEl.src = videoUrl;
                 this.audioEl.src = audioUrl;
@@ -69,8 +67,6 @@ export class PlayerView implements UiComponent {
                 this.audioEl.load();
 
                 loadMediaSession();
-
-                if (isPlaying) this.mediaSync.play();
             } catch (err) {
                 uiMsg("Failed to load video: " + err.message);
             }
