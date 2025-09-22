@@ -8,9 +8,12 @@ import { avatarHandler, avatarTryHandler } from "./avatar";
 const isDev = process.env.NODE_ENV === "development";
 
 const app = new FalconFrame({
-    loggerName: "VoidTube-SERVER",
-    logLevel: process.env.FALCON_LOG_LEVEL as LogLevelName || (isDev ? "INFO" : "ERROR")
+    loggerOpts: {
+        loggerName: "VoidTube-SERVER",
+        logLevel: process.env.FALCON_LOG_LEVEL as LogLevelName || (isDev ? "INFO" : "ERROR")
+    }
 });
+
 if (isDev) note("server", "FalconFrame started with", app.logger.logLevel, "debug level");
 
 const port = parseInt(process.env.PORT) || 29848;
@@ -43,8 +46,8 @@ app.listen(port);
 
 if (isDev || process.argv.join(" ").includes("bun")) {
     try {
-        const { DevPanelBackend } = await import("@wxn0brp/vql-dev");
-        const devPanel = new DevPanelBackend(VQL);
+        const { VqlDevPanel } = await import("@wxn0brp/vql-dev");
+        const devPanel = new VqlDevPanel(VQL);
         devPanel.start();
     } catch (e) {
         console.error("Error while starting dev panel:", e);

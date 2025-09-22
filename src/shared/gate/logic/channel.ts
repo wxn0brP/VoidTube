@@ -19,7 +19,7 @@ export async function channelInfo(id: string, update = false) {
     await db.cache.updateOneOrAdd("channel", { id }, {
         ttl: getTTL(),
         ...data
-    }, {}, {}, false);
+    }, { id_gen: false });
 
     return data;
 }
