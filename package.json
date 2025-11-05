@@ -24,7 +24,7 @@
     "devDependencies": {
         "@types/node": "*",
         "@wxn0brp/vql-dev": "github:wxn0brP/VQL-dev#dist",
-        "electron": "^38.1.2",
+        "electron": "^39.1.0",
         "tsc-alias": "*",
         "typescript": "*"
     },
