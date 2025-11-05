@@ -94,7 +94,6 @@ export interface YoutubeDlOptions {
     noCheckCertificates?: boolean;
     noWarnings?: boolean;
     preferFreeFormats?: boolean;
-    youtubeSkipDashManifest?: boolean;
     skipDownload?: boolean;
     noCheckFormats?: boolean;
     flatPlaylist?: boolean;

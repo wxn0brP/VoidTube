@@ -26,7 +26,6 @@ export async function getVideoInfo(videoUrl: string, withFormats: boolean = fals
 
         const opts: YoutubeDlOptions = Object.assign({}, options, {
             preferFreeFormats: true,
-            youtubeSkipDashManifest: true,
             skipDownload: true,
             noCheckFormats: !withFormats,
         });
