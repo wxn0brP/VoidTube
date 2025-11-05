@@ -4,7 +4,7 @@ import { getFeed, getQuickFeed } from "#relay/feed";
 import { clearQuickCache } from "#relay/fetchQuick";
 import { getRecommended } from "#relay/getRecommended";
 import { getSuggestions } from "#relay/suggestions";
-import { AdapterBuilder } from "@wxn0brp/vql/apiAbstract";
+import { AdapterBuilder } from "@wxn0brp/vql/helpers/apiAbstract";
 import { runFeedVQL } from "./alg";
 import "./cache";
 import { channelInfo } from "./logic/channel";
