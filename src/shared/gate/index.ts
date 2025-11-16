@@ -16,7 +16,7 @@ const VQL = new VQLProcessor(vqlDb);
 export default VQL;
 
 export async function fetchVQL<T = any>(query: VQLUQ<T>) {
-    const res = await VQL.execute(query, {});
+    const res = await VQL.execute(query as any, {});
     // @ts-ignore
     if (res.err) throw new Error(res.err);
     return res as T;

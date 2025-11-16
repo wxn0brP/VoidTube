@@ -25,11 +25,11 @@ esbuild.build({
         stylePlugin({
             renderOptions: {
                 sassOptions: {
-                    silenceDeprecations: ['legacy-js-api'],
+                    silenceDeprecations: ["legacy-js-api"],
                     outputStyle: "compressed"
                 }
             }
         })
     ],
-    external: ['/favicon.svg']
+    external: ["/favicon.svg"]
 }).catch(() => process.exit(1));
