@@ -21,12 +21,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
+          node-version: "24.x"
 
       - name: 📦 Install dependencies
         run: |
@@ -73,12 +73,12 @@ jobs:
 
     steps:
       - name: 📥 Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
+          node-version: "24.x"
 
       - name: 📦 Install dependencies
         run: |
