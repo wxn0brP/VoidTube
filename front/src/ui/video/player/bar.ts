@@ -28,16 +28,16 @@ const bufferNextThrottled = throttle(() => {
 
 export function setupBar() {
     let hasHours = false;
-    playPauseBtn = playerView.bar.qi<HTMLButtonElement>("play-pause");
-    const timeSpan = playerView.bar.qi<HTMLSpanElement>("time");
-    const volume = playerView.bar.qi<HTMLInputElement>("volume");
-    const fullscreenBtn = playerView.bar.qi<HTMLButtonElement>("toggle-fullscreen");
-    const loopQueue = playerView.bar.qi<HTMLInputElement>("loop-queue");
-    const audioFadeEnabled = playerView.bar.qi<HTMLInputElement>("audio-fade");
-    const loopInput = playerView.bar.qi<HTMLInputElement>("loop")
-    bufferedRange = playerView.bar.qi("buffered-range");
-    playedRange = playerView.bar.qi("played-range");
-    progressInput = playerView.bar.qi("progress");
+    playPauseBtn = playerView.bar.qs<HTMLButtonElement>("play-pause", 1);
+    const timeSpan = playerView.bar.qs<HTMLSpanElement>("time", 1);
+    const volume = playerView.bar.qi("volume", 1);
+    const fullscreenBtn = playerView.bar.qs<HTMLButtonElement>("toggle-fullscreen", 1);
+    const loopQueue = playerView.bar.qi("loop-queue", 1);
+    const audioFadeEnabled = playerView.bar.qi("audio-fade", 1);
+    const loopInput = playerView.bar.qi("loop", 1)
+    bufferedRange = playerView.bar.qs("buffered-range", 1);
+    playedRange = playerView.bar.qs("played-range", 1);
+    progressInput = playerView.bar.qs("progress", 1);
 
     watchCheckbox(audioFadeEnabled, $store.settings.audioFadeEnabled);
     watchCheckbox(loopInput, $store.player.loop);
@@ -48,8 +48,8 @@ export function setupBar() {
     $store.queueLoop.set(loopQueue.checked);
     $store.player.loop.set(loopInput.checked);
 
-    playerView.bar.qi("previous-video").addEventListener("click", () => playPrev());
-    playerView.bar.qi("next-video").addEventListener("click", () => playNext());
+    playerView.bar.qs("previous-video", 1).addEventListener("click", () => playPrev());
+    playerView.bar.qs("next-video", 1).addEventListener("click", () => playNext());
 
     playPauseBtn.addEventListener("click", changePlay);
     playerView.videoEl.addEventListener("click", changePlay);
