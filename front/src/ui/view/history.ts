@@ -125,11 +125,11 @@ class HistoryView implements UiComponent {
     }
 
     async appendLastVideo(id: string) {
-        let card = this.container.qi(id);
+        let card = this.container.qs(id, 1);
         if (!card) {
             const history = await fetchHistory(null, id);
             this.render(history);
-            card = this.container.qi(id);
+            card = this.container.qs(id, 1);
         }
         this.container.insertBefore(card, this.container.firstChild);
     }
