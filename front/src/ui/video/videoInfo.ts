@@ -26,7 +26,7 @@ class VideoInfoView implements UiComponent {
             <br><br>
             <article data-id="description"></article>
         `;
-        setDescription(this.element.qi("description"), info.description);
+        setDescription(this.element.qs("description", 1), info.description);
     }
 }
 
