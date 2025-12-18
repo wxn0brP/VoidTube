@@ -13,11 +13,11 @@
     "devDependencies": {
         "esbuild": "*",
         "esbuild-style-plugin": "^1.6.3",
-        "sass": "^1.94.2",
+        "sass": "^1.97.0",
         "typescript": "*"
     },
     "dependencies": {
-        "@wxn0brp/flanker-ui": "^0.4.4",
-        "@wxn0brp/vql-client": "^0.2.6"
+        "@wxn0brp/flanker-ui": "^0.4.6",
+        "@wxn0brp/vql-client": "^0.2.7"
     }
 }
