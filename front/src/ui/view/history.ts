@@ -89,7 +89,7 @@ class HistoryView implements UiComponent {
             sortBy: "last",
             sortAsc: false,
         }
-        if (count > 0) cfg.max = count;
+        if (count > 0) cfg.limit = count;
 
         this.loading = true;
         const history = await fetchHistory(cfg);
@@ -111,7 +111,7 @@ class HistoryView implements UiComponent {
         this.loading = true;
         const history = await fetchHistory({
             offset: this.page * 32,
-            max: 32,
+            limit: 32,
             sortBy: "last",
             sortAsc: false,
         });
