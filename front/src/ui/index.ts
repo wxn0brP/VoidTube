@@ -24,6 +24,7 @@ import subsListView from "./view/subsList";
 import queuePanel from "./video/queue";
 import recommendationPanel from "./video/recommendations";
 import queueView from "./view/queues";
+import { storeKeys } from "@wxn0brp/flanker-ui";
 
 export const components = [
     playerView,
@@ -55,8 +56,9 @@ export const components = [
 components.forEach(component => component.mount());
 
 export function changeView(view: string) {
-    const views = $store.view.get();
+    const views = $store.view;
     for (const key of Object.keys(views)) {
+        if (storeKeys.includes(key)) return;
         views[key].set(key === view);
     }
 }
