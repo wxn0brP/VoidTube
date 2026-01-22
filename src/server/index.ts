@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 FF_VQL(app, VQL);
 app.static("/", __cwd + "public");
 app.static("/js", __cwd + "front/dist");
-app.static("/src", __cwd + "front/src");
+app.static("/src", __cwd + "front/src", { errorIfDirNotFound: false });
 app.get("/avatar", avatarHandler);
 app.get("/avatarTry", avatarTryHandler);
 
