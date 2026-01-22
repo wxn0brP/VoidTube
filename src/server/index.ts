@@ -4,6 +4,7 @@ import FalconFrame from "@wxn0brp/falcon-frame";
 import { LogLevelName } from "@wxn0brp/lucerna-log";
 import { FF_VQL } from "@wxn0brp/vql";
 import { avatarHandler, avatarTryHandler } from "./avatar";
+import { existsSync } from "fs";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -28,9 +29,11 @@ app.get("/", (req, res) => {
 FF_VQL(app, VQL);
 app.static("/", __cwd + "public");
 app.static("/js", __cwd + "front/dist");
-app.static("/src", __cwd + "front/src", { errorIfDirNotFound: false });
 app.get("/avatar", avatarHandler);
 app.get("/avatarTry", avatarTryHandler);
+
+if (existsSync(__cwd + "front/src"))
+    app.static("/src", __cwd + "front/src", { errorIfDirNotFound: false });
 
 note(`server`, `Server started on http://localhost:${port}`);
 
