@@ -22,10 +22,6 @@ const port = parseInt(process.env.PORT) || 29848;
 const __cwd = process.env.APP_PATH || import.meta.dirname + "/../../";
 if (isDev) note("server", "__cwd:", __cwd);
 
-app.get("/", (req, res) => {
-    res.render(__cwd + "public/index.html", {});
-});
-
 FF_VQL(app, VQL);
 app.static("/", __cwd + "public");
 app.static("/js", __cwd + "front/dist");

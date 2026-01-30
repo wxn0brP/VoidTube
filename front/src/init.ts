@@ -10,7 +10,7 @@ import { getYouTubeVideoId, setTitle, updateQueryParam } from "./utils";
 
 await new Promise(r => setTimeout(r, 100)); // wait for ui to mount
 
-export function initParma(autoPlay = false) {
+export function initParam(autoPlay = false) {
     const urlParams = new URLSearchParams(window.location.search);
 
     const query = urlParams.get("query");
@@ -62,9 +62,9 @@ export function initParma(autoPlay = false) {
     }
 }
 
-initParma();
+initParam();
 await import("./store/registers");
 
 window.addEventListener("popstate", () => {
-    initParma(true);
+    initParam(true);
 });
