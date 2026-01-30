@@ -1,7 +1,7 @@
 import { clamp } from "@wxn0brp/flanker-ui/utils";
 import { fadeAudioIn, fadeAudioOut } from "./audioSync";
 import { playNext, playPrev } from "./sync";
-import { UniversalEventEmitter } from "#utils/eventEmitter";
+import VEE from "@wxn0brp/event-emitter";
 
 interface MediaSyncControllerConfig {
     audio: HTMLAudioElement;
@@ -17,7 +17,7 @@ class MediaSyncController {
     private clockTime = 0;
     private playing = false;
     public videoEnabled = true;
-    public eventEmitter = new UniversalEventEmitter();
+    public eventEmitter = new VEE();
 
     constructor(config: MediaSyncControllerConfig) {
         this.audio = config.audio;
