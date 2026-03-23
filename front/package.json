@@ -12,7 +12,7 @@
 		"esbuild": "*",
 		"esbuild-style-plugin": "^1.6.3",
 		"sass": "^1.97.3",
-		"typescript": "^5"
+		"typescript": "^6.0.0"
 	},
 	"dependencies": {
 		"@wxn0brp/event-emitter": "^0.0.4",

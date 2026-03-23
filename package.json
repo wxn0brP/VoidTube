@@ -26,7 +26,7 @@
 		"@wxn0brp/vql-dev": "*",
 		"electron": "^40.1.0",
 		"tsc-alias": "*",
-		"typescript": "^5"
+		"typescript": "^6.0.0"
 	},
 	"dependencies": {
 		"@wxn0brp/db": "^0.42.0",
