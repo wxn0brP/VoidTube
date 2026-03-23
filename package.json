@@ -32,7 +32,7 @@
 		"@wxn0brp/db": "^0.42.0",
 		"@wxn0brp/falcon-frame": "^0.6.1",
 		"@wxn0brp/lucerna-log": "^0.2.2",
-		"@wxn0brp/vql": "^0.10.2",
+		"@wxn0brp/vql": "^0.11.0",
 		"fast-xml-parser": "^5.3.4",
 		"ky": "^1.14.3"
 	},
