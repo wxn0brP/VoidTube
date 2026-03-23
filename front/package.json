@@ -1,22 +1,22 @@
 {
-    "name": "void-tube-front",
-    "version": "0.0.1",
-    "main": "dist/index.js",
-    "author": "wxn0brP",
-    "license": "MIT",
-    "type": "module",
-    "scripts": {
-        "build": "node build.js"
-    },
-    "devDependencies": {
-        "esbuild": "*",
-        "esbuild-style-plugin": "^1.6.3",
-        "sass": "^1.97.3",
-        "typescript": "*"
-    },
-    "dependencies": {
-        "@wxn0brp/event-emitter": "^0.0.4",
-        "@wxn0brp/flanker-ui": "^0.5.1",
-        "@wxn0brp/vql-client": "^0.2.7"
-    }
+	"name": "void-tube-front",
+	"version": "0.0.1",
+	"main": "dist/index.js",
+	"author": "wxn0brP",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "node build.js"
+	},
+	"devDependencies": {
+		"esbuild": "*",
+		"esbuild-style-plugin": "^1.6.3",
+		"sass": "^1.97.3",
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@wxn0brp/event-emitter": "^0.0.4",
+		"@wxn0brp/flanker-ui": "^0.5.1",
+		"@wxn0brp/vql-client": "^0.2.7"
+	}
 }

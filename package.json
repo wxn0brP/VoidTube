@@ -1,95 +1,95 @@
 {
-    "name": "void-tube",
-    "version": "0.0.5",
-    "main": "dist/app/index.js",
-    "license": "MIT",
-    "private": true,
-    "type": "module",
-    "scripts": {
-        "build": "tsc && tsc-alias",
-        "start:server": "node dist/server/index.js",
-        "start:client": "electron .",
-        "electron:build": "electron-builder",
-        "electron:build-win": "electron-builder build --win",
-        "electron:build-linux": "electron-builder build --linux",
-        "electron:publish": "electron-builder --publish always",
-        "electron:publish-win": "electron-builder --publish always --win",
-        "electron:publish-linux": "electron-builder --publish always --linux",
-        "electron:build-zip": "electron-builder build --win zip --linux zip",
-        "electron:build-mac": "electron-builder build --mac",
-        "electron:publish-mac": "electron-builder --publish always --mac",
-        "electron:dist": "electron-packager .",
-        "bun": "bun run dev.ts"
-    },
-    "devDependencies": {
-        "@types/node": "*",
-        "@wxn0brp/vql-dev": "*",
-        "electron": "^40.1.0",
-        "tsc-alias": "*",
-        "typescript": "*"
-    },
-    "dependencies": {
-        "@wxn0brp/db": "^0.42.0",
-        "@wxn0brp/falcon-frame": "^0.6.1",
-        "@wxn0brp/lucerna-log": "^0.2.2",
-        "@wxn0brp/vql": "^0.10.2",
-        "fast-xml-parser": "^5.3.4",
-        "ky": "^1.14.3"
-    },
-    "author": {
-        "name": "wxn0brP",
-        "email": "toja.filiper@gmail.com"
-    },
-    "homepage": "https://github.com/wxn0brP/VoidTube",
-    "build": {
-        "appId": "com.wxn0brp.voidtube",
-        "productName": "VoidTube",
-        "directories": {
-            "buildResources": "public",
-            "output": "release"
-        },
-        "files": [
-            "dist/**/*",
-            "public/**/*",
-            "front/dist/**/*"
-        ],
-        "win": {
-            "target": [
-                "nsis",
-                "zip"
-            ],
-            "icon": "public/favicon.ico"
-        },
-        "linux": {
-            "target": [
-                "AppImage",
-                "deb",
-                "rpm",
-                "tar.gz",
-                "pacman",
-                "zip",
-                "7z"
-            ],
-            "icon": "public/favicon.png",
-            "category": "Application"
-        },
-        "mac": {
-            "target": [
-                "zip",
-                "7z"
-            ],
-            "icon": "public/icon.icns",
-            "type": "development",
-            "hardenedRuntime": false,
-            "gatekeeperAssess": false
-        },
-        "publish": {
-            "provider": "github",
-            "owner": "wxn0brP",
-            "repo": "VoidTube"
-        }
-    },
-    "engines": {
-        "node": ">=22.0.0"
-    }
+	"name": "void-tube",
+	"version": "0.0.5",
+	"main": "dist/app/index.js",
+	"license": "MIT",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "tsc && tsc-alias",
+		"start:server": "node dist/server/index.js",
+		"start:client": "electron .",
+		"electron:build": "electron-builder",
+		"electron:build-win": "electron-builder build --win",
+		"electron:build-linux": "electron-builder build --linux",
+		"electron:publish": "electron-builder --publish always",
+		"electron:publish-win": "electron-builder --publish always --win",
+		"electron:publish-linux": "electron-builder --publish always --linux",
+		"electron:build-zip": "electron-builder build --win zip --linux zip",
+		"electron:build-mac": "electron-builder build --mac",
+		"electron:publish-mac": "electron-builder --publish always --mac",
+		"electron:dist": "electron-packager .",
+		"bun": "bun run dev.ts"
+	},
+	"devDependencies": {
+		"@types/node": "*",
+		"@wxn0brp/vql-dev": "*",
+		"electron": "^40.1.0",
+		"tsc-alias": "*",
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@wxn0brp/db": "^0.42.0",
+		"@wxn0brp/falcon-frame": "^0.6.1",
+		"@wxn0brp/lucerna-log": "^0.2.2",
+		"@wxn0brp/vql": "^0.10.2",
+		"fast-xml-parser": "^5.3.4",
+		"ky": "^1.14.3"
+	},
+	"author": {
+		"name": "wxn0brP",
+		"email": "toja.filiper@gmail.com"
+	},
+	"homepage": "https://github.com/wxn0brP/VoidTube",
+	"build": {
+		"appId": "com.wxn0brp.voidtube",
+		"productName": "VoidTube",
+		"directories": {
+			"buildResources": "public",
+			"output": "release"
+		},
+		"files": [
+			"dist/**/*",
+			"public/**/*",
+			"front/dist/**/*"
+		],
+		"win": {
+			"target": [
+				"nsis",
+				"zip"
+			],
+			"icon": "public/favicon.ico"
+		},
+		"linux": {
+			"target": [
+				"AppImage",
+				"deb",
+				"rpm",
+				"tar.gz",
+				"pacman",
+				"zip",
+				"7z"
+			],
+			"icon": "public/favicon.png",
+			"category": "Application"
+		},
+		"mac": {
+			"target": [
+				"zip",
+				"7z"
+			],
+			"icon": "public/icon.icns",
+			"type": "development",
+			"hardenedRuntime": false,
+			"gatekeeperAssess": false
+		},
+		"publish": {
+			"provider": "github",
+			"owner": "wxn0brP",
+			"repo": "VoidTube"
+		}
+	},
+	"engines": {
+		"node": ">=22.0.0"
+	}
 }
