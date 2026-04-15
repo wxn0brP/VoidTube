@@ -34,7 +34,7 @@
 		"@wxn0brp/lucerna-log": "^0.2.2",
 		"@wxn0brp/vql": "^0.10.2",
 		"fast-xml-parser": "^5.3.4",
-		"ky": "^1.14.3"
+		"ky": "^2.0.0"
 	},
 	"author": {
 		"name": "wxn0brP",
