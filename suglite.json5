@@ -1,10 +1,6 @@
 {
-    "cmd": "tsc --noEmit && yarn bun",
-    "watch": [
+    cmd: "tsc --noEmit && bun run bun",
+    watch: [
         "src"
-    ],
-    "restart_cmd": "clear",
-    "events": {
-        "rs": "clear"
-    }
+    ]
 }

@@ -18,6 +18,7 @@ export interface VideoInfo {
     views: number;
     likes: number;
     channel: string;
+    channelName?: string;
     formats?: VideoFormat[];
 }
 

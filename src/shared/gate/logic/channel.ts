@@ -1,22 +1,22 @@
-import db from "#db";
+import { db } from "#db";
 import { getChannelInfo } from "#relay/apiBack";
+import { ChannelInfo } from "#relay/types";
 import { getTTL } from "#utils";
 
-export async function channelInfo(id: string, update = false) {
-    if (!id) return {};
-    const channel = await db.cache.findOne<any>("channel", { id });
+export async function channelInfo(id: string, update = false): Promise<ChannelInfo> {
+    if (!id) return {} as any;
+    const channel = await db.cache.channel.findOne({ id });
 
     if (!update) {
         if (channel) return channel;
     } else {
-        // @ts-ignore
         if (channel && channel.ttl > Math.floor(Date.now() / 1000)) {
             return channel;
         }
     }
 
     const data = await getChannelInfo(id);
-    await db.cache.updateOneOrAdd("channel", { id }, {
+    await db.cache.channel.updateOneOrAdd({ id }, {
         ttl: getTTL(),
         ...data
     }, { id_gen: false });

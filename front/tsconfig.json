@@ -33,7 +33,10 @@
         "skipLibCheck": true,
         "outDir": "./dist",
         "inlineSourceMap": true,
+        "strict": false,
+        "rootDir": "./src",
         "types": [
+            "@wxn0brp/flanker-ui",
             "esbuild-style-plugin"
         ]
     },

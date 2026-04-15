@@ -57,7 +57,7 @@ export async function getYtDlpPath(): Promise<string> {
         }
         return binPath;
     }
-    
+
     await downloadYtDlp(binName, binPath, baseDir);
     return binPath;
 }
