@@ -1,4 +1,4 @@
-import db from "#db";
+import { db } from "#db";
 import { note } from "#echo/logger";
 import ky from "ky";
 import { QuickVideoInfo } from "./types";
@@ -29,7 +29,7 @@ export async function fetchQuick(videoId: string): Promise<QuickVideoInfo> {
 
     let uploadDate: string | null = microformat?.uploadDate;
     if (uploadDate) uploadDate = formatDate(new Date(uploadDate));
-    
+
     const thumbnails = video.thumbnail?.thumbnails;
     let thumbnailUrl: string | null = null;
     if (thumbnails) {
@@ -55,8 +55,9 @@ export async function fetchQuick(videoId: string): Promise<QuickVideoInfo> {
 }
 
 export async function clearQuickCache(): Promise<boolean> {
-    const history = await db.user.find<QuickVideoInfo>("history", {});
+    const history = await db.user.history.find();
     const list = history.map(h => h._id);
-    await db.cache.remove("video-static-quick", { $nin: { _id: list } });
+    // @ts-ignore
+    await db.cache["video-static-quick"].remove({ $nin: { _id: list } });
     return true;
 }

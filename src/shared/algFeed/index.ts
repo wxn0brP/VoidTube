@@ -3,21 +3,21 @@ import { Config, FeedbackMap } from "./final/types";
 import { buildInitialCandidates } from "./candidates";
 import { getHistory } from "./history";
 import { getSetting } from "./getSetting";
-import db from "#db";
+import { db } from "#db";
 import { note } from "#echo/logger";
 
 export async function getConfig(): Promise<Config> {
     return {
-        minHistory:         await getSetting("minHistory",      20),
-        maxKeywords:        await getSetting("maxKeywords",     10),
-        keywordMinFreq:     await getSetting("keywordMinFreq",  7),
-        videoPerTag:        await getSetting("videoPerTag",     5),
-        noisePercent:       await getSetting("noisePercent",    10),
-        noiseBoost:         await getSetting("noiseBoost",      15),
-        hashTagBoost:       await getSetting("hashTagBoost",    3),
-        minScore:           await getSetting("minScore",        0),
-        irrelevant:         await getSetting("irrelevant",      "").then(v => Array.isArray(v) ? v : v.split(",")),
-        userTags:           await getSetting("userTags",        []),
+        minHistory: await getSetting("minHistory", 20),
+        maxKeywords: await getSetting("maxKeywords", 10),
+        keywordMinFreq: await getSetting("keywordMinFreq", 7),
+        videoPerTag: await getSetting("videoPerTag", 5),
+        noisePercent: await getSetting("noisePercent", 10),
+        noiseBoost: await getSetting("noiseBoost", 15),
+        hashTagBoost: await getSetting("hashTagBoost", 3),
+        minScore: await getSetting("minScore", 0),
+        irrelevant: await getSetting("irrelevant", "").then(v => Array.isArray(v) ? v : v.split(",")),
+        userTags: await getSetting("userTags", []),
     };
 }
 
@@ -29,7 +29,7 @@ export async function runFeed() {
     note("alg", "Config:", config);
 
     const feedback: FeedbackMap = new Map();
-    const feedbackRaw = await db.alg.find<{ _id: string, v: number }>("feedback", {});
+    const feedbackRaw = await db.alg.feedback.find();
     for (const f of feedbackRaw) feedback.set(f._id, f.v);
 
     const candidates = await buildInitialCandidates(history, config);

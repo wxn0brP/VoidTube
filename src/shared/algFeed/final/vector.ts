@@ -10,7 +10,7 @@ export function buildInterestVector(history: Video[], config: Config, feedback: 
         for (const token of tokens) {
             freqMap.set(token, (freqMap.get(token) ?? 0) + 1);
         }
-        
+
         for (const hashTag of hashTags) {
             freqMap.set(hashTag, (freqMap.get(hashTag) ?? 0) + config.hashTagBoost);
         }

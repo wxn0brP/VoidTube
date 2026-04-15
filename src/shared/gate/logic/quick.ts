@@ -1,13 +1,13 @@
-import db from "#db";
+import { db } from "#db";
 import { fetchQuick } from "#relay/fetchQuick";
 import { channelInfo } from "./channel";
 import { retrieveVideoData } from "./vidInfo";
 
 export async function fetchQuickCache(id: string) {
-    const cached = await db.cache.findOne("video-static-quick", { _id: id });
+    const cached = await db.cache["video-static-quick"].findOne({ _id: id });
     if (cached) return cached;
 
-    const staticData = await db.cache.findOne<any>("video-static", { _id: id });
+    const staticData = await db.cache["video-static"].findOne({ _id: id });
     if (staticData) {
         staticData.channelName = await channelInfo(staticData.channel).then(c => c.name);
         return staticData;
@@ -15,7 +15,7 @@ export async function fetchQuickCache(id: string) {
 
     const data = await fetchQuick(id);
     if (data) {
-        await db.cache.add("video-static-quick", data);
+        await db.cache["video-static-quick"].add(data);
         return data;
     } else {
         return retrieveVideoData(id, false, false);
@@ -25,13 +25,15 @@ export async function fetchQuickCache(id: string) {
 export async function fetchQuickCache$(search: { $in: { _id: string[] } }) {
     const map = new Map<string, any>();
 
-    const cached = await db.cache.find<any>("video-static-quick", { $in: { _id: search.$in._id } });
+    // @ts-ignore // TODO fix valthera type inference
+    const cached = await db.cache["video-static-quick"].find({ $in: { _id: search.$in._id } });
     for (const data of cached) {
         map.set(data._id, data);
     }
 
     const missingIds = search.$in._id.filter(id => !map.has(id));
-    const staticData = await db.cache.find<any>("video-static", { $in: { _id: missingIds } });
+    // @ts-ignore
+    const staticData = await db.cache["video-static"].find({ $in: { _id: missingIds } });
     const channelName = new Map<string, string>();
     for (const data of staticData) {
         if (channelName.has(data.channel)) {
@@ -48,7 +50,7 @@ export async function fetchQuickCache$(search: { $in: { _id: string[] } }) {
         let data = map.get(id);
         if (!data) {
             data = await fetchQuick(id);
-            await db.cache.add("video-static-quick", data);
+            await db.cache["video-static-quick"].add(data);
         }
         map.set(id, data);
     }
