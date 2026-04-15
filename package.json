@@ -24,17 +24,17 @@
 	"devDependencies": {
 		"@types/node": "*",
 		"@wxn0brp/vql-dev": "*",
-		"electron": "^40.1.0",
-		"tsc-alias": "*",
-		"typescript": "^5"
+		"electron": "^41.2.0",
+		"tsc-alias": "^1",
+		"typescript": "^6"
 	},
 	"dependencies": {
-		"@wxn0brp/db": "^0.42.0",
-		"@wxn0brp/falcon-frame": "^0.6.1",
-		"@wxn0brp/lucerna-log": "^0.2.2",
-		"@wxn0brp/vql": "^0.10.2",
-		"fast-xml-parser": "^5.3.4",
-		"ky": "^1.14.3"
+		"@wxn0brp/db": "^0.100.1",
+		"@wxn0brp/falcon-frame": "^0.8.1",
+		"@wxn0brp/lucerna-log": "^0.2.4",
+		"@wxn0brp/vql": "^0.11.4",
+		"fast-xml-parser": "^5.6.0",
+		"ky": "^2.0.1"
 	},
 	"author": {
 		"name": "wxn0brP",

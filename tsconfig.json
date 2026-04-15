@@ -11,7 +11,12 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "outDir": "./dist",
-        "inlineSourceMap": true
+        "inlineSourceMap": true,
+        "strict": false,
+        "rootDir": "./src",
+        "types": [
+            "@types/node"
+        ]
     },
     "include": [
         "./src"

@@ -1,5 +1,5 @@
 import VQLProcessor from "@wxn0brp/vql";
-import db from "#db";
+import { db } from "#db";
 import { YouTubeAdapter } from "./vql";
 import { VQLUQ } from "@wxn0brp/vql/vql";
 

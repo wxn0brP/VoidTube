@@ -1,4 +1,4 @@
-import db from "#db";
+import { db } from "#db";
 import { XMLParser } from "fast-xml-parser";
 import ky from "ky";
 import { FeedItem } from "./types";
@@ -24,7 +24,7 @@ export async function getFeed(channelId: string): Promise<FeedItem[] | null> {
 }
 
 export async function getQuickFeed(): Promise<FeedItem[]> {
-    const channels = await db.user.find<{ _id: string }>("subs", {}).then(res => res.map(c => c._id));
+    const channels = await db.user.subs.find().then(res => res.map(c => c._id));
     const feeds = await Promise.all(channels.map(c => getFeed(c)));
     return feeds.flat().filter(Boolean) as FeedItem[];
 }

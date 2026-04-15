@@ -1,4 +1,4 @@
-import db from "#db";
+import { db } from "#db";
 import { getVideoInfo } from "#relay/apiBack";
 import { getTTL } from "#utils";
 import { note } from "#echo/logger";
@@ -8,11 +8,11 @@ import { VideoInfo, StaticVideoInfo, DynamicVideoInfo } from "#relay/types";
 export const apiExecutor = new Executor();
 
 export async function retrieveVideoData(url: string, dynamic = true, staticData?: any): Promise<VideoInfo | null> {
-    if (staticData !== false) staticData = await db.cache.findOne<StaticVideoInfo>("video-static", { _id: url });
+    if (staticData !== false) staticData = await db.cache["video-static"].findOne({ _id: url });
     if (!dynamic && staticData) return staticData;
 
     async function fn(i = 0): Promise<VideoInfo | null> {
-        const dynamicData = dynamic && await db.cache.findOne<DynamicVideoInfo>("video-dynamic", { _id: url });
+        const dynamicData = dynamic && await db.cache["video-dynamic"].findOne({ _id: url });
 
         if (dynamic && staticData && dynamicData) {
             if (dynamicData.ttl > Math.floor(new Date().getTime() / 1000)) {
@@ -21,7 +21,7 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
                 delete data.url;
                 return data;
             } else {
-                db.cache.remove("video-dynamic", { url });
+                db.cache["video-dynamic"].remove({ url });
             }
         }
 
@@ -45,7 +45,7 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
             views: data.views,
             channel: data.channel,
         };
-        await db.cache.updateOneOrAdd("video-static", { url }, staticDataPayload);
+        await db.cache["video-static"].updateOneOrAdd({ url }, staticDataPayload);
 
         if ("formats" in data && data.formats.length > 3) {
             const dynamicDataPayload: DynamicVideoInfo = {
@@ -54,7 +54,7 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
                 ttl: getTTL(),
             };
 
-            await db.cache.add("video-dynamic", dynamicDataPayload);
+            await db.cache["video-dynamic"].add(dynamicDataPayload);
         } else if (dynamic) {
             console.error("[API-VQL] Failed to get video formats:", url);
             if (i < 3) {
@@ -63,7 +63,7 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
                 return fn(i + 1);
             }
         }
-        db.cache.remove("video-static-quick", { _id: url });
+        db.cache["video-static-quick"].remove({ _id: url });
 
         return data;
     }
@@ -72,7 +72,7 @@ export async function retrieveVideoData(url: string, dynamic = true, staticData?
 }
 
 export async function retrieveVideoData$(search: any): Promise<StaticVideoInfo[]> {
-    const staticData = await db.cache.find<StaticVideoInfo>("video-static", search);
+    const staticData = await db.cache["video-static"].find(search);
     const ids = search.$in._id;
 
     if (ids.length !== staticData.length) {
