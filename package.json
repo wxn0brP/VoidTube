@@ -24,7 +24,7 @@
 	"devDependencies": {
 		"@types/node": "*",
 		"@wxn0brp/vql-dev": "*",
-		"electron": "^41.2.0",
+		"electron": "^43.0.0",
 		"tsc-alias": "^1",
 		"typescript": "^6"
 	},
