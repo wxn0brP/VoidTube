@@ -3,7 +3,7 @@ name: Build Electron
 on:
   push:
     tags:
-      - "v*"
+      - "*"
 
   workflow_dispatch:
 
@@ -20,30 +20,30 @@ jobs:
       build_type: ${{ steps.determine_build_type.outputs.build_type }}
 
     steps:
-      - name: 📥 Checkout repository
-        uses: actions/checkout@v6
+      - name: Checkout repository
+        uses: actions/checkout@v7
 
-      - name: 🔧 Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
           node-version: 25
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: |
           npm install -g typescript tsc-alias
           npm install
 
-      - name: ⚙️ Compile TypeScript
+      - name: Compile TypeScript
         run: |
           npm run build
 
-      - name: 🌐 Build frontend
+      - name: Build frontend
         run: |
           cd front
           npm install
           npm run build
 
-      - name: 🤖 Determine build type
+      - name: Determine build type
         id: determine_build_type
         run: |
           if [ -z "${{ github.event.inputs.build-type }}" ]; then
@@ -60,42 +60,42 @@ jobs:
           sudo apt update
           sudo apt install -y wine32 wine64 libarchive-tools pacman fakeroot rpm
 
-      - name: 🚀 Full build and publish
+      - name: Full build and publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           npx electron-builder --publish always --win --linux
 
   build-mac:
-    name: 🍏 Build macOS (manual)
+    name: 🍏 Build macOS
     runs-on: macos-latest
     needs: build-electron
 
     steps:
-      - name: 📥 Checkout repo
+      - name: Checkout repo
         uses: actions/checkout@v6
 
-      - name: 🔧 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 25
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: |
           npm install -g typescript tsc-alias
           npm install
 
-      - name: ⚙️ Compile TypeScript
+      - name: Compile TypeScript
         run: |
           npm run build
 
-      - name: 🌐 Build frontend
+      - name: Build frontend
         run: |
           cd front
           npm install
           npm run build
 
-      - name: 🚀 Build macOS app (no code signing)
+      - name: Build macOS app (no code signing)
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
