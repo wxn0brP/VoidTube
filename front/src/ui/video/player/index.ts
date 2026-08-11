@@ -15,111 +15,119 @@ import { loadCaps, removeCaps } from "./caps";
 import MediaSyncController from "./mediaSync";
 
 export class PlayerView implements UiComponent {
-    public element: HTMLDivElement;
-    public bar: HTMLDivElement;
+	public element: HTMLDivElement;
+	public bar: HTMLDivElement;
 
-    public lastUpdateTime = Date.now();
-    public videoEl: HTMLVideoElement;
-    public audioEl: HTMLAudioElement;
-    public savedTime: number = 0;
-    public mediaSync: MediaSyncController;
+	public lastUpdateTime = Date.now();
+	public videoEl: HTMLVideoElement;
+	public audioEl: HTMLAudioElement;
+	public savedTime: number = 0;
+	public mediaSync: MediaSyncController;
 
-    constructor() {
-        this.audioEl = new Audio();
-    }
+	constructor() {
+		this.audioEl = new Audio();
+	}
 
-    mount(): void {
-        this.element = qs("#player")!;
-        this.bar = qs("#player-bar")!;
-        this.videoEl = this.element.querySelector("video")!;
+	mount(): void {
+		this.element = qs("#player")!;
+		this.bar = qs("#player-bar")!;
+		this.videoEl = this.element.querySelector("video")!;
 
-        this.mediaSync = new MediaSyncController({
-            audio: this.audioEl,
-            video: this.videoEl,
-        });
+		this.mediaSync = new MediaSyncController({
+			audio: this.audioEl,
+			video: this.videoEl,
+		});
 
-        this.videoEl.controls = false;
-        this.element.appendChild(this.videoEl);
-        this.element.appendChild(this.bar);
+		this.videoEl.controls = false;
+		this.element.appendChild(this.videoEl);
+		this.element.appendChild(this.bar);
 
-        const loadMedia = async () => {
-            const videoUrl = $store.selectedVideoUrl.get();
-            const audioUrl = $store.selectedAudioUrl.get();
+		const loadMedia = async () => {
+			const videoUrl = $store.selectedVideoUrl.get();
+			const audioUrl = $store.selectedAudioUrl.get();
 
-            if (!videoUrl || !audioUrl) {
-                console.error("No video or audio url", videoUrl, audioUrl);
-                fetchVQL("cache -video-dynamic! s._id = " + $store.videoId.get()).then(() => {
-                    loadVideo($store.videoId.get());
-                    setTimeout(() => {
-                        uiMsg("Failed to load video. Trying again...");
-                    }, 100);
-                });
-                return;
-            }
+			if (!videoUrl || !audioUrl) {
+				console.error("No video or audio url", videoUrl, audioUrl);
+				fetchVQL("cache -video-dynamic! s._id = " + $store.videoId.get()).then(
+					() => {
+						loadVideo($store.videoId.get());
+						setTimeout(() => {
+							uiMsg("Failed to load video. Trying again...");
+						}, 100);
+					},
+				);
+				return;
+			}
 
-            try {
-                this.savedTime = this.mediaSync.currentTime;
+			try {
+				this.savedTime = this.mediaSync.currentTime;
 
-                this.videoEl.src = videoUrl;
-                this.audioEl.src = audioUrl;
+				this.videoEl.src = videoUrl;
+				this.audioEl.src = audioUrl;
 
-                this.videoEl.load();
-                this.audioEl.load();
+				this.videoEl.load();
+				this.audioEl.load();
 
-                loadMediaSession();
-            } catch (err) {
-                uiMsg("Failed to load video: " + err.message);
-            }
-        };
+				loadMediaSession();
+			} catch (err) {
+				uiMsg("Failed to load video: " + err.message);
+			}
+		};
 
-        $store.video.subscribe(video => {
-            setTitle(video ? video.title : "");
-        });
+		$store.video.subscribe(video => {
+			setTitle(video ? video.title : "");
+		});
 
-        this.mediaSync.eventEmitter.on("loadeddata", () => {
-            this.mediaSync.seek(this.savedTime);
-            loadMediaSession();
+		this.mediaSync.eventEmitter.on("loadeddata", () => {
+			this.mediaSync.seek(this.savedTime);
+			loadMediaSession();
 
-            if (this.mediaSync.isPlaying) this.mediaSync.play();
-        });
+			if (this.mediaSync.isPlaying) this.mediaSync.play();
+		});
 
-        const loadMediaDebounce = utils.debounce(loadMedia, 100);
-        $store.selectedVideoUrl.subscribe(() => loadMediaDebounce());
-        $store.selectedAudioUrl.subscribe(() => loadMediaDebounce());
+		const loadMediaDebounce = utils.debounce(loadMedia, 100);
+		$store.selectedVideoUrl.subscribe(() => loadMediaDebounce());
+		$store.selectedAudioUrl.subscribe(() => loadMediaDebounce());
 
-        setupBar();
-        setupChannelInfo();
-        setUpSponsorBlock();
+		setupBar();
+		setupChannelInfo();
+		setUpSponsorBlock();
 
-        window.addEventListener("beforeunload", () => {
-            localStorage.setItem("cache.progress", JSON.stringify({
-                id: $store.videoId.get(),
-                time: Math.floor(this.mediaSync.currentTime)
-            }));
-            localStorage.setItem("cache.queue", JSON.stringify({
-                i: $store.queueIndex.get(),
-                q: queuePanel.queue
-            }));
-            localStorage.setItem("cache.queueName", $store.queueGroup.get());
-        });
-    }
+		window.addEventListener("beforeunload", () => {
+			localStorage.setItem(
+				"cache.progress",
+				JSON.stringify({
+					id: $store.videoId.get(),
+					time: Math.floor(this.mediaSync.currentTime),
+				}),
+			);
+			localStorage.setItem(
+				"cache.queue",
+				JSON.stringify({
+					i: $store.queueIndex.get(),
+					q: queuePanel.queue,
+				}),
+			);
+			localStorage.setItem("cache.queueName", $store.queueGroup.get());
+		});
+	}
 
-    public show() {
-        if (!$store.videoId.get()) return;
-        changeView("video");
-        setTitle($store.video.get()?.title);
-        clearQueryParams();
-        updateQueryParam("v", $store.videoId.get());
-        queuePanel.queryParams();
-        navBarView.save("video");
-    }
+	public show() {
+		if (!$store.videoId.get()) return;
+		changeView("video");
+		setTitle($store.video.get()?.title);
+		clearQueryParams();
+		updateQueryParam("v", $store.videoId.get());
+		queuePanel.queryParams();
+		navBarView.save("video");
+	}
 }
 
 const playerView = new PlayerView();
 export default playerView;
 
 mgl.playerShow = playerView.show;
-mgl.player = {}
+mgl.player = {};
 mgl.player.setTime = (time: number) => playerView.mediaSync.seek(time);
 mgl.player.loadCaps = loadCaps;
 mgl.player.removeCaps = removeCaps;

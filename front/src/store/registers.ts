@@ -4,5 +4,5 @@ import utils from "@wxn0brp/flanker-ui";
 
 const cancel = utils.throttle(() => fetchVQL("api -video-load s.id=0"), 1000);
 $store.loader.subscribe(count => {
-    if (count > 30) cancel();
+	if (count > 30) cancel();
 });

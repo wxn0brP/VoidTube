@@ -12,88 +12,97 @@ import channelView from "./channel";
 import "./subsList.scss";
 
 class SubsListView implements UiComponent {
-    element: HTMLDivElement;
-    container: HTMLDivElement;
-    searchInput: HTMLInputElement;
+	element: HTMLDivElement;
+	container: HTMLDivElement;
+	searchInput: HTMLInputElement;
 
-    render(subs: UserSub[]) {
-        this.container.innerHTML = "";
+	render(subs: UserSub[]) {
+		this.container.innerHTML = "";
 
-        if (!subs.length) {
-            this.container.innerHTML = `<h1 style="text-align: center;">No Subs</h1>`;
-            this.searchInput.style.display = "none";
-            return;
-        } else {
-            this.searchInput.style.display = "";
-        }
+		if (!subs.length) {
+			this.container.innerHTML = `<h1 style="text-align: center;">No Subs</h1>`;
+			this.searchInput.style.display = "none";
+			return;
+		} else {
+			this.searchInput.style.display = "";
+		}
 
-        subs.forEach((sub) => {
-            const card = document.createElement("div");
-            card.className = "subCard";
-            card.clA("card");
-            card.innerHTML = `
+		subs.forEach(sub => {
+			const card = document.createElement("div");
+			card.className = "subCard";
+			card.clA("card");
+			card.innerHTML = `
                 <div style="background-image: url(${sub.channel.avatar})" class="img"></div>
                 <h3 title="${sub.channel.name}">${sub.channel.name}</h3>
                 <span>${number2HumanFormatter.format(sub.channel.subscribers)} subs</span>
             `;
-            this.container.appendChild(card);
+			this.container.appendChild(card);
 
-            card.addEventListener("click", () => {
-                channelView.load($store.video.get().channel);
-            });
+			card.addEventListener("click", () => {
+				channelView.load($store.video.get().channel);
+			});
 
-            card.addEventListener("contextmenu", (e) => {
-                e.preventDefault();
-                window.open(window.location.origin + "/?channel=" + $store.video.get().channel, "_blank");
-            });
-        });
-    }
+			card.addEventListener("contextmenu", e => {
+				e.preventDefault();
+				window.open(
+					window.location.origin + "/?channel=" + $store.video.get().channel,
+					"_blank",
+				);
+			});
+		});
+	}
 
-    mount(): void {
-        this.element = qs("#subs-list-view");
-        this.container = this.element.querySelector("#subs-list-container")!;
-        this.searchInput = this.element.querySelector("#subs-list-search")!;
-        this.searchInput.style.display = "none";
+	mount(): void {
+		this.element = qs("#subs-list-view");
+		this.container = this.element.querySelector("#subs-list-container")!;
+		this.searchInput = this.element.querySelector("#subs-list-search")!;
+		this.searchInput.style.display = "none";
 
-        qs("#show-subs-button").addEventListener("dblclick", () => {
-            this.load();
-        });
+		qs("#show-subs-button").addEventListener("dblclick", () => {
+			this.load();
+		});
 
-        uiHelpers.storeHide(this.element, $store.view.subs);
-        $store.view.subs.set(false);
+		uiHelpers.storeHide(this.element, $store.view.subs);
+		$store.view.subs.set(false);
 
-        setTimeout(() => {
-            this.load();
-        }, 100);
+		setTimeout(() => {
+			this.load();
+		}, 100);
 
-        filterCards(this);
-    }
+		filterCards(this);
+	}
 
-    async load() {
-        const subs = await fetchVQL<UserSub[]>({
-            r: {
-                path: ["user", "subs"],
-                relations: {
-                    channel: {
-                        path: ["api", "channelInfo"],
-                        fk: "id",
-                        type: "11"
-                    }
-                },
-                search: {},
-                many: true
-            }
-        });
-        this.render(subs);
-    }
+	async load() {
+		const subs = await fetchVQL<UserSub[]>({
+			r: {
+				path: [
+					"user",
+					"subs",
+				],
+				relations: {
+					channel: {
+						path: [
+							"api",
+							"channelInfo",
+						],
+						fk: "id",
+						type: "11",
+					},
+				},
+				search: {},
+				many: true,
+			},
+		});
+		this.render(subs);
+	}
 
-    show() {
-        changeView("subs");
-        setTitle("");
-        clearQueryParams();
-        queuePanel.queryParams();
-        navBarView.save("subs");
-    }
+	show() {
+		changeView("subs");
+		setTitle("");
+		clearQueryParams();
+		queuePanel.queryParams();
+		navBarView.save("subs");
+	}
 }
 
 const subsListView = new SubsListView();

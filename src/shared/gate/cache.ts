@@ -4,11 +4,13 @@ import { note } from "#echo/logger";
 clearOldCache();
 
 export async function clearOldCache() {
-    note("cache", "Clearing old cache...");
-    const dynamicData = await db.cache["video-dynamic"].find();
-    for (const data of dynamicData) {
-        if (data.ttl < Math.floor(new Date().getTime() / 1000)) {
-            db.cache["video-dynamic"].remove({ _id: data._id });
-        }
-    }
+	note("cache", "Clearing old cache...");
+	const dynamicData = await db.cache["video-dynamic"].find();
+	for (const data of dynamicData) {
+		if (data.ttl < Math.floor(Date.now() / 1000)) {
+			db.cache["video-dynamic"].remove({
+				_id: data._id,
+			});
+		}
+	}
 }

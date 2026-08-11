@@ -5,5 +5,3 @@ await import("./init");
 // @ts-ignore
 await import("./__all_modules");
 import "#css/style.scss";
-
-export {}

@@ -9,12 +9,12 @@
         "build": "node build.js"
     },
     "devDependencies": {
-        "esbuild": "*",
-        "esbuild-style-plugin": "^1.6.3",
-        "sass": "^1.99.0"
+        "esbuild": "^0.28",
+        "esbuild-style-plugin": "^1.6",
+        "sass": "^1.102"
     },
     "dependencies": {
-        "@wxn0brp/flanker-ui": "^0.5.1",
-        "@wxn0brp/vql-client": "^0.2.9"
+        "@wxn0brp/flanker-ui": "^0.5.2",
+        "@wxn0brp/vql-client": "^0.2.13"
     }
 }

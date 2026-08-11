@@ -6,39 +6,38 @@ import playerView from ".";
 let sponsorBlockLock = false;
 
 export async function sponsorBlock() {
-    if (!$store.settings.sponsorBlock.get()) return;
+	if (!$store.settings.sponsorBlock.get()) return;
 
-    if ($store.sponsorBlock.id.get() !== $store.videoId.get()) return;
+	if ($store.sponsorBlock.id.get() !== $store.videoId.get()) return;
 
-    const segments = $store.sponsorBlock.segments.get();
-    if (!segments || !segments.length) return;
+	const segments = $store.sponsorBlock.segments.get();
+	if (!segments || !segments.length) return;
 
-    const current = playerView.mediaSync.currentTime;
-    if (sponsorBlockLock) return;
+	const current = playerView.mediaSync.currentTime;
+	if (sponsorBlockLock) return;
 
-    for (const seg of segments) {
-        const [start, end] = seg.segment;
-        const condition =
-            $store.settings.sponsorBlock.full.get() ?
-                current >= start && current < end :
-                current >= start && current < start + 2;
+	for (const seg of segments) {
+		const [start, end] = seg.segment;
+		const condition = $store.settings.sponsorBlock.full.get()
+			? current >= start && current < end
+			: current >= start && current < start + 2;
 
-        if (condition) {
-            uiMsg(`Skipping via sponsor block (${seg.category})`);
-            playerView.mediaSync.seek(end);
+		if (condition) {
+			uiMsg(`Skipping via sponsor block (${seg.category})`);
+			playerView.mediaSync.seek(end);
 
-            sponsorBlockLock = true;
-            setTimeout(() => sponsorBlockLock = false, 1500);
+			sponsorBlockLock = true;
+			setTimeout(() => (sponsorBlockLock = false), 1500);
 
-            break;
-        }
-    }
+			break;
+		}
+	}
 }
 
 export async function fetchSponsorSegments(videoId: string) {
-    const url = `https://sponsor.ajay.app/api/skipSegments?videoID=${videoId}`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error("Failed to fetch SponsorBlock segments");
-    const data: SponsorSegment[] = await res.json();
-    return data;
+	const url = `https://sponsor.ajay.app/api/skipSegments?videoID=${videoId}`;
+	const res = await fetch(url);
+	if (!res.ok) throw new Error("Failed to fetch SponsorBlock segments");
+	const data: SponsorSegment[] = await res.json();
+	return data;
 }

@@ -10,33 +10,33 @@ import { changeView } from "..";
 import navBarView from "../navBar";
 
 class FeedView implements UiComponent {
-    element: HTMLDivElement;
-    container: HTMLDivElement;
+	element: HTMLDivElement;
+	container: HTMLDivElement;
 
-    render(feed: FeedEntry[]) {
-        this.container.innerHTML = "";
-        fewItems(this.container, feed.length);
+	render(feed: FeedEntry[]) {
+		this.container.innerHTML = "";
+		fewItems(this.container, feed.length);
 
-        if (!feed.length) {
-            this.container.innerHTML = `<h1 style="text-align: center;">No feed</h1>`;
-            return;
-        }
+		if (!feed.length) {
+			this.container.innerHTML = `<h1 style="text-align: center;">No feed</h1>`;
+			return;
+		}
 
-        feed
-            .map(entry => {
-                return {
-                    ...entry,
-                    last: new Date(entry.pubDate).getTime()
-                }
-            })
-            .sort((a, b) => b.last - a.last)
-            .forEach(entry => {
-                const card = document.createElement("div");
-                card.className = "feedCard";
-                card.clA("card");
-                const id = entry.id;
+		feed
+			.map(entry => {
+				return {
+					...entry,
+					last: new Date(entry.pubDate).getTime(),
+				};
+			})
+			.sort((a, b) => b.last - a.last)
+			.forEach(entry => {
+				const card = document.createElement("div");
+				card.className = "feedCard";
+				card.clA("card");
+				const id = entry.id;
 
-                card.innerHTML = `
+				card.innerHTML = `
                     <div style="background-image: url(https://i3.ytimg.com/vi/${id}/maxresdefault.jpg)" class="img"></div>
                     <h3 title="${entry.title}">${entry.title}</h3>
                     <p>${new Date(entry.pubDate).toLocaleString()}</p>
@@ -50,59 +50,70 @@ class FeedView implements UiComponent {
                     </div>
                 `;
 
-                cardHelpers.click(card, entry);
-                cardHelpers.author(card, entry.authorId);
-                cardHelpers.queue(card, entry);
-                cardHelpers.playlist(card, entry);
+				cardHelpers.click(card, entry);
+				cardHelpers.author(card, entry.authorId);
+				cardHelpers.queue(card, entry);
+				cardHelpers.playlist(card, entry);
 
-                this.container.appendChild(card);
-            });
-    }
+				this.container.appendChild(card);
+			});
+	}
 
-    public async loadFeed() {
-        const feed = await fetchVQL<FeedEntry[]>({
-            r: {
-                path: ["api", "quickFeed"],
-                search: {
-                    id: 0
-                },
-                relations: {
-                    channel: {
-                        path: ["api", "channelInfo"],
-                        fk: "id",
-                        pk: "authorId",
-                        select: ["avatar"],
-                        type: "11"
-                    }
-                },
-                many: true
-            }
-        })
-        this.render(feed);
-        return feed;
-    }
+	public async loadFeed() {
+		const feed = await fetchVQL<FeedEntry[]>({
+			r: {
+				path: [
+					"api",
+					"quickFeed",
+				],
+				search: {
+					id: 0,
+				},
+				relations: {
+					channel: {
+						path: [
+							"api",
+							"channelInfo",
+						],
+						fk: "id",
+						pk: "authorId",
+						select: [
+							"avatar",
+						],
+						type: "11",
+					},
+				},
+				many: true,
+			},
+		});
+		this.render(feed);
+		return feed;
+	}
 
-    mount(): void {
-        this.element = qs("#feed-view");
-        this.container = this.element.querySelector("#feed-container")!;
+	mount(): void {
+		this.element = qs("#feed-view");
+		this.container = this.element.querySelector("#feed-container")!;
 
-        uiHelpers.storeHide(this.element, $store.view.feed);
-        $store.view.feed.set(false);
+		uiHelpers.storeHide(this.element, $store.view.feed);
+		$store.view.feed.set(false);
 
-        setTimeout(() => this.loadFeed(), window.location.search.length > 0 ? 5_000 : 10);
+		setTimeout(
+			() => this.loadFeed(),
+			window.location.search.length > 0 ? 5_000 : 10,
+		);
 
-        qs("#show-feed-button").addEventListener("dblclick", () => {
-            this.loadFeed();
-        });
-    }
+		qs("#show-feed-button").addEventListener("dblclick", () => {
+			this.loadFeed();
+		});
+	}
 
-    show() {
-        changeView("feed");
-        setTitle("");
-        clearQueryParams();
-        queuePanel.queryParams();
-        navBarView.save("feed");
-    }
+	show() {
+		changeView("feed");
+		setTitle("");
+		clearQueryParams();
+		queuePanel.queryParams();
+		navBarView.save("feed");
+	}
 }
 
 const feedView = new FeedView();

@@ -9,26 +9,26 @@ import { changeView } from "..";
 import "./settings.scss";
 
 class SettingsView implements UiComponent {
-    element: HTMLDivElement;
-    container: HTMLDivElement;
+	element: HTMLDivElement;
+	container: HTMLDivElement;
 
-    mount() {
-        this.element = qs("#settings-view")!;
-        this.container = this.element.querySelector("#settings-container")!;
+	mount() {
+		this.element = qs("#settings-view")!;
+		this.container = this.element.querySelector("#settings-container")!;
 
-        uiHelpers.storeHide(this.element, $store.view.settings);
-        $store.view.settings.set(false);
+		uiHelpers.storeHide(this.element, $store.view.settings);
+		$store.view.settings.set(false);
 
-        build(this.container);
-    }
+		build(this.container);
+	}
 
-    show() {
-        changeView("settings");
-        setTitle("");
-        clearQueryParams();
-        queuePanel.queryParams();
-        navBarView.save("settings");
-    }
+	show() {
+		changeView("settings");
+		setTitle("");
+		clearQueryParams();
+		queuePanel.queryParams();
+		navBarView.save("settings");
+	}
 }
 
 const settingsView = new SettingsView();
