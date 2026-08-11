@@ -6,43 +6,43 @@ import { loadSearchHistory } from "./utils";
 import event from "./event";
 
 export class SearchBarView implements UiComponent {
-    element: HTMLDivElement;
+	element: HTMLDivElement;
 
-    public searchInput: HTMLInputElement;
-    public searchBtn: HTMLButtonElement;
-    public searchSizeInput: HTMLInputElement;
-    public suggestionsList: HTMLElement;
-    public searchHistory: string[] = [];
+	public searchInput: HTMLInputElement;
+	public searchBtn: HTMLButtonElement;
+	public searchSizeInput: HTMLInputElement;
+	public suggestionsList: HTMLElement;
+	public searchHistory: string[] = [];
 
-    mount(): void {
-        this.element = qs("#search-bar");
-        this.searchInput = this.element.querySelector("#search-input")!;
-        this.searchBtn = this.element.querySelector("#search-btn")!;
-        this.searchSizeInput = this.element.querySelector("#search-size")!;
-        this.suggestionsList = qs("#suggestions")!;
+	mount(): void {
+		this.element = qs("#search-bar");
+		this.searchInput = this.element.querySelector("#search-input")!;
+		this.searchBtn = this.element.querySelector("#search-btn")!;
+		this.searchSizeInput = this.element.querySelector("#search-size")!;
+		this.suggestionsList = qs("#suggestions")!;
 
-        this.searchBtn.onclick = this.search.bind(this);
+		this.searchBtn.onclick = this.search.bind(this);
 
-        document.addEventListener("click", (e) => {
-            const target = e.target as HTMLElement;
-            if (target.closest("#search-bar") || target.closest("#prompt")) return;
-            hideSuggestions(this);
-        });
+		document.addEventListener("click", e => {
+			const target = e.target as HTMLElement;
+			if (target.closest("#search-bar") || target.closest("#prompt")) return;
+			hideSuggestions(this);
+		});
 
-        event(this);
-        loadSearchHistory(this);
-    }
+		event(this);
+		loadSearchHistory(this);
+	}
 
-    search() {
-        search(this);
-    }
+	search() {
+		search(this);
+	}
 }
 
 const searchBarView = new SearchBarView();
 export default searchBarView;
 
 mgl.searchShow = (text: string, e: Event) => {
-    e.preventDefault();
-    searchBarView.searchInput.value = text;
-    searchBarView.search();
+	e.preventDefault();
+	searchBarView.searchInput.value = text;
+	searchBarView.search();
 };

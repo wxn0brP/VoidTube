@@ -27,40 +27,40 @@ import queueView from "./view/queues";
 import { storeKeys } from "@wxn0brp/flanker-ui";
 
 export const components = [
-    playerView,
-    videoInfoView,
-    searchBarView,
-    videoFormatsView,
-    audioFormatsView,
-    videoView,
-    historyView,
-    queuePanel,
-    recommendationPanel,
-    playListsView,
-    searchView,
-    loaderView,
-    metaControlView,
-    playListsModal,
-    asideView,
-    navBarView,
-    playListSnapView,
-    channelView,
-    feedView,
-    settingsView,
-    messageView,
-    algView,
-    subsListView,
-    queueView,
-]
+	playerView,
+	videoInfoView,
+	searchBarView,
+	videoFormatsView,
+	audioFormatsView,
+	videoView,
+	historyView,
+	queuePanel,
+	recommendationPanel,
+	playListsView,
+	searchView,
+	loaderView,
+	metaControlView,
+	playListsModal,
+	asideView,
+	navBarView,
+	playListSnapView,
+	channelView,
+	feedView,
+	settingsView,
+	messageView,
+	algView,
+	subsListView,
+	queueView,
+];
 
 components.forEach(component => component.mount());
 
 export function changeView(view: string) {
-    const views = $store.view;
-    for (const key of Object.keys(views)) {
-        if (storeKeys.includes(key)) return;
-        views[key].set(key === view);
-    }
+	const views = $store.view;
+	for (const key of Object.keys(views)) {
+		if (storeKeys.includes(key)) return;
+		views[key].set(key === view);
+	}
 }
 
 mgl.changeView = changeView;

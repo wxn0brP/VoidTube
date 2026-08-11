@@ -9,13 +9,21 @@ import { existsSync } from "fs";
 const isDev = process.env.NODE_ENV === "development";
 
 const app = new FalconFrame({
-    loggerOpts: {
-        loggerName: "VoidTube-SERVER",
-        logLevel: process.env.FALCON_LOG_LEVEL as LogLevelName || (isDev ? "INFO" : "ERROR")
-    }
+	loggerOpts: {
+		loggerName: "VoidTube-SERVER",
+		logLevel:
+			(process.env.FALCON_LOG_LEVEL as LogLevelName) ||
+			(isDev ? "INFO" : "ERROR"),
+	},
 });
 
-if (isDev) note("server", "FalconFrame started with", app.logger.logLevel, "debug level");
+if (isDev)
+	note(
+		"server",
+		"FalconFrame started with",
+		app.logger.logLevel,
+		"debug level",
+	);
 
 const port = parseInt(process.env.PORT) || 29848;
 
@@ -29,26 +37,28 @@ app.get("/avatar", avatarHandler);
 app.get("/avatarTry", avatarTryHandler);
 
 if (existsSync(__cwd + "front/src"))
-    app.static("/src", __cwd + "front/src", { errorIfDirNotFound: false });
+	app.static("/src", __cwd + "front/src", {
+		errorIfDirNotFound: false,
+	});
 
 note(`server`, `Server started on http://localhost:${port}`);
 
 process.on("unhandledRejection", (reason, p) => {
-    note("server", "Unhandled Rejection at: Promise", p, "reason:", reason);
+	note("server", "Unhandled Rejection at: Promise", p, "reason:", reason);
 });
 
-process.on("uncaughtException", (err) => {
-    note("server", "Uncaught Exception thrown:", err.message, err.stack);
+process.on("uncaughtException", err => {
+	note("server", "Uncaught Exception thrown:", err.message, err.stack);
 });
 
 app.listen(port);
 
 if (isDev || process.argv.join(" ").includes("bun")) {
-    try {
-        const { VqlDevPanel } = await import("@wxn0brp/vql-dev");
-        const devPanel = new VqlDevPanel(VQL);
-        devPanel.start();
-    } catch (e) {
-        console.error("Error while starting dev panel:", e);
-    }
+	try {
+		const { VqlDevPanel } = await import("@wxn0brp/vql-dev");
+		const devPanel = new VqlDevPanel(VQL);
+		devPanel.start();
+	} catch (e) {
+		console.error("Error while starting dev panel:", e);
+	}
 }

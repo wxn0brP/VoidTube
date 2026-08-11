@@ -8,24 +8,24 @@ import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 import { changeView } from "..";
 
 class SearchView implements UiComponent {
-    element: HTMLDivElement;
-    container: HTMLDivElement;
+	element: HTMLDivElement;
+	container: HTMLDivElement;
 
-    render(search: SearchEntry[]) {
-        this.container.innerHTML = "";
-        fewItems(this.container, search.length);
+	render(search: SearchEntry[]) {
+		this.container.innerHTML = "";
+		fewItems(this.container, search.length);
 
-        if (!search.length) {
-            this.container.innerHTML = `<h1 style="text-align: center;">No Results</h1>`;
-            return;
-        }
+		if (!search.length) {
+			this.container.innerHTML = `<h1 style="text-align: center;">No Results</h1>`;
+			return;
+		}
 
-        search.forEach(entry => {
-            const card = document.createElement("div");
-            card.className = "searchCard";
-            card.clA("card");
+		search.forEach(entry => {
+			const card = document.createElement("div");
+			card.className = "searchCard";
+			card.clA("card");
 
-            card.innerHTML = `
+			card.innerHTML = `
                 <div style="background-image: url(${entry.thumbnail})" class="img"></div>
                 <h3 title="${entry.title}">${entry.title}</h3>
                 ${formatTime(entry.duration, null)} <br>
@@ -38,32 +38,32 @@ class SearchView implements UiComponent {
                     <button class="btn" data-id="queue">Queue➕</button>
                     <button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                 </div>
-            `
+            `;
 
-            cardHelpers.click(card, entry);
-            cardHelpers.queue(card, entry);
-            cardHelpers.playlist(card, entry);
-            cardHelpers.author(card, entry.channel);
-            cardHelpers.avatarTry(card);
+			cardHelpers.click(card, entry);
+			cardHelpers.queue(card, entry);
+			cardHelpers.playlist(card, entry);
+			cardHelpers.author(card, entry.channel);
+			cardHelpers.avatarTry(card);
 
-            this.container.appendChild(card);
-        });
-        this.container.classList.toggle("fewItems", search.length <= 3);
-    }
+			this.container.appendChild(card);
+		});
+		this.container.classList.toggle("fewItems", search.length <= 3);
+	}
 
-    mount(): void {
-        this.element = qs("#search-view");
-        this.container = this.element.querySelector("#search-container")!;
+	mount(): void {
+		this.element = qs("#search-view");
+		this.container = this.element.querySelector("#search-container")!;
 
-        uiHelpers.storeHide(this.element, $store.view.search);
-        $store.view.search.set(false);
-    }
+		uiHelpers.storeHide(this.element, $store.view.search);
+		$store.view.search.set(false);
+	}
 
-    show() {
-        changeView("search");
-        updateQueryParam("v", undefined);
-        navBarView.save("search");
-    }
+	show() {
+		changeView("search");
+		updateQueryParam("v", undefined);
+		navBarView.save("search");
+	}
 }
 
 const searchView = new SearchView();

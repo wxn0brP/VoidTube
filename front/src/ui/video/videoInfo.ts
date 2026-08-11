@@ -5,20 +5,21 @@ import "./video.scss";
 import { setDescription } from "./description";
 
 class VideoInfoView implements UiComponent {
-    element: HTMLElement;
+	element: HTMLElement;
 
-    mount(): void {
-        this.element = qs("#video-info");
+	mount(): void {
+		this.element = qs("#video-info");
 
-        $store.video.subscribe(data => {
-            data ? this.renderVideoInfo(data) : (this.element.innerHTML = "");
-        });
-    }
+		$store.video.subscribe(data => {
+			data ? this.renderVideoInfo(data) : (this.element.innerHTML = "");
+		});
+	}
 
-    renderVideoInfo(info: VideoInfo): void {
-        const d = info.uploadDate;
-        const date = d[6] + d[7] + "." + d[4] + d[5] + "." + d[0] + d[1] + d[2] + d[3];
-        this.element.innerHTML = `
+	renderVideoInfo(info: VideoInfo): void {
+		const d = info.uploadDate;
+		const date =
+			d[6] + d[7] + "." + d[4] + d[5] + "." + d[0] + d[1] + d[2] + d[3];
+		this.element.innerHTML = `
             <h3 title="${info.title}">${info.title}</h3>
             <b>Upload date:</b> ${date} -
             <b>Views:</b> ${info.views} -
@@ -26,8 +27,8 @@ class VideoInfoView implements UiComponent {
             <br><br>
             <article data-id="description"></article>
         `;
-        setDescription(this.element.qs("description", 1), info.description);
-    }
+		setDescription(this.element.qs("description", 1), info.description);
+	}
 }
 
 const videoInfoView = new VideoInfoView();

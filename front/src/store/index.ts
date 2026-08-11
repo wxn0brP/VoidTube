@@ -5,71 +5,73 @@ import { SponsorSegment } from "#types/sponsorBlock";
 import { generateName } from "#utils/names";
 
 const initData = {
-    video: null as VideoInfo,
-    videoId: "",
-    selectedVideoUrl: "",
-    selectedAudioUrl: "",
-    videoChannelName: "",
-    videoMetaCache: null as { [key: string]: VideoCache },
-    recommendedId: "",
-    queueLoop: false,
-    queueIndex: 0,
+	video: null as VideoInfo,
+	videoId: "",
+	selectedVideoUrl: "",
+	selectedAudioUrl: "",
+	videoChannelName: "",
+	videoMetaCache: null as {
+		[key: string]: VideoCache;
+	},
+	recommendedId: "",
+	queueLoop: false,
+	queueIndex: 0,
 
-    player: {
-        loop: false,
-        volume: 1
-    },
+	player: {
+		loop: false,
+		volume: 1,
+	},
 
-    view: {
-        video: false,
-        history: false,
-        playlists: false,
-        search: false,
-        playlistSnap: false,
-        channel: false,
-        feed: false,
-        settings: false,
-        alg: false,
-        subs: false,
-        queues: false
-    },
-    loader: 0,
-    queueGroup: generateName(),
+	view: {
+		video: false,
+		history: false,
+		playlists: false,
+		search: false,
+		playlistSnap: false,
+		channel: false,
+		feed: false,
+		settings: false,
+		alg: false,
+		subs: false,
+		queues: false,
+	},
+	loader: 0,
+	queueGroup: generateName(),
 
-    playlistsCache: [] as PlaylistsEntry[],
-    channelId: "",
+	playlistsCache: [] as PlaylistsEntry[],
+	channelId: "",
 
-    settings: {
-        quality: "best",
-        recommendations: "10",
-        onePlay: true,
-        searchLanguage: "en",
-        searchCountry: "US",
-        sponsorBlock: {
-            full: true,
-            enabled: true
-        },
-        antiRecommendationLoop: true,
-        audioFadeEnabled: false,
-        audioFade: "300",
-        alg: {
-            minHistory: "20",
-            maxKeywords: "10",
-            keywordMinFreq: "7",
-            videoPerTag: "5",
-            noisePercent: "10",
-            noiseBoost: "15",
-            hashTagBoost: "3",
-            minScore: "0",
-        }
-    },
-    lastVideos: [] as string[],
+	settings: {
+		quality: "best",
+		recommendations: "10",
+		onePlay: true,
+		searchLanguage: "en",
+		searchCountry: "US",
+		sponsorBlock: {
+			full: true,
+			enabled: true,
+		},
+		antiRecommendationLoop: true,
+		audioFadeEnabled: false,
+		audioFade: "300",
+		alg: {
+			minHistory: "20",
+			maxKeywords: "10",
+			keywordMinFreq: "7",
+			videoPerTag: "5",
+			noisePercent: "10",
+			noiseBoost: "15",
+			hashTagBoost: "3",
+			minScore: "0",
+		},
+	},
+	lastVideos: [] as string[],
 
-    sponsorBlock: {
-        id: "",
-        segments: [] as SponsorSegment[]
-    }
-}
+	sponsorBlock: {
+		id: "",
+		segments: [] as SponsorSegment[],
+	},
+};
 
 export const $store = createStore(initData);
 mgl.store = $store;
@@ -77,8 +79,17 @@ mgl.store = $store;
 initData.videoMetaCache = {};
 
 export function appendLastVideos(id: string | string[]) {
-    const ids = Array.isArray(id) ? id : [id];
-    const old = $store.lastVideos.get();
-    const set = new Set([...old, ...ids]);
-    $store.lastVideos.set([...set]);
+	const ids = Array.isArray(id)
+		? id
+		: [
+				id,
+			];
+	const old = $store.lastVideos.get();
+	const set = new Set([
+		...old,
+		...ids,
+	]);
+	$store.lastVideos.set([
+		...set,
+	]);
 }

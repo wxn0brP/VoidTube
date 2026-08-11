@@ -10,45 +10,45 @@ import { handleDragOver, handleDragStart, handleDrop } from "./drag";
 import { scrollToPlayCard } from "./utils";
 
 export async function render(cmp: QueuePanel) {
-    if (!cmp.queue) {
-        cmp.element.style.display = "none";
-        return;
-    }
+	if (!cmp.queue) {
+		cmp.element.style.display = "none";
+		return;
+	}
 
-    const videos = new Map<string, VideoQuickInfo>();
-    const missing = [];
+	const videos = new Map<string, VideoQuickInfo>();
+	const missing = [];
 
-    cmp.queue.forEach(id => {
-        cmp.videoMap.has(id) ?
-            videos.set(id, cmp.videoMap.get(id)) :
-            missing.push(id);
-    });
+	cmp.queue.forEach(id => {
+		cmp.videoMap.has(id)
+			? videos.set(id, cmp.videoMap.get(id))
+			: missing.push(id);
+	});
 
-    if (missing.length) {
-        const info = await fetchVQL({
-            query: "api video-static-quick s.$in._id = $_id",
-            var: {
-                _id: missing
-            }
-        });
-        for (const item of info) {
-            cmp.videoMap.set(item._id, item);
-            videos.set(item._id, item);
-        }
-    }
+	if (missing.length) {
+		const info = await fetchVQL({
+			query: "api video-static-quick s.$in._id = $_id",
+			var: {
+				_id: missing,
+			},
+		});
+		for (const item of info) {
+			cmp.videoMap.set(item._id, item);
+			videos.set(item._id, item);
+		}
+	}
 
-    const rendered = cmp.queue.map(id => videos.get(id));
-    cmp.element.innerHTML = "";
-    cmp.element.style.display = "";
-    cmp.cards.clear();
-    rendered.forEach((item, i) => {
-        const card = document.createElement("div");
-        card.className = "queueCard";
-        card.setAttribute("draggable", "true");
-        card.setAttribute("data-id", item._id);
-        card.setAttribute("data-index", i.toString());
-        if ($store.queueIndex.get() === i) card.clA("playing");
-        card.innerHTML = `
+	const rendered = cmp.queue.map(id => videos.get(id));
+	cmp.element.innerHTML = "";
+	cmp.element.style.display = "";
+	cmp.cards.clear();
+	rendered.forEach((item, i) => {
+		const card = document.createElement("div");
+		card.className = "queueCard";
+		card.setAttribute("draggable", "true");
+		card.setAttribute("data-id", item._id);
+		card.setAttribute("data-index", i.toString());
+		if ($store.queueIndex.get() === i) card.clA("playing");
+		card.innerHTML = `
             <div class="img">
                 <img src="${getThumbnail(item.thumbnail, item._id)}"></div>
             </div>
@@ -61,33 +61,37 @@ export async function render(cmp: QueuePanel) {
             </div>
         `;
 
-        card.addEventListener("click", async (e: MouseEvent) => {
-            if (!e.shiftKey) {
-                $store.queueIndex.set(+card.getAttribute("data-index"));
-                return loadVideo(item._id);
-            }
-            e.preventDefault();
-            cmp.element.clA("dragging");
-            let confirm = e.altKey || await uiFunc.confirm("Are you sure you want to remove this video from the queue?");
-            if (!confirm) return;
-            remove(cmp, i);
-            setTimeout(() => cmp.element.clR("dragging"), 10);
-        });
+		card.addEventListener("click", async (e: MouseEvent) => {
+			if (!e.shiftKey) {
+				$store.queueIndex.set(+card.getAttribute("data-index"));
+				return loadVideo(item._id);
+			}
+			e.preventDefault();
+			cmp.element.clA("dragging");
+			const confirm =
+				e.altKey ||
+				(await uiFunc.confirm(
+					"Are you sure you want to remove this video from the queue?",
+				));
+			if (!confirm) return;
+			remove(cmp, i);
+			setTimeout(() => cmp.element.clR("dragging"), 10);
+		});
 
-        card.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-            window.open(window.location.origin + "/?v=" + item._id);
-        });
+		card.addEventListener("contextmenu", e => {
+			e.preventDefault();
+			window.open(window.location.origin + "/?v=" + item._id);
+		});
 
-        card.addEventListener("dragstart", (e) => handleDragStart(cmp, e));
-        card.addEventListener("dragover", (e) => handleDragOver(cmp, e));
-        card.addEventListener("drop", () => handleDrop(cmp));
+		card.addEventListener("dragstart", e => handleDragStart(cmp, e));
+		card.addEventListener("dragover", e => handleDragOver(cmp, e));
+		card.addEventListener("drop", () => handleDrop(cmp));
 
-        cmp.element.appendChild(card);
-        cmp.cards.set(item._id, card);
-    });
+		cmp.element.appendChild(card);
+		cmp.cards.set(item._id, card);
+	});
 
-    setTimeout(() => {
-        scrollToPlayCard(cmp);
-    }, 50);
+	setTimeout(() => {
+		scrollToPlayCard(cmp);
+	}, 50);
 }
