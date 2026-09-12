@@ -24,6 +24,7 @@ import subsListView from "./view/subsList";
 import queuePanel from "./video/queue";
 import recommendationPanel from "./video/recommendations";
 import queueView from "./view/queues";
+import downloadsView from "./view/downloads";
 import { storeKeys } from "@wxn0brp/flanker-ui";
 
 export const components = [
@@ -51,6 +52,7 @@ export const components = [
 	algView,
 	subsListView,
 	queueView,
+	downloadsView,
 ];
 
 components.forEach(component => component.mount());

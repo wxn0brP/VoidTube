@@ -182,7 +182,10 @@ export function updateProgressBars() {
 }
 
 document.addEventListener("keydown", e => {
-	if (e.code === "Escape") {
+	if (
+		e.code === "Escape" &&
+		playerView.element.classList.contains("fullscreen")
+	) {
 		document.exitFullscreen();
 		playerView.element.classList.remove("fullscreen");
 		playerView.bar.classList.remove("fullscreen");
