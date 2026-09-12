@@ -34,6 +34,7 @@ const initData = {
 		alg: false,
 		subs: false,
 		queues: false,
+		downloads: false,
 	},
 	loader: 0,
 	queueGroup: generateName(),

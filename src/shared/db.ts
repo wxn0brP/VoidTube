@@ -22,6 +22,19 @@ export const db = {
 		history: QuickVideoInfo;
 	}>(getExternalResourcePath("internal-db", "user")),
 
+	downloads: ValtheraCreate<{
+		downloads: {
+			_id: string;
+			videoId: string;
+			title: string;
+			format: string;
+			status: string;
+			error?: string;
+			path?: string;
+			createdAt: number;
+			finishedAt?: number;
+		};
+	}>(getExternalResourcePath("internal-db", "downloads")),
 	video: ValtheraCreate(getExternalResourcePath("internal-db", "video")),
 
 	playlist: ValtheraCreate(getExternalResourcePath("internal-db", "playlist")),

@@ -132,3 +132,32 @@ export interface LoadVideoOpts {
 	saveProgressOpt: boolean;
 	saveNav: boolean;
 }
+
+export type DownloadFormat = "mp3" | "mp4";
+
+export interface ActiveDownload {
+	id: string;
+	videoId: string;
+	title: string;
+	format: DownloadFormat;
+	progress: number;
+	speed: string;
+	eta: string;
+	total: string;
+	startedAt: number;
+	status: "downloading" | "done" | "cancelled" | "error";
+	error?: string;
+	path?: string;
+}
+
+export interface DownloadEntry {
+	_id: string;
+	videoId: string;
+	title: string;
+	format: DownloadFormat;
+	status: string;
+	error?: string;
+	path?: string;
+	createdAt: number;
+	finishedAt?: number;
+}

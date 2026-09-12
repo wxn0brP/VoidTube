@@ -1,5 +1,6 @@
 import { fetchVQL } from "#api/index";
 import { fetchPlaylistsContainingVideo } from "#api/playlist";
+import { mgl } from "#mgl";
 import { $store } from "#store";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import playListsView from "#ui/view/playListsView";
@@ -153,11 +154,11 @@ class MetaControlView implements UiComponent {
 		if (!url || url.toLowerCase() === "cancel") return;
 
 		if (url.toLowerCase() === "mp3" || url.toLowerCase() === "mp4") {
-			fetchVQL(
-				`api +download d._id = ${$store.videoId.get()} d.format = ${url}`,
-			).then(res => {
-				uiMsg("Downloaded to " + res.path);
-			});
+			await fetchVQL(
+				`api +downloadStart d._id = ${$store.videoId.get()} d.format = ${url}`,
+			);
+			uiMsg("Download started");
+			mgl.downloadsShow();
 			return;
 		}
 
