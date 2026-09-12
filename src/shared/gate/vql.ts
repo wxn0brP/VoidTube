@@ -14,7 +14,14 @@ import { AdapterBuilder } from "@wxn0brp/vql/helpers/apiAbstract";
 import { runFeedVQL } from "./alg";
 import "./cache";
 import { channelInfo } from "./logic/channel";
-import { downloadVideo } from "./logic/download";
+import {
+	downloadCancel,
+	downloadHistory,
+	downloadHistoryRm,
+	downloadStart,
+	downloadStatus,
+	downloadVideo,
+} from "./logic/download";
 import { fetchQuickCache, fetchQuickCache$ } from "./logic/quick";
 import {
 	apiExecutor,
@@ -25,6 +32,15 @@ import {
 const adapter = new AdapterBuilder();
 
 adapter.add("download", async ({ data }) => downloadVideo(data as any));
+adapter.add("downloadStart", async ({ data }: any) => downloadStart(data));
+adapter.find("downloadStatus", async () => downloadStatus());
+adapter.find("downloadHistory", async () => downloadHistory());
+adapter.removeOne("downloadCancel", async ({ search }: any) =>
+	downloadCancel(search),
+);
+adapter.removeOne("downloadHistory-rm", async ({ search }: any) =>
+	downloadHistoryRm(search),
+);
 
 adapter.find("playlistIds", async ({ search }: any) =>
 	getPlaylistIds(search.url || search._id),
