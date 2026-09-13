@@ -24,7 +24,7 @@
     "devDependencies": {
         "@types/node": "*",
         "@wxn0brp/biome": "*",
-        "@wxn0brp/vql-dev": "^0.6.2",
+        "@wxn0brp/vql-dev": "^0.6.3",
         "electron": "^44.3.0",
         "tsc-alias": "^1",
         "typescript": "^7"
@@ -33,7 +33,7 @@
         "@wxn0brp/db": "^0.120.0",
         "@wxn0brp/falcon-frame": "^0.9.2",
         "@wxn0brp/lucerna-log": "^0.2.5",
-        "@wxn0brp/vql": "^0.13.0",
+        "@wxn0brp/vql": "^0.13.1",
         "fast-xml-parser": "^5.11.1",
         "ky": "^2.1.0"
     },
