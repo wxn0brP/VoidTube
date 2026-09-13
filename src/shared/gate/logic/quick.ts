@@ -35,7 +35,6 @@ export async function fetchQuickCache$(search: {
 }) {
 	const map = new Map<string, any>();
 
-	// @ts-ignore // TODO fix valthera type inference
 	const cached = await db.cache["video-static-quick"].find({
 		$in: {
 			_id: search.$in._id,

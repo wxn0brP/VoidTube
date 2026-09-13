@@ -60,25 +60,22 @@ export default async function (container: HTMLDivElement) {
 
 		switch (setting.type) {
 			case "input":
-				element.querySelector<HTMLInputElement>("input")!.value =
-					value as string;
+				element.qs<HTMLInputElement>("input")!.value = value as string;
 				break;
 			case "select":
 				value = value.toString();
-				element.querySelector<HTMLSelectElement>("select")!.value = value;
+				element.qs<HTMLSelectElement>("select")!.value = value;
 				break;
 			case "textarea":
 				value = ((value as string) || "")
 					.split(",")
 					.map(v => v.trim())
 					.join("\n");
-				element.querySelector<HTMLTextAreaElement>("textarea")!.value = value;
+				element.qs<HTMLTextAreaElement>("textarea")!.value = value;
 				break;
 			case "checkbox":
 				value = typeof value === "boolean" ? value : value === "true";
-				element.querySelector<HTMLInputElement>(
-					"input[type='checkbox']",
-				)!.checked = value;
+				element.qs<HTMLInputElement>("input[type='checkbox']")!.checked = value;
 				break;
 			default:
 				console.warn(`Unknown setting type: ${setting.type}`);

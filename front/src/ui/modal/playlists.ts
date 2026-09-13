@@ -46,15 +46,14 @@ class PlayListsModal implements UiComponent {
 			});
 	}
 
-	mount(): void {
-		this.element = qs("#playlists-modal")!;
-		this.container = this.element.querySelector("#playlists-modal-container")!;
-		this.createPlaylistBtn = this.element.querySelector("[data-id=create]")!;
-		this.element.querySelector<HTMLButtonElement>("[data-id=cancel]")!.onclick =
-			() => {
-				this.callback(null);
-				this.hide();
-			};
+	mount() {
+		this.element = qs("#playlists-modal");
+		this.container = this.element.qs("#playlists-modal-container");
+		this.createPlaylistBtn = this.element.qs("[data-id=create]");
+		this.element.qs<HTMLButtonElement>("[data-id=cancel]")!.onclick = () => {
+			this.callback(null);
+			this.hide();
+		};
 
 		this.createPlaylistBtn.onclick = async () => {
 			const name = await uiFunc.prompt("Playlist name");

@@ -42,7 +42,7 @@ class AlgView implements UiComponent {
                     <button title="Add to playlist" class="btn" data-id="playlist">📂</button>
                 </div>
             `;
-			card.querySelector<HTMLSpanElement>("[data-id=scores]")!.title =
+			card.qs<HTMLSpanElement>("[data-id=scores]")!.title =
 				`score: ${entry.score}
 tags:
 ${entry.tags.map(t => `- ${t}`).join("\n")}
@@ -59,9 +59,9 @@ ${entry.tags.map(t => `- ${t}`).join("\n")}
 		this.container.classList.toggle("fewItems", alg.length <= 3);
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#alg-view");
-		this.container = this.element.querySelector("#alg-container")!;
+		this.container = this.element.qs("#alg-container");
 
 		qs("#show-alg-button").addEventListener("dblclick", () => {
 			this.load();

@@ -28,10 +28,10 @@ export class PlayerView implements UiComponent {
 		this.audioEl = new Audio();
 	}
 
-	mount(): void {
-		this.element = qs("#player")!;
-		this.bar = qs("#player-bar")!;
-		this.videoEl = this.element.querySelector("video")!;
+	mount() {
+		this.element = qs("#player");
+		this.bar = qs("#player-bar");
+		this.videoEl = this.element.qs("video");
 
 		this.mediaSync = new MediaSyncController({
 			audio: this.audioEl,

@@ -6,7 +6,7 @@ let draggingId: string | null = null;
 
 export function handleDragStart(cmp: QueuePanel, e: DragEvent) {
 	const target = e.target as HTMLElement;
-	const card = target.closest(".queueCard") as HTMLElement;
+	const card = target.closest<HTMLElement>(".queueCard");
 	if (!card) return;
 	cmp.element.clA("dragging");
 
@@ -17,10 +17,10 @@ export function handleDragStart(cmp: QueuePanel, e: DragEvent) {
 export function handleDragOver(cmp: QueuePanel, e: DragEvent) {
 	e.preventDefault();
 	const target = e.target as HTMLElement;
-	const card = target.closest(".queueCard") as HTMLElement;
+	const card = target.closest<HTMLElement>(".queueCard");
 	if (!card || !draggingId) return;
 
-	const draggedCard = cmp.element.querySelector(".dragging") as HTMLElement;
+	const draggedCard = cmp.element.qs(".dragging");
 	if (!draggedCard || draggedCard === card) return;
 
 	const rect = card.getBoundingClientRect();
@@ -36,7 +36,7 @@ export function handleDragOver(cmp: QueuePanel, e: DragEvent) {
 }
 
 export function handleDrop(cmp: QueuePanel) {
-	const card = cmp.element.querySelector(".dragging") as HTMLElement;
+	const card = cmp.element.qs(".dragging") as HTMLElement;
 	if (card) {
 		card.clR("dragging");
 		const cardId = card.getAttribute("data-id");

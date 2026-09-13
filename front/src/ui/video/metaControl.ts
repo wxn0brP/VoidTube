@@ -18,22 +18,20 @@ class MetaControlView implements UiComponent {
 	shareBtn: HTMLButtonElement;
 	downloadBtn: HTMLButtonElement;
 
-	mount(): void {
-		this.element = qs("#meta-control-bar")!;
+	mount() {
+		this.element = qs("#meta-control-bar");
 
-		this.toggleToPlayListBtn = this.element.querySelector(
-			"#toggle-to-playlist",
-		)!;
-		this.shareBtn = this.element.querySelector("#share")!;
-		this.downloadBtn = this.element.querySelector("#download")!;
-		this.element.querySelector<HTMLButtonElement>("#clear-queue")!.onclick =
-			() => queuePanel.clear(true);
+		this.toggleToPlayListBtn = this.element.qs("#toggle-to-playlist");
+		this.shareBtn = this.element.qs("#share");
+		this.downloadBtn = this.element.qs("#download");
+		this.element.qs<HTMLButtonElement>("#clear-queue")!.onclick = () =>
+			queuePanel.clear(true);
 
 		this.toggleToPlayListBtn.onclick = e =>
 			this.toggleToPlayList($store.videoId.get(), e);
 		this.shareBtn.onclick = () => this.share();
 		this.downloadBtn.onclick = () => this.download();
-		setUpCaps(this.element.querySelector("#captions-select")!);
+		setUpCaps(this.element.qs("#captions-select")!);
 	}
 
 	public async toggleToPlayList(id = $store.videoId.get(), e?: Event) {

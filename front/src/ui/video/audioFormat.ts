@@ -5,8 +5,8 @@ import { watchSelect } from "@wxn0brp/flanker-ui/component/helpers";
 export class AudioFormatsView implements UiComponent {
 	element: HTMLSelectElement;
 
-	mount(): void {
-		this.element = qs("#audio-formats")!;
+	mount() {
+		this.element = qs("#audio-formats");
 
 		$store.video.subscribe(video => {
 			if (!video) return;

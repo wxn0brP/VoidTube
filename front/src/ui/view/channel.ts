@@ -49,18 +49,17 @@ class ChannelView implements UiComponent {
 		});
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#channel-view");
-		this.info = this.element.querySelector("#channel-info");
-		this.name = this.element.querySelector("#channel-name");
-		this.subscriptions = this.element.querySelector("#channel-subscriptions");
-		this.videos = this.element.querySelector("#channel-videos");
-		this.avatar = this.element.querySelector("#channel-avatar");
-		this.banner = this.element.querySelector("#channel-banner");
-		this.loadVideosButton = this.element.querySelector("#load-channel-videos")!;
-		this.channelSubscribeBtn =
-			this.element.querySelector("#channel-subscribe")!;
-		this.channelShareBtn = this.element.querySelector("#channel-share")!;
+		this.info = this.element.qs("#channel-info");
+		this.name = this.element.qs("#channel-name");
+		this.subscriptions = this.element.qs("#channel-subscriptions");
+		this.videos = this.element.qs("#channel-videos");
+		this.avatar = this.element.qs("#channel-avatar");
+		this.banner = this.element.qs("#channel-banner");
+		this.loadVideosButton = this.element.qs("#load-channel-videos");
+		this.channelSubscribeBtn = this.element.qs("#channel-subscribe");
+		this.channelShareBtn = this.element.qs("#channel-share");
 
 		uiHelpers.storeHide(this.element, $store.view.channel);
 		$store.view.channel.set(false);
