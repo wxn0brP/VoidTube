@@ -90,9 +90,9 @@ class FeedView implements UiComponent {
 		return feed;
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#feed-view");
-		this.container = this.element.querySelector("#feed-container")!;
+		this.container = this.element.qs("#feed-container");
 
 		uiHelpers.storeHide(this.element, $store.view.feed);
 		$store.view.feed.set(false);

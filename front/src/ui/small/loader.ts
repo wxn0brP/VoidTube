@@ -1,13 +1,14 @@
 import { $store } from "#store";
 import { UiComponent } from "@wxn0brp/flanker-ui";
+import { incrementCell, decrementCell } from "@wxn0brp/flanker-ui/storeUtils";
 
 class LoaderView implements UiComponent {
 	element: HTMLDivElement;
 	valueSpan: HTMLSpanElement;
 
-	mount(): void {
-		this.element = qs("#loader")!;
-		this.valueSpan = qs("#loader-value")!;
+	mount() {
+		this.element = qs("#loader");
+		this.valueSpan = qs("#loader-value");
 
 		$store.loader.subscribe(open => {
 			this.element.style.opacity = open > 0 ? "1" : "0";
@@ -16,13 +17,11 @@ class LoaderView implements UiComponent {
 	}
 
 	on() {
-		$store.loader.value++;
-		$store.loader.notify();
+		incrementCell($store.loader);
 	}
 
 	off() {
-		$store.loader.value--;
-		$store.loader.notify();
+		decrementCell($store.loader);
 	}
 }
 

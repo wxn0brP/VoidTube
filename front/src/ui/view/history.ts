@@ -39,7 +39,7 @@ class HistoryView implements UiComponent {
 			return;
 		} else {
 			this.searchInput.style.display = "";
-			this.container.querySelector("#history-empty")?.remove();
+			this.container.qs("#history-empty")?.remove();
 		}
 
 		history
@@ -85,21 +85,19 @@ class HistoryView implements UiComponent {
 				cardHelpers.queue(card, entry);
 				cardHelpers.playlist(card, entry);
 
-				card
-					.querySelector(`[data-id=rm]`)!
-					.addEventListener("click", async e => {
-						e.stopPropagation();
-						e.preventDefault();
+				card.qs(`[data-id=rm]`)!.addEventListener("click", async e => {
+					e.stopPropagation();
+					e.preventDefault();
 
-						const sure = await uiFunc.confirm(
-							"Are you sure? You can't undo this",
-						);
-						if (!sure) return;
+					const sure = await uiFunc.confirm(
+						"Are you sure? You can't undo this",
+					);
+					if (!sure) return;
 
-						fetchVQL(`user -history s._id = ${entry._id}`).then(() => {
-							this.container.removeChild(card);
-						});
+					fetchVQL(`user -history s._id = ${entry._id}`).then(() => {
+						this.container.removeChild(card);
 					});
+				});
 
 				this.container.appendChild(card);
 			});
@@ -155,10 +153,10 @@ class HistoryView implements UiComponent {
 		this.container.insertBefore(card, this.container.firstChild);
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#history-view");
-		this.container = this.element.querySelector("#history-container")!;
-		this.searchInput = qs("#history-search")!;
+		this.container = this.element.qs("#history-container");
+		this.searchInput = qs("#history-search");
 		this.searchInput.style.display = "none";
 
 		uiHelpers.storeHide(this.element, $store.view.history);

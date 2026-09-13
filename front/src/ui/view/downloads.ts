@@ -39,21 +39,19 @@ class DownloadsView implements UiComponent {
 
 		if (sameIds && active.length > 0) {
 			for (const entry of active) {
-				const card = this.activeContainer.querySelector(
-					`[data-dl-id="${entry.id}"]`,
-				);
+				const card = this.activeContainer.qs(`[data-dl-id="${entry.id}"]`);
 				if (!card) continue;
 
-				const bar = card.querySelector(".progress-bar") as HTMLElement;
+				const bar = card.qs(".progress-bar") as HTMLElement;
 				if (bar) bar.style.width = entry.progress + "%";
 
-				const pct = card.querySelector(".dl-pct");
+				const pct = card.qs(".dl-pct");
 				if (pct) pct.textContent = entry.progress.toFixed(1) + "%";
 
-				const speed = card.querySelector(".dl-speed");
+				const speed = card.qs(".dl-speed");
 				if (speed) speed.textContent = entry.speed || "";
 
-				const eta = card.querySelector(".dl-eta");
+				const eta = card.qs(".dl-eta");
 				if (eta) eta.textContent = entry.eta ? `ETA ${entry.eta}` : "";
 			}
 			return;
@@ -94,7 +92,7 @@ class DownloadsView implements UiComponent {
 			`;
 
 			card
-				.querySelector<HTMLButtonElement>("[data-id=cancel]")!
+				.qs<HTMLButtonElement>("[data-id=cancel]")!
 				.addEventListener("click", async e => {
 					e.stopPropagation();
 					e.preventDefault();
@@ -151,7 +149,7 @@ class DownloadsView implements UiComponent {
 			`;
 
 			card
-				.querySelector<HTMLButtonElement>("[data-id=rm]")!
+				.qs<HTMLButtonElement>("[data-id=rm]")!
 				.addEventListener("click", async e => {
 					e.stopPropagation();
 					e.preventDefault();
@@ -187,11 +185,11 @@ class DownloadsView implements UiComponent {
 		}
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#downloads-view");
-		this.container = this.element.querySelector("#downloads-container")!;
-		this.activeContainer = this.element.querySelector("#downloads-active")!;
-		this.historyContainer = this.element.querySelector("#downloads-history")!;
+		this.container = this.element.qs("#downloads-container");
+		this.activeContainer = this.element.qs("#downloads-active");
+		this.historyContainer = this.element.qs("#downloads-history");
 
 		uiHelpers.storeHide(this.element, $store.view.downloads);
 		$store.view.downloads.set(false);

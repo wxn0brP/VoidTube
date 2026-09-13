@@ -74,8 +74,8 @@ class RecommendationPanel implements UiComponent {
 		});
 	}
 
-	mount(): void {
-		this.element = qs("#recommendations")!;
+	mount() {
+		this.element = qs("#recommendations");
 	}
 }
 

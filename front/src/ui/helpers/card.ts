@@ -47,14 +47,12 @@ export const cardHelpers = {
 			_id?: string;
 		},
 	) {
-		card
-			.querySelector(`[data-id=queue]`)!
-			.addEventListener("click", (e: MouseEvent) => {
-				e.stopPropagation();
-				e.preventDefault();
-				const id = data.id || data._id;
-				e.shiftKey ? queuePanel.appendToNext(id) : queuePanel.append(id);
-			});
+		card.qs(`[data-id=queue]`)!.addEventListener("click", (e: MouseEvent) => {
+			e.stopPropagation();
+			e.preventDefault();
+			const id = data.id || data._id;
+			e.shiftKey ? queuePanel.appendToNext(id) : queuePanel.append(id);
+		});
 	},
 
 	playlist(
@@ -65,7 +63,7 @@ export const cardHelpers = {
 		},
 	) {
 		card
-			.querySelector(`[data-id=playlist]`)!
+			.qs(`[data-id=playlist]`)!
 			.addEventListener("click", (e: MouseEvent) => {
 				e.stopPropagation();
 				e.preventDefault();
@@ -74,7 +72,7 @@ export const cardHelpers = {
 	},
 
 	author(card: HTMLElement, authorId: string) {
-		card.querySelector(`.author`)!.addEventListener("click", e => {
+		card.qs(`.author`)!.addEventListener("click", e => {
 			e.stopPropagation();
 			e.preventDefault();
 			channelView.load(authorId);
@@ -82,8 +80,8 @@ export const cardHelpers = {
 	},
 
 	avatarTry(card: HTMLElement) {
-		card.querySelector(`img`).addEventListener("error", () => {
-			card.querySelector(`img`).style.display = "none";
+		card.qs(`img`).addEventListener("error", () => {
+			card.qs(`img`).style.display = "none";
 		});
 	},
 };
@@ -106,7 +104,7 @@ function filter({ container, selector, match }: filterSettings, query: string) {
 	const cards = container.querySelectorAll<HTMLDivElement>(selector);
 
 	cards.forEach(card => {
-		const title = card.querySelector("h3")!.textContent!.toLowerCase();
+		const title = card.qs("h3")!.textContent!.toLowerCase();
 
 		const dist = levenshtein(normalizedQuery, title);
 		const maxAllowed = Math.floor(title.length * match);

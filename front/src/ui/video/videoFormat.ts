@@ -5,8 +5,8 @@ import { Format } from "#types/video";
 export class VideoFormatsView implements UiComponent {
 	element: HTMLSelectElement;
 
-	mount(): void {
-		this.element = qs("#video-formats")!;
+	mount() {
+		this.element = qs("#video-formats");
 
 		$store.video.subscribe(video => {
 			if (!video) return;

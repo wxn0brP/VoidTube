@@ -51,9 +51,9 @@ class SearchView implements UiComponent {
 		this.container.classList.toggle("fewItems", search.length <= 3);
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#search-view");
-		this.container = this.element.querySelector("#search-container")!;
+		this.container = this.element.qs("#search-container");
 
 		uiHelpers.storeHide(this.element, $store.view.search);
 		$store.view.search.set(false);

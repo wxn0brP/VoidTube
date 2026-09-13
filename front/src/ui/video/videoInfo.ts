@@ -7,7 +7,7 @@ import { setDescription } from "./description";
 class VideoInfoView implements UiComponent {
 	element: HTMLElement;
 
-	mount(): void {
+	mount() {
 		this.element = qs("#video-info");
 
 		$store.video.subscribe(data => {
@@ -15,7 +15,7 @@ class VideoInfoView implements UiComponent {
 		});
 	}
 
-	renderVideoInfo(info: VideoInfo): void {
+	renderVideoInfo(info: VideoInfo) {
 		const d = info.uploadDate;
 		const date =
 			d[6] + d[7] + "." + d[4] + d[5] + "." + d[0] + d[1] + d[2] + d[3];

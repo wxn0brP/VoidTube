@@ -1,4 +1,5 @@
 import { createStore } from "@wxn0brp/flanker-ui";
+import { updateCell } from "@wxn0brp/flanker-ui/storeUtils";
 import { mgl } from "../mgl";
 import { PlaylistsEntry, VideoCache, VideoInfo } from "../types/video";
 import { SponsorSegment } from "#types/sponsorBlock";
@@ -85,12 +86,13 @@ export function appendLastVideos(id: string | string[]) {
 		: [
 				id,
 			];
-	const old = $store.lastVideos.get();
-	const set = new Set([
-		...old,
-		...ids,
-	]);
-	$store.lastVideos.set([
-		...set,
-	]);
+	updateCell($store.lastVideos, old => {
+		const set = new Set([
+			...old,
+			...ids,
+		]);
+		return [
+			...set,
+		];
+	});
 }

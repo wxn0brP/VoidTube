@@ -6,7 +6,7 @@ export function applyFeedback(
 	config: Config,
 	feedback: FeedbackMap,
 	delta: number,
-): void {
+) {
 	const hashTags = getHashTag(video.description || "", config);
 	const tokens = [
 		...tokenize(video.title, config),

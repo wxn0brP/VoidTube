@@ -22,13 +22,13 @@ class NavBarView implements UiComponent {
 
 	mount() {
 		this.element = qs("#nav-bar");
-		this.undoBtn = this.element.querySelector("#undo")!;
-		this.redoBtn = this.element.querySelector("#redo")!;
+		this.undoBtn = this.element.qs("#undo");
+		this.redoBtn = this.element.qs("#redo");
 
 		this.undoBtn.onclick = () => this.undo();
 		this.redoBtn.onclick = () => this.redo();
 
-		const VoidTube = this.element.querySelector("a");
+		const VoidTube = this.element.qs("a");
 		VoidTube.addEventListener("click", e => {
 			e.preventDefault();
 			clearQueryParams();
@@ -43,7 +43,7 @@ class NavBarView implements UiComponent {
 
 	undo() {
 		if (this.stack.length <= 1) return;
-		const itemActual = this.stack.pop()!;
+		const itemActual = this.stack.pop();
 		const item = this.stack[this.stack.length - 1];
 		this.redoStack.push(itemActual);
 
@@ -70,7 +70,7 @@ class NavBarView implements UiComponent {
 
 	redo() {
 		if (this.redoStack.length === 0) return;
-		const item = this.redoStack.pop()!;
+		const item = this.redoStack.pop();
 		this.stack.push(item);
 
 		window.history.replaceState(

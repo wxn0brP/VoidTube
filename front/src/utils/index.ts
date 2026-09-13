@@ -1,6 +1,6 @@
 import { mgl } from "../mgl";
 
-export function updateQueryParam(key: string, value: string | undefined): void {
+export function updateQueryParam(key: string, value: string | undefined) {
 	const url = new URL(window.location.href);
 
 	if (value === undefined) {
@@ -12,7 +12,7 @@ export function updateQueryParam(key: string, value: string | undefined): void {
 	window.history.pushState({}, "", url.toString());
 }
 
-export function clearQueryParams(): void {
+export function clearQueryParams() {
 	window.history.pushState({}, "", window.location.origin);
 }
 mgl.clearQueryParams = clearQueryParams;

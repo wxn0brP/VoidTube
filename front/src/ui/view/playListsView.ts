@@ -58,13 +58,13 @@ class PlayListsView implements UiComponent {
 			playListSnapView.show();
 		});
 
-		card.querySelector(`[data-id=play]`)!.addEventListener("click", e => {
+		card.qs(`[data-id=play]`)!.addEventListener("click", e => {
 			e.stopPropagation();
 			e.preventDefault();
 			queuePanel.loadPlaylist(item._id);
 		});
 
-		card.querySelector(`[data-id=rm]`)!.addEventListener("click", async e => {
+		card.qs(`[data-id=rm]`)!.addEventListener("click", async e => {
 			e.stopPropagation();
 			e.preventDefault();
 
@@ -80,59 +80,52 @@ class PlayListsView implements UiComponent {
 			fetchVQL(`playlist removeCollection ${item._id}`);
 		});
 
-		card
-			.querySelector(`[data-id=rename]`)!
-			.addEventListener("click", async e => {
-				e.stopPropagation();
-				e.preventDefault();
-				const name = await uiFunc.prompt("Playlist name", item.name);
-				if (!name) return;
-				await fetchVQL(
-					`user updateOne playlist s._id = ${item._id} u.name = ${name} u.last = $_nowShort`,
-				);
-				await this.loadPlaylists();
-			});
+		card.qs(`[data-id=rename]`)!.addEventListener("click", async e => {
+			e.stopPropagation();
+			e.preventDefault();
+			const name = await uiFunc.prompt("Playlist name", item.name);
+			if (!name) return;
+			await fetchVQL(
+				`user updateOne playlist s._id = ${item._id} u.name = ${name} u.last = $_nowShort`,
+			);
+			await this.loadPlaylists();
+		});
 
-		card
-			.querySelector(`[data-id=export]`)!
-			.addEventListener("click", async e => {
-				e.stopPropagation();
-				e.preventDefault();
-				fetchVQL(`playlist ${item._id}`).then(
-					(
-						res: {
-							_id: string;
-						}[],
-					) => {
-						const ids = res.map(i => i._id);
-						const link = document.createElement("a");
-						link.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(ids))}`;
-						link.download = `${item.name}.json`;
-						link.click();
-					},
-				);
-			});
+		card.qs(`[data-id=export]`)!.addEventListener("click", async e => {
+			e.stopPropagation();
+			e.preventDefault();
+			fetchVQL(`playlist ${item._id}`).then(
+				(
+					res: {
+						_id: string;
+					}[],
+				) => {
+					const ids = res.map(i => i._id);
+					const link = document.createElement("a");
+					link.href = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(ids))}`;
+					link.download = `${item.name}.json`;
+					link.click();
+				},
+			);
+		});
 	}
 
 	async loadPlaylists() {
 		const playlists = await fetchPlaylists(
 			play => this.render(play),
 			item =>
-				this.renderCard(
-					this.container.querySelector(`#playlist-${item._id}`)!,
-					item,
-				),
+				this.renderCard(this.container.qs(`#playlist-${item._id}`)!, item),
 		);
 		this.render(playlists);
 		$store.playlistsCache.set(playlists);
 		return playlists;
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#playlists-view");
-		this.container = this.element.querySelector("#playlists-container")!;
-		this.createPlaylistBtn = this.element.querySelector("#create-playlist")!;
-		this.importPlaylistBtn = this.element.querySelector("#import-playlist")!;
+		this.container = this.element.qs("#playlists-container");
+		this.createPlaylistBtn = this.element.qs("#create-playlist");
+		this.importPlaylistBtn = this.element.qs("#import-playlist");
 
 		this.createPlaylistBtn.onclick = async () => {
 			const name = await uiFunc.prompt("Playlist name");

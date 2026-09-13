@@ -58,17 +58,15 @@ class PlayListSnapView implements UiComponent {
 		this.container.classList.toggle("fewItems", data.length <= 3);
 	}
 
-	mount(): void {
-		this.element = qs("#playlist-snap")!;
-		this.container = this.element.querySelector("#playlist-snap-container")!;
+	mount() {
+		this.element = qs("#playlist-snap");
+		this.container = this.element.qs("#playlist-snap-container");
 		uiHelpers.storeHide(this.element, $store.view.playlistSnap);
 		$store.view.playlistSnap.set(false);
 
-		this.element
-			.querySelector("#save-snap-playlist")
-			.addEventListener("click", () => {
-				this.saveTo();
-			});
+		this.element.qs("#save-snap-playlist").addEventListener("click", () => {
+			this.saveTo();
+		});
 	}
 
 	show() {

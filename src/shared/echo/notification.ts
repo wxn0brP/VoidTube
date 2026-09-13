@@ -2,7 +2,7 @@ import { exec, spawn } from "child_process";
 import os from "os";
 
 const platform = os.platform();
-export function showNotification(title: string, message: string): void {
+export function showNotification(title: string, message: string) {
 	if (platform === "linux") {
 		// Linux: notify-send
 		exec(`notify-send "${title}" "${message}"`);

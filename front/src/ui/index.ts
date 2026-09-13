@@ -60,7 +60,7 @@ components.forEach(component => component.mount());
 export function changeView(view: string) {
 	const views = $store.view;
 	for (const key of Object.keys(views)) {
-		if (storeKeys.includes(key)) return;
+		if (storeKeys.includes(key)) continue;
 		views[key].set(key === view);
 	}
 }
