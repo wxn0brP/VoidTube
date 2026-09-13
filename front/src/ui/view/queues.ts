@@ -84,9 +84,9 @@ class QueueView implements UiComponent {
 		return queuesMap;
 	}
 
-	mount(): void {
+	mount() {
 		this.element = qs("#queues-view");
-		this.container = this.element.querySelector("#queues-container")!;
+		this.container = this.element.qs("#queues-container");
 
 		uiHelpers.storeHide(this.element, $store.view.queues);
 		$store.view.queues.set(false);
@@ -98,7 +98,7 @@ class QueueView implements UiComponent {
 		});
 
 		this.element
-			.querySelector("#queues-exit-button")
+			.qs("#queues-exit-button")
 			.addEventListener("click", async () => {
 				const confirm = await uiFunc.confirm(
 					"Do you want to leave the queue group?",
@@ -107,7 +107,7 @@ class QueueView implements UiComponent {
 				joinGroup();
 			});
 
-		const queuesExitName = this.element.querySelector("#queues-exit-name");
+		const queuesExitName = this.element.qs("#queues-exit-name");
 		$store.queueGroup.subscribe(id => {
 			queuesExitName.textContent = id;
 			btn.setAttribute("title", id);

@@ -5,10 +5,10 @@ import playListsView from "./view/playListsView";
 class AsideView implements UiComponent {
 	element: HTMLDivElement;
 
-	mount(): void {
+	mount() {
 		this.element = qs("aside");
 
-		const showHistoryBtn = this.element.querySelector<HTMLButtonElement>(
+		const showHistoryBtn = this.element.qs<HTMLButtonElement>(
 			"#show-history-button",
 		);
 		showHistoryBtn.addEventListener("dblclick", () => {
@@ -22,7 +22,7 @@ class AsideView implements UiComponent {
 		});
 
 		this.element
-			.querySelector<HTMLButtonElement>("#show-playlists-button")
+			.qs<HTMLButtonElement>("#show-playlists-button")
 			.addEventListener("dblclick", () => {
 				playListsView.loadPlaylists();
 			});

@@ -4,7 +4,7 @@ import { UiComponent, uiHelpers } from "@wxn0brp/flanker-ui";
 class VideoView implements UiComponent {
 	element: HTMLElement;
 
-	mount(): void {
+	mount() {
 		this.element = qs("#video-view");
 		uiHelpers.storeHide(this.element, $store.view.video);
 		$store.view.video.set(false);

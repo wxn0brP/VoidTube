@@ -33,7 +33,7 @@ export class QueuePanel implements UiComponent {
 	loadPlaylist = (...args: Shift<Parameters<typeof loadPlaylist>>) =>
 		loadPlaylist(this, ...args);
 
-	mount(): void {
+	mount() {
 		this.element = qs("#queue-panel");
 
 		this.element.addEventListener("mouseenter", () => scrollToPlayCard(this));

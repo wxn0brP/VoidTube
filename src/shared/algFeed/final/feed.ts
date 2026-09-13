@@ -41,7 +41,7 @@ export function injectNoise(
 	candidates: FeedEntry[],
 	scored: Map<string, number>,
 	config: Config,
-): void {
+) {
 	const sorted = candidates
 		.filter(v => !scored.has(v.id))
 		.sort(() => Math.random() - 0.5); // shuffle

@@ -14,7 +14,7 @@ function formatDate(date: Date): string {
 }
 
 export async function fetchQuick(videoId: string): Promise<QuickVideoInfo> {
-	if (cache.has(videoId)) return cache.get(videoId)!;
+	if (cache.has(videoId)) return cache.get(videoId);
 	note("fetchQuick", "Fetching", videoId);
 	const html = await ky(`https://www.youtube.com/watch?v=${videoId}`).text();
 

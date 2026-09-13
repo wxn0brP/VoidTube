@@ -147,12 +147,12 @@ const uiFunc = {
 			}
 
 			if (defaultValue) {
-				const ele = select.querySelector<HTMLOptionElement>(
+				const ele = select.qs<HTMLOptionElement>(
 					"option[value='" + defaultValue + "']",
 				);
 				if (ele) ele.selected = true;
 			} else {
-				select.querySelector("option").selected = true;
+				select.qs<HTMLOptionElement>("option").selected = true;
 			}
 
 			div.appendChild(select);

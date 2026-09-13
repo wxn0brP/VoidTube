@@ -103,7 +103,7 @@ class Executor {
 
 		while (this.queue.length > 0 || this.activeCount > 0) {
 			while (this.activeCount < this.maxConcurrency && this.queue.length > 0) {
-				const task = this.queue.shift()!;
+				const task = this.queue.shift();
 
 				// Check if the task was not canceled before starting
 				if (this.queue.some(t => t.id === task.id)) continue;

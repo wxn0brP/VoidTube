@@ -7,10 +7,10 @@ import { loadMediaSession } from "./status";
 
 export function setupChannelInfo() {
 	const playerInfoDiv = qs("#video-channel-info");
-	const img = playerInfoDiv.querySelector("img");
-	const name = playerInfoDiv.querySelector("#video-channel-name");
-	const subs = playerInfoDiv.querySelector("#video-channel-subscriptions");
-	const subscribeBtn = playerInfoDiv.querySelector("#video-channel-subscribe");
+	const img = playerInfoDiv.qs<HTMLImageElement>("img");
+	const name = playerInfoDiv.qs("#video-channel-name");
+	const subs = playerInfoDiv.qs("#video-channel-subscriptions");
+	const subscribeBtn = playerInfoDiv.qs("#video-channel-subscribe");
 
 	$store.video.subscribe(async video => {
 		const channelData = await fetchVQL<ChannelInfo>(
