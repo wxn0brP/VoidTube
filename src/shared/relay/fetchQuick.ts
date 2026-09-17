@@ -13,21 +13,77 @@ function formatDate(date: Date): string {
 	return `${padData(date.getFullYear(), 4)}${padData(date.getMonth() + 1)}${padData(date.getDate())}`;
 }
 
-export async function fetchQuick(videoId: string): Promise<QuickVideoInfo> {
+function extractJsonObject(html: string, key: string): any {
+	const startMarker = `${key} = {`;
+	const startIdx = html.indexOf(startMarker);
+	if (startIdx === -1) return null;
+
+	const jsonStart = startIdx + startMarker.length - 1;
+	let depth = 0;
+	let inString = false;
+	let isEscaped = false;
+
+	for (let i = jsonStart; i < html.length; i++) {
+		const char = html[i];
+
+		if (isEscaped) {
+			isEscaped = false;
+			continue;
+		}
+
+		if (char === "\\") {
+			isEscaped = true;
+			continue;
+		}
+
+		if (char === '"') {
+			inString = !inString;
+			continue;
+		}
+
+		if (inString) continue;
+
+		if (char === "{") depth++;
+		else if (char === "}") {
+			depth--;
+			if (depth === 0) {
+				const jsonStr = html.slice(jsonStart, i + 1);
+				try {
+					return JSON.parse(jsonStr);
+				} catch {
+					return null;
+				}
+			}
+		}
+	}
+
+	return null;
+}
+
+export async function fetchQuick(videoId: string): Promise<QuickVideoInfo | null> {
 	if (cache.has(videoId)) return cache.get(videoId);
 	note("fetchQuick", "Fetching", videoId);
 	const html = await ky(`https://www.youtube.com/watch?v=${videoId}`).text();
 
-	const playerRespMatch = html.match(
-		/ytInitialPlayerResponse\s*=\s*({.+?})\s*;/,
-	);
-	if (!playerRespMatch) throw new Error("ytInitialPlayerResponse not found");
+	const playerData = extractJsonObject(html, "ytInitialPlayerResponse");
+	if (!playerData) {
+		note("fetchQuick", "ytInitialPlayerResponse not found for", videoId);
+		return null;
+	}
 
-	const playerData = JSON.parse(playerRespMatch[1]);
+	const playabilityStatus = playerData?.playabilityStatus;
+	if (playabilityStatus?.status !== "OK") {
+		note("fetchQuick", "Video not available:", videoId, playabilityStatus?.reason);
+		return null;
+	}
+
 	const video = playerData?.videoDetails;
 	const microformat = playerData?.microformat?.playerMicroformatRenderer;
 
-	if (!video) throw new Error("videoDetails missing");
+	if (!video) {
+		note("fetchQuick", "videoDetails missing for", videoId);
+		return null;
+	}
 
 	let uploadDate: string | null = microformat?.uploadDate;
 	if (uploadDate) uploadDate = formatDate(new Date(uploadDate));

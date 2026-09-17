@@ -1,6 +1,6 @@
 import { tokenize } from "../utils";
 import { Video, Config, FeedbackMap, SearchEntry, FeedEntry } from "./types";
-import { buildInterestVector } from "./vector";
+import { buildInterestVector, calcDurationPreference } from "./vector";
 
 export function generateFeed(
 	history: Video[],
@@ -11,19 +11,23 @@ export function generateFeed(
 	if (history.length < config.minHistory) return [];
 
 	const interestVector = buildInterestVector(history, config, feedback);
+	const seenIds = new Set(history.map(v => v.id));
+	const avgDuration = config.durationPreference
+		? calcDurationPreference(history)
+		: 0;
 
 	const scored = new Map<string, number>();
 
-	const videos: FeedEntry[] = candidates.map(v => {
-		return {
+	const videos: FeedEntry[] = candidates
+		.filter(v => !seenIds.has(v.id))
+		.map(v => ({
 			score: 0,
 			tags: [],
 			...v,
-		};
-	});
+		}));
 
 	for (const video of videos) {
-		const score = scoreVideo(video, config, interestVector);
+		const score = scoreVideo(video, config, interestVector, avgDuration);
 		video.score = score;
 		if (score > config.minScore) {
 			scored.set(video.id, score);
@@ -32,9 +36,29 @@ export function generateFeed(
 
 	injectNoise(videos, scored, config);
 
-	return videos
+	const result = videos
 		.filter(v => scored.has(v.id))
 		.sort((a, b) => scored.get(b.id)! - scored.get(a.id)!);
+
+	return applyChannelDiversity(result, config.maxPerChannel);
+}
+
+function applyChannelDiversity(
+	videos: FeedEntry[],
+	maxPerChannel: number,
+): FeedEntry[] {
+	const channelCount = new Map<string, number>();
+	const result: FeedEntry[] = [];
+
+	for (const video of videos) {
+		const count = channelCount.get(video.channel) ?? 0;
+		if (count < maxPerChannel) {
+			result.push(video);
+			channelCount.set(video.channel, count + 1);
+		}
+	}
+
+	return result;
 }
 
 export function injectNoise(
@@ -58,8 +82,8 @@ export function scoreVideo(
 	video: FeedEntry,
 	config: Config,
 	interest: Map<string, number>,
+	avgDuration: number,
 ): number {
-	// const tokens = [...video.tags, ...tokenize(video.title), ...tokenize(video.description)];
 	const tokens = tokenize(video.title, config);
 	video.tags = [
 		...new Set(tokens),
@@ -70,8 +94,20 @@ export function scoreVideo(
 		score += interest.get(token) ?? 0;
 	}
 
-	// const ageDays = (Date.now() - video.publishDate.getTime()) / (1000 * 3600 * 24);
-	// score += Math.max(0, 10 - ageDays);
+	if (avgDuration > 0 && video.duration > 0) {
+		const durationDiff = Math.abs(video.duration - avgDuration);
+		const durationSimilarity = Math.max(0, 1 - durationDiff / avgDuration);
+		score += durationSimilarity * 5;
+	}
+
+	if (video.publishDate) {
+		const ageDays =
+			(Date.now() - new Date(video.publishDate).getTime()) /
+			(1000 * 60 * 60 * 24);
+		if (!Number.isNaN(ageDays)) {
+			score += Math.max(0, config.publishDateBoost - ageDays / 10);
+		}
+	}
 
 	return score;
 }
