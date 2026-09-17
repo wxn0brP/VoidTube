@@ -9,6 +9,7 @@ export interface HistoryEntry {
 	last: number;
 	info: {
 		title: string;
+		description: string;
 		duration: number;
 		uploadDate: string;
 		views: number;
@@ -49,11 +50,14 @@ export async function getHistory(): Promise<Video[]> {
 	if (!data) return [];
 
 	return data
+		.filter(v => v.info)
 		.sort((a, b) => a.last - b.last)
 		.map(v => ({
 			id: v._id,
 			title: v.info.title,
-			description: v.info.title,
+			description: v.info.description || "",
+			duration: v.info.duration || 0,
 			channel: v.info.channel,
+			last: v.last,
 		}));
 }
