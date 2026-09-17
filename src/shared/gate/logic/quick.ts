@@ -23,9 +23,8 @@ export async function fetchQuickCache(id: string) {
 	if (data) {
 		await db.cache["video-static-quick"].add(data);
 		return data;
-	} else {
-		return retrieveVideoData(id, false, false);
 	}
+	return retrieveVideoData(id, false, false);
 }
 
 export async function fetchQuickCache$(search: {
@@ -67,10 +66,12 @@ export async function fetchQuickCache$(search: {
 		let data = map.get(id);
 		if (!data) {
 			data = await fetchQuick(id);
-			await db.cache["video-static-quick"].add(data);
+			if (data) {
+				await db.cache["video-static-quick"].add(data);
+				map.set(id, data);
+			}
 		}
-		map.set(id, data);
 	}
 
-	return search.$in._id.map(id => map.get(id));
+	return search.$in._id.filter(id => map.has(id)).map(id => map.get(id));
 }

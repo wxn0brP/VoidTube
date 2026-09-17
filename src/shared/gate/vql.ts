@@ -11,7 +11,7 @@ import { clearQuickCache } from "#relay/fetchQuick";
 import { getRecommended } from "#relay/getRecommended";
 import { getSuggestions } from "#relay/suggestions";
 import { AdapterBuilder } from "@wxn0brp/vql/helpers/apiAbstract";
-import { runFeedVQL } from "./alg";
+import { runFeedVQL, submitFeedbackVQL } from "./alg";
 import "./cache";
 import { channelInfo } from "./logic/channel";
 import {
@@ -88,6 +88,9 @@ adapter.findOne("channelInfo", async ({ search }: any) =>
 	channelInfo(search.url || search._id || search.id, search.update || false),
 );
 adapter.findOne("algRun", async () => runFeedVQL());
+adapter.add("algFeedback", async ({ data }: any) =>
+	submitFeedbackVQL(data.videoId, data.delta),
+);
 adapter.findOne("seeLogs", async () => seeLogs());
 adapter.findOne("video-static-quick", async ({ search }: any) =>
 	fetchQuickCache(search._id || search.id),

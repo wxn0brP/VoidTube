@@ -40,6 +40,8 @@ class AlgView implements UiComponent {
                 <div class="btns">
                     <button class="btn" data-id="queue">Queue➕</button>
                     <button title="Add to playlist" class="btn" data-id="playlist">📂</button>
+                    <button class="btn" data-id="like" title="Like">👍</button>
+                    <button class="btn" data-id="dislike" title="Dislike">👎</button>
                 </div>
             `;
 			card.qs<HTMLSpanElement>("[data-id=scores]")!.title =
@@ -53,6 +55,22 @@ ${entry.tags.map(t => `- ${t}`).join("\n")}
 			cardHelpers.playlist(card, entry);
 			cardHelpers.author(card, entry.channel);
 			cardHelpers.avatarTry(card);
+
+			card
+				.qs<HTMLButtonElement>("[data-id=like]")
+				?.addEventListener("click", async e => {
+					e.stopPropagation();
+					await fetchVQL(`api +algFeedback d.videoId="${entry.id}" d.delta=1`);
+					uiMsg("Feedback recorded");
+				});
+
+			card
+				.qs<HTMLButtonElement>("[data-id=dislike]")
+				?.addEventListener("click", async e => {
+					e.stopPropagation();
+					await fetchVQL(`api +algFeedback d.videoId="${entry.id}" d.delta=-1`);
+					uiMsg("Feedback recorded");
+				});
 
 			this.container.appendChild(card);
 		});

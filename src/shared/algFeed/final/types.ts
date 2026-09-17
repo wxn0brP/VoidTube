@@ -3,22 +3,28 @@ export interface Video {
 	title: string;
 	description: string;
 	channel: string;
+	duration?: number;
+	last?: number;
 }
 
 export interface Config {
-	minHistory: number; // eg. 20
-	maxKeywords: number; // eg. 10
-	keywordMinFreq: number; // eg. 7
-	videoPerTag: number; // eg. 5
-	noisePercent: number; // eg. 10%
-	noiseBoost: number; // eg. 15
-	hashTagBoost: number; // eg. 3
-	minScore: number; // eg. 0
-	irrelevant: string[]; // ignore [the, a, an]
+	minHistory: number;
+	maxKeywords: number;
+	keywordMinFreq: number;
+	videoPerTag: number;
+	noisePercent: number;
+	noiseBoost: number;
+	hashTagBoost: number;
+	minScore: number;
+	irrelevant: string[];
 	userTags: [
 		string,
 		number,
-	][]; // always search
+	][];
+	maxPerChannel: number;
+	recencyWeight: number;
+	durationPreference: boolean;
+	publishDateBoost: number;
 }
 
 export type FeedbackMap = Map<string, number>; // tag => score
@@ -31,6 +37,7 @@ export interface SearchEntry {
 	views: number;
 	channel: string;
 	channelName: string;
+	publishDate?: string;
 }
 
 export interface AlgEntry {

@@ -1,10 +1,11 @@
 import { generateFeed } from "./final/feed";
-import { Config, FeedbackMap } from "./final/types";
+import { Config, FeedbackMap, Video } from "./final/types";
 import { buildInitialCandidates } from "./candidates";
 import { getHistory } from "./history";
 import { getSetting } from "./getSetting";
 import { db } from "#db";
 import { note } from "#echo/logger";
+import { applyFeedback } from "./fallback";
 
 export async function getConfig(): Promise<Config> {
 	return {
@@ -20,6 +21,10 @@ export async function getConfig(): Promise<Config> {
 			Array.isArray(v) ? v : v.split(","),
 		),
 		userTags: await getSetting("userTags", []),
+		maxPerChannel: await getSetting("maxPerChannel", 3),
+		recencyWeight: await getSetting("recencyWeight", 2),
+		durationPreference: await getSetting("durationPreference", true),
+		publishDateBoost: await getSetting("publishDateBoost", 5),
 	};
 }
 
@@ -42,5 +47,25 @@ export async function runFeed() {
 	return feed;
 }
 
-// applyFeedback(feed[0], feedback, +1); // like
-// applyFeedback(feed[1], feedback, -1); // dislike
+export async function submitFeedback(videoId: string, delta: number) {
+	const history = await getHistory();
+	const config = await getConfig();
+	const video = history.find(v => v.id === videoId);
+	if (!video) return false;
+
+	const feedback: FeedbackMap = new Map();
+	const feedbackRaw = await db.alg.feedback.find();
+	for (const f of feedbackRaw) feedback.set(f._id, f.v);
+
+	applyFeedback(video as Video, config, feedback, delta);
+
+	for (const [tag, score] of feedback.entries()) {
+		await db.alg.feedback.add({
+			_id: tag,
+			v: score,
+		});
+	}
+
+	note("alg", `Feedback applied: ${videoId} delta=${delta}`);
+	return true;
+}
