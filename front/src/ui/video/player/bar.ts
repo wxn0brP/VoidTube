@@ -1,12 +1,18 @@
 import { updateVideoHistoryTime } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { $store } from "#store";
+import uiFunc from "#ui/modal";
 import { formatTime } from "#utils";
 import { watchCheckbox } from "@wxn0brp/flanker-ui/component/helpers";
 import { toggleBoolean } from "@wxn0brp/flanker-ui/storeUtils";
 import { clamp, debounce, round, throttle } from "@wxn0brp/flanker-ui/utils";
 import playerView from ".";
 import "./bar.scss";
+import {
+	cancelSleepTimer,
+	getSleepRemaining,
+	startSleepTimer,
+} from "./sleepTimer";
 import { changePlay, toggleFullscreen } from "./status";
 import { getNextVideoId, playNext, playPrev } from "./sync";
 
@@ -40,6 +46,7 @@ export function setupBar() {
 	const loopQueue = playerView.bar.qi("loop-queue", 1);
 	const audioFadeEnabled = playerView.bar.qi("audio-fade", 1);
 	const loopInput = playerView.bar.qi("loop", 1);
+	const sleepTimerBtn = playerView.bar.qs<HTMLButtonElement>("sleep-timer", 1);
 	bufferedRange = playerView.bar.qs("buffered-range", 1);
 	playedRange = playerView.bar.qs("played-range", 1);
 	progressInput = playerView.bar.qs("progress", 1);
@@ -59,6 +66,27 @@ export function setupBar() {
 	playerView.bar
 		.qs("next-video", 1)
 		.addEventListener("click", () => playNext());
+
+	sleepTimerBtn.addEventListener("click", async () => {
+		if (getSleepRemaining() > 0) {
+			const sure = await uiFunc.confirm("Cancel sleep timer?");
+			if (sure) cancelSleepTimer();
+			return;
+		}
+		const minutesStr = await uiFunc.prompt("Sleep timer in minutes", "30");
+		const minutes = parseInt(minutesStr);
+		if (!minutes || minutes <= 0) return;
+		startSleepTimer(minutes);
+	});
+
+	$store.player.sleepTimerEndsAt.subscribe(endsAt => {
+		const remaining = endsAt - Date.now();
+		sleepTimerBtn.style.color = remaining > 0 ? "var(--accent)" : "";
+		sleepTimerBtn.title =
+			remaining > 0
+				? `Sleep timer: ${Math.ceil(remaining / 60_000)} min`
+				: "Sleep timer";
+	});
 
 	playPauseBtn.addEventListener("click", changePlay);
 	playerView.videoEl.addEventListener("click", changePlay);

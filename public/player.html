@@ -17,10 +17,12 @@
                         <label title="Audio Fade Enabled">AF <input type="checkbox" data-id="audio-fade"></label>
                         <button data-id="previous-video" class="btn" title="Previous video">⬅️</button>
                         <button data-id="next-video" class="btn" title="Next video">➡️</button>
+                        <button data-id="sleep-timer" class="btn" title="Sleep timer">💤</button>
                     </div>
-                    
+
                     <div class="right-bar">
-                        <input type="range" class="volume" title="Volume" min="0" max="1" step="0.01" value="1" data-id="volume" />
+                        <input type="range" class="volume" title="Volume" min="0" max="1" step="0.01" value="1"
+                            data-id="volume" />
                         <span class="time" data-id="time">00:00 / 00:00</span>
                         <button class="fullscreen-btn" title="Fullscreen" data-id="toggle-fullscreen">⛶</button>
                     </div>
@@ -32,6 +34,7 @@
             <select id="video-formats"></select>
             <button id="toggle-to-playlist">Playlist 📂</button>
             <button id="share">Share 📤</button>
+            <button id="share-at-time">Share With Time 📤</button>
             <button id="download">Download ⬇️</button>
             <button id="clear-queue">Clear Queue</button>
             <select id="captions-select" title="Captions"></select>
