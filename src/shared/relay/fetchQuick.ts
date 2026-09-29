@@ -60,7 +60,9 @@ function extractJsonObject(html: string, key: string): any {
 	return null;
 }
 
-export async function fetchQuick(videoId: string): Promise<QuickVideoInfo | null> {
+export async function fetchQuick(
+	videoId: string,
+): Promise<QuickVideoInfo | null> {
 	if (cache.has(videoId)) return cache.get(videoId);
 	note("fetchQuick", "Fetching", videoId);
 	const html = await ky(`https://www.youtube.com/watch?v=${videoId}`).text();
@@ -73,7 +75,12 @@ export async function fetchQuick(videoId: string): Promise<QuickVideoInfo | null
 
 	const playabilityStatus = playerData?.playabilityStatus;
 	if (playabilityStatus?.status !== "OK") {
-		note("fetchQuick", "Video not available:", videoId, playabilityStatus?.reason);
+		note(
+			"fetchQuick",
+			"Video not available:",
+			videoId,
+			playabilityStatus?.reason,
+		);
 		return null;
 	}
 

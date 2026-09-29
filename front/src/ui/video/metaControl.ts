@@ -16,6 +16,7 @@ class MetaControlView implements UiComponent {
 	toggleToPlayListBtn: HTMLButtonElement;
 	removeFromPlayListBtn: HTMLButtonElement;
 	shareBtn: HTMLButtonElement;
+	shareAtTimeBtn: HTMLButtonElement;
 	downloadBtn: HTMLButtonElement;
 
 	mount() {
@@ -23,6 +24,7 @@ class MetaControlView implements UiComponent {
 
 		this.toggleToPlayListBtn = this.element.qs("#toggle-to-playlist");
 		this.shareBtn = this.element.qs("#share");
+		this.shareAtTimeBtn = this.element.qs("#share-at-time");
 		this.downloadBtn = this.element.qs("#download");
 		this.element.qs<HTMLButtonElement>("#clear-queue")!.onclick = () =>
 			queuePanel.clear(true);
@@ -30,6 +32,7 @@ class MetaControlView implements UiComponent {
 		this.toggleToPlayListBtn.onclick = e =>
 			this.toggleToPlayList($store.videoId.get(), e);
 		this.shareBtn.onclick = () => this.share();
+		this.shareAtTimeBtn.onclick = () => this.shareAtTime();
 		this.downloadBtn.onclick = () => this.download();
 		setUpCaps(this.element.qs("#captions-select")!);
 	}
@@ -78,6 +81,13 @@ class MetaControlView implements UiComponent {
 	public share(id = $store.videoId.get()) {
 		navigator.clipboard.writeText("https://youtube.com/watch?v=" + id);
 		uiMsg("Link copied to clipboard");
+	}
+
+	public shareAtTime(id = $store.videoId.get()) {
+		const time = Math.floor(mgl.player.view.mediaSync.currentTime);
+		const url = `https://youtube.com/watch?v=${id}&t=${time}`;
+		navigator.clipboard.writeText(url);
+		uiMsg(`Link with timestamp ${time}s copied to clipboard`);
 	}
 
 	public async download() {
