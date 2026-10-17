@@ -1,0 +1,89 @@
+#stats-view {
+    #stats-container {
+        padding: 15px 25px;
+        overflow-y: auto;
+
+        .stats-summary {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+
+            .stat-box {
+                background: var(--player-bg);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 15px 25px;
+                min-width: 140px;
+                text-align: center;
+
+                b {
+                    display: block;
+                    font-size: 1.8rem;
+                    color: var(--accent);
+                }
+
+                span {
+                    opacity: 0.7;
+                    font-size: 0.85rem;
+                }
+            }
+        }
+
+        .stats-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 6px;
+
+            &:hover {
+                background: var(--player-bg);
+            }
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                object-fit: cover;
+                background: var(--player-bg);
+            }
+
+            .stats-info {
+                flex: 1;
+                min-width: 0;
+
+                a {
+                    text-decoration: none;
+                    color: var(--txt);
+                }
+
+                .stats-bar {
+                    height: 6px;
+                    margin-top: 6px;
+                    background: var(--border);
+                    border-radius: 3px;
+                    overflow: hidden;
+
+                    .stats-bar-fill {
+                        height: 100%;
+                        background: var(--accent);
+                    }
+                }
+            }
+
+            .stats-value {
+                text-align: right;
+                min-width: 110px;
+
+                span {
+                    display: block;
+                }
+
+                small {
+                    opacity: 0.6;
+                }
+            }
+        }
+    }
+}

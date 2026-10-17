@@ -23,6 +23,7 @@ import {
 	downloadVideo,
 } from "./logic/download";
 import { fetchQuickCache, fetchQuickCache$ } from "./logic/quick";
+import { getStats } from "./logic/stats";
 import {
 	apiExecutor,
 	retrieveVideoData,
@@ -88,6 +89,7 @@ adapter.findOne("channelInfo", async ({ search }: any) =>
 	channelInfo(search.url || search._id || search.id, search.update || false),
 );
 adapter.findOne("algRun", async () => runFeedVQL());
+adapter.findOne("stats", async () => getStats());
 adapter.add("algFeedback", async ({ data }: any) =>
 	submitFeedbackVQL(data.videoId, data.delta),
 );
