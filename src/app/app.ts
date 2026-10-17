@@ -1,4 +1,11 @@
-import { app, BrowserWindow, globalShortcut } from "electron";
+import {
+	app,
+	BrowserWindow,
+	globalShortcut,
+	Menu,
+	Tray,
+	nativeImage,
+} from "electron";
 process.env.APP_PATH = app.getAppPath() + "/";
 process.env.IS_ELECTRON = "true";
 process.env.DOWNLOAD_PATH = app.getPath("downloads");
@@ -53,6 +60,7 @@ function createWindow(url = `http://localhost:${port}`): BrowserWindow {
 
 app.whenReady().then(() => {
 	createWindow();
+	setupTray();
 
 	app.on("activate", () => {
 		if (windows.size === 0) {
@@ -78,4 +86,149 @@ function debounce(func: Function, wait: number = 100) {
 		clearTimeout(timeout);
 		timeout = setTimeout(() => func.apply(this, args), wait);
 	};
+}
+
+let tray: Tray | null = null;
+let currentTitle = "";
+
+function getWindow(): BrowserWindow | undefined {
+	return [
+		...windows,
+	].find(win => !win.isDestroyed());
+}
+
+function sendCommand(command: string) {
+	const win = getWindow();
+	if (win) win.webContents.executeJavaScript(command).catch(() => {});
+}
+
+function playbackMenuItems(): Electron.MenuItemConstructorOptions[] {
+	return [
+		{
+			label: "Play / Pause",
+			click: () => sendCommand("mgl.player.togglePlay()"),
+		},
+		{
+			label: "Next",
+			click: () => sendCommand("mgl.player.next()"),
+		},
+		{
+			label: "Previous",
+			click: () => sendCommand("mgl.player.prev()"),
+		},
+	];
+}
+
+function toggleWindow() {
+	const win = getWindow();
+	if (!win) return createWindow();
+	win.isVisible() ? win.hide() : win.show();
+}
+
+function buildTrayMenu() {
+	return Menu.buildFromTemplate([
+		{
+			label: currentTitle || "Nothing playing",
+			enabled: false,
+		},
+		{
+			type: "separator",
+		},
+		...playbackMenuItems(),
+		{
+			type: "separator",
+		},
+		{
+			label: "Show / Hide",
+			click: toggleWindow,
+		},
+		{
+			type: "separator",
+		},
+		{
+			label: "Quit",
+			click: () => app.quit(),
+		},
+	]);
+}
+
+function buildAppMenu() {
+	return Menu.buildFromTemplate([
+		{
+			label: "VoidTube",
+			submenu: [
+				{
+					label: currentTitle || "Now Playing",
+					enabled: false,
+				},
+				{
+					type: "separator",
+				},
+				...playbackMenuItems(),
+				{
+					type: "separator",
+				},
+				{
+					role: "quit",
+				},
+			],
+		},
+		{
+			label: "View",
+			submenu: [
+				{
+					role: "reload",
+				},
+				{
+					role: "toggleDevTools",
+				},
+				{
+					type: "separator",
+				},
+				{
+					role: "resetZoom",
+				},
+				{
+					role: "zoomIn",
+				},
+				{
+					role: "zoomOut",
+				},
+				{
+					type: "separator",
+				},
+				{
+					role: "togglefullscreen",
+				},
+			],
+		},
+	]);
+}
+
+function refreshNowPlaying() {
+	const win = getWindow();
+	if (!win) return;
+
+	win.webContents
+		.executeJavaScript("(mgl.store.video.get() || {}).title || ''")
+		.then((title: string) => {
+			if (title === currentTitle) return;
+			currentTitle = title;
+			if (tray) {
+				tray.setToolTip(title ? `VoidTube: ${title}` : "VoidTube");
+				tray.setContextMenu(buildTrayMenu());
+			}
+			Menu.setApplicationMenu(buildAppMenu());
+		})
+		.catch(() => {});
+}
+
+function setupTray() {
+	const iconPath = app.getAppPath() + "/public/favicon.png";
+	tray = new Tray(nativeImage.createFromPath(iconPath));
+	tray.setToolTip("VoidTube");
+	tray.setContextMenu(buildTrayMenu());
+	Menu.setApplicationMenu(buildAppMenu());
+	tray.on("click", toggleWindow);
+	setInterval(refreshNowPlaying, 3000);
 }
