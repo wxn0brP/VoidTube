@@ -23,6 +23,7 @@ import {
 	downloadVideo,
 } from "./logic/download";
 import { fetchQuickCache, fetchQuickCache$ } from "./logic/quick";
+import { managePlaylist } from "./logic/playlistManage";
 import { getStats } from "./logic/stats";
 import {
 	apiExecutor,
@@ -71,6 +72,9 @@ adapter.find("suggestions", async ({ search }: any) =>
 );
 adapter.find("playlist", async ({ search }: any) =>
 	getPlaylistInfo(search.url || search._id),
+);
+adapter.find("playlistManage", async ({ search }: any) =>
+	managePlaylist(search.id || search._id, search.mode),
 );
 
 adapter.findOne("video", async ({ search }: any) =>
