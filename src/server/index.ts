@@ -1,5 +1,6 @@
 import { note } from "#echo/logger";
 import VQL from "#gate";
+import { exportBackup, importBackup } from "#gate/logic/backup";
 import FalconFrame from "@wxn0brp/falcon-frame";
 import { LogLevelName } from "@wxn0brp/lucerna-log";
 import { FF_VQL } from "@wxn0brp/vql";
@@ -9,6 +10,7 @@ import { existsSync } from "fs";
 const isDev = process.env.NODE_ENV === "development";
 
 const app = new FalconFrame({
+	bodyLimit: "100m",
 	loggerOpts: {
 		loggerName: "VoidTube-SERVER",
 		logLevel:
@@ -35,6 +37,20 @@ app.static("/", __cwd + "public");
 app.static("/js", __cwd + "front/dist");
 app.get("/avatar", avatarHandler);
 app.get("/avatarTry", avatarTryHandler);
+
+app.get("/api/backup", async (_req, res) => {
+	res.json(await exportBackup());
+});
+
+app.post("/api/backup", async (req, res) => {
+	try {
+		res.json(await importBackup(req.body as any));
+	} catch (err) {
+		res.status(400).json({
+			error: err.message,
+		});
+	}
+});
 
 if (existsSync(__cwd + "front/src"))
 	app.static("/src", __cwd + "front/src", {
