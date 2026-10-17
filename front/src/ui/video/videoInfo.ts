@@ -1,11 +1,14 @@
 import { $store } from "#store";
-import { VideoInfo } from "#types/video";
+import { Chapter, VideoInfo } from "#types/video";
+import { formatTime } from "#utils";
 import { UiComponent } from "@wxn0brp/flanker-ui";
 import "./video.scss";
 import { setDescription } from "./description";
+import playerView from "./player";
 
 class VideoInfoView implements UiComponent {
 	element: HTMLElement;
+	chapters: Chapter[] = [];
 
 	mount() {
 		this.element = qs("#video-info");
@@ -13,6 +16,10 @@ class VideoInfoView implements UiComponent {
 		$store.video.subscribe(data => {
 			data ? this.renderVideoInfo(data) : (this.element.innerHTML = "");
 		});
+
+		playerView.mediaSync.eventEmitter.on("timeupdate", () =>
+			this.highlightChapter(),
+		);
 	}
 
 	renderVideoInfo(info: VideoInfo) {
@@ -26,8 +33,49 @@ class VideoInfoView implements UiComponent {
             <b>Likes:</b> ${info.likes}
             <br><br>
             <article data-id="description"></article>
+            <div data-id="chapters"></div>
         `;
 		setDescription(this.element.qs("description", 1), info.description);
+		this.renderChapters(info.chapters || []);
+	}
+
+	renderChapters(chapters: Chapter[]) {
+		this.chapters = chapters;
+		const container = this.element.qs("chapters", 1);
+		if (!container || !chapters.length) return;
+		container.clA("chapters");
+
+		const heading = document.createElement("h4");
+		heading.textContent = "Chapters";
+		container.appendChild(heading);
+
+		chapters.forEach((chapter, index) => {
+			const button = document.createElement("button");
+			button.className = "chapter-btn";
+			button.dataset.index = index.toString();
+			button.textContent = `${formatTime(chapter.start_time, null)}  ${chapter.title}`;
+			button.addEventListener("click", () =>
+				playerView.mediaSync.seek(chapter.start_time),
+			);
+			container.appendChild(button);
+		});
+	}
+
+	highlightChapter() {
+		if (!this.chapters.length) return;
+		const container = this.element.qs("chapters", 1);
+		if (!container) return;
+
+		const time = playerView.mediaSync.currentTime;
+		let active = 0;
+		for (let i = 0; i < this.chapters.length; i++) {
+			if (time >= this.chapters[i].start_time) active = i;
+			else break;
+		}
+
+		container.querySelectorAll(".chapter-btn").forEach((button, i) => {
+			button.classList.toggle("active", i === active);
+		});
 	}
 }
 
