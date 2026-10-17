@@ -142,6 +142,23 @@ export const settingsData: Setting[] = [
 	},
 	{
 		type: "header",
+		text: "Data",
+	},
+	{
+		type: "button",
+		text: "Export backup",
+		onClick: exportBackup,
+	},
+	{
+		type: "button",
+		text: "Import backup",
+		onClick: importBackupDialog,
+	},
+	{
+		type: "separator",
+	},
+	{
+		type: "header",
 		text: "Algorithm",
 	},
 	{
@@ -238,3 +255,60 @@ export const settingsData: Setting[] = [
 		},
 	},
 ];
+
+export async function exportBackup() {
+	try {
+		const res = await fetch("/api/backup");
+		if (!res.ok) return uiMsg("Backup export failed");
+		const data = await res.json();
+		const blob = new Blob(
+			[
+				JSON.stringify(data, null, 2),
+			],
+			{
+				type: "application/json",
+			},
+		);
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement("a");
+		link.href = url;
+		link.download = `voidtube-backup-${new Date().toISOString().slice(0, 10)}.json`;
+		link.click();
+		URL.revokeObjectURL(url);
+		uiMsg("Backup exported");
+	} catch (err) {
+		uiMsg(`Backup export failed: ${err.message}`);
+	}
+}
+
+export function importBackupDialog() {
+	const input = document.createElement("input");
+	input.type = "file";
+	input.accept = "application/json";
+	input.onchange = async () => {
+		const file = input.files?.[0];
+		if (!file) return;
+
+		const sure = await uiFunc.confirm(
+			"Import backup? This overwrites current local data",
+		);
+		if (!sure) return;
+
+		try {
+			const payload = JSON.parse(await file.text());
+			const res = await fetch("/api/backup", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(payload),
+			});
+			const result = await res.json();
+			if (!res.ok) return uiMsg(`Import failed: ${result.error || res.status}`);
+			uiMsg(`Imported ${result.imported} documents`);
+		} catch (err) {
+			uiMsg(`Import failed: ${err.message}`);
+		}
+	};
+	input.click();
+}
