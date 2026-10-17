@@ -1,0 +1,9 @@
+{
+    "entryPoints": [
+        "src/index.ts"
+    ],
+    "minify": true,
+    "split": false,
+    "jsx": true,
+    "gen": true
+}
