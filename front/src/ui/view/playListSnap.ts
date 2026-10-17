@@ -22,6 +22,7 @@ class PlayListSnapView implements UiComponent {
 	element: HTMLDivElement;
 	container: HTMLDivElement;
 	ids: string[] = [];
+	playlistId = "";
 
 	render(data: PlaylistSnapEntry[]) {
 		this.container.innerHTML = "";
@@ -67,6 +68,25 @@ class PlayListSnapView implements UiComponent {
 		this.element.qs("#save-snap-playlist").addEventListener("click", () => {
 			this.saveTo();
 		});
+
+		this.manage("#snap-reverse", "reverse");
+		this.manage("#snap-dedupe", "dedupe");
+		this.manage("#snap-sort-title", "sortTitle");
+		this.manage("#snap-sort-date", "sortDate");
+		this.manage("#snap-remove-watched", "removeWatched");
+	}
+
+	private manage(selector: string, mode: string) {
+		this.element.qs(selector).addEventListener("click", async () => {
+			if (!this.playlistId) {
+				uiMsg("Only local playlists can be managed");
+				return;
+			}
+			await fetchVQL(
+				`api playlistManage s.id = ${this.playlistId} s.mode = ${mode}`,
+			);
+			await this.loadPlaylist(this.playlistId);
+		});
 	}
 
 	show() {
@@ -78,11 +98,13 @@ class PlayListSnapView implements UiComponent {
 	}
 
 	async loadPlaylist(id: string) {
+		this.playlistId = id;
 		const playlist = await fetchPlaylistSnap(id);
 		this.render(playlist);
 	}
 
 	async loadYoutubePlaylist(id: string) {
+		this.playlistId = "";
 		const playlist = await fetchPlaylistSnapYouTube(id);
 		this.render(playlist);
 	}
