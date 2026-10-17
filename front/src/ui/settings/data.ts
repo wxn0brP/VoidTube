@@ -94,6 +94,32 @@ export const settingsData: Setting[] = [
 		max: 3_000,
 	},
 	{
+		type: "select",
+		id: "app_speed",
+		text: "Playback Speed",
+		names: [
+			"0.25x",
+			"0.5x",
+			"0.75x",
+			"1x",
+			"1.25x",
+			"1.5x",
+			"1.75x",
+			"2x",
+		],
+		values: [
+			"0.25",
+			"0.5",
+			"0.75",
+			"1",
+			"1.25",
+			"1.5",
+			"1.75",
+			"2",
+		],
+		storeField: $store.player.speed,
+	},
+	{
 		type: "button",
 		onClick: () => {
 			fetchVQL("api seeLogs! s._id=1");
