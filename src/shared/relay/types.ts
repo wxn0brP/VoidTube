@@ -9,6 +9,12 @@ export interface VideoFormat {
 	is_audio: boolean;
 }
 
+export interface VideoChapter {
+	title: string;
+	start_time: number;
+	end_time?: number;
+}
+
 export interface VideoInfo {
 	title: string;
 	description: string;
@@ -19,6 +25,7 @@ export interface VideoInfo {
 	likes: number;
 	channel: string;
 	channelName?: string;
+	chapters?: VideoChapter[];
 	formats?: VideoFormat[];
 }
 
@@ -126,5 +133,6 @@ export interface YoutubeDlResult {
 	channel_subscribers_count: number;
 	channel_follower_count: number;
 	automatic_captions: any;
+	chapters: any[];
 	name: string;
 }

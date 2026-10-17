@@ -60,6 +60,7 @@ export async function retrieveVideoData(
 			likes: data.likes,
 			views: data.views,
 			channel: data.channel,
+			chapters: data.chapters,
 		};
 		await db.cache["video-static"].updateOneOrAdd(
 			{

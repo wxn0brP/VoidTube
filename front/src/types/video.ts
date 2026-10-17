@@ -9,6 +9,12 @@ export interface Format {
 	is_audio: boolean;
 }
 
+export interface Chapter {
+	title: string;
+	start_time: number;
+	end_time?: number;
+}
+
 export interface VideoInfo {
 	title: string;
 	description: string;
@@ -19,6 +25,7 @@ export interface VideoInfo {
 	likes: number;
 	formats: Format[];
 	channel: string;
+	chapters?: Chapter[];
 }
 
 export interface VideoCache {

@@ -54,6 +54,7 @@ export async function getVideoInfo(
 			views: result.view_count,
 			likes: result.like_count,
 			channel: result.channel_id,
+			chapters: result.chapters || [],
 		};
 
 		if (!withFormats) return baseInfo;
