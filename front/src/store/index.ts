@@ -38,6 +38,7 @@ const initData = {
 		subs: false,
 		queues: false,
 		downloads: false,
+		stats: false,
 	},
 	loader: 0,
 	queueGroup: generateName(),
