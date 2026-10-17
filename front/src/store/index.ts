@@ -21,6 +21,7 @@ const initData = {
 	player: {
 		loop: false,
 		volume: 1,
+		speed: "1",
 		sleepTimerEndsAt: 0,
 	},
 

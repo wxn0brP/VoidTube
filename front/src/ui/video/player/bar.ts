@@ -39,6 +39,7 @@ export function setupBar() {
 	playPauseBtn = playerView.bar.qs<HTMLButtonElement>("play-pause", 1);
 	const timeSpan = playerView.bar.qs<HTMLSpanElement>("time", 1);
 	const volume = playerView.bar.qi("volume", 1);
+	const speedSelect = playerView.bar.qs<HTMLSelectElement>("speed", 1);
 	const fullscreenBtn = playerView.bar.qs<HTMLButtonElement>(
 		"toggle-fullscreen",
 		1,
@@ -53,6 +54,15 @@ export function setupBar() {
 
 	watchCheckbox(audioFadeEnabled, $store.settings.audioFadeEnabled);
 	watchCheckbox(loopInput, $store.player.loop);
+
+	speedSelect.value = $store.player.speed.get();
+	speedSelect.addEventListener("change", () =>
+		$store.player.speed.set(speedSelect.value),
+	);
+	$store.player.speed.subscribe(val => {
+		if (speedSelect.value !== val) speedSelect.value = val;
+		playerView.mediaSync.setRate(parseFloat(val) || 1);
+	});
 	$store.player.loop.subscribe(val => {
 		playerView.videoEl.loop = val;
 		playerView.audioEl.loop = val;
@@ -269,4 +279,13 @@ document.addEventListener("keydown", e => {
 	if (e.key === "l") {
 		toggleBoolean($store.player.loop);
 	}
+
+	if (e.key === "]" || e.key === "}") stepSpeed(0.25);
+	if (e.key === "[" || e.key === "{") stepSpeed(-0.25);
 });
+
+function stepSpeed(delta: number) {
+	const current = parseFloat($store.player.speed.get()) || 1;
+	const next = clamp(0.25, round(current + delta, 2), 2);
+	$store.player.speed.set(next.toString());
+}

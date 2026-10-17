@@ -16,6 +16,7 @@ class MediaSyncController {
 	private duration = 0;
 	private clockTime = 0;
 	private playing = false;
+	private rate = 1;
 	public videoEnabled = true;
 	public eventEmitter = new VEE();
 
@@ -72,6 +73,7 @@ class MediaSyncController {
 
 	private onMediaLoadedMetadata() {
 		if (this.audio.duration) this.setDuration(this.audio.duration);
+		this.applyRate();
 		this.syncClients();
 
 		if (this.playing) {
@@ -83,10 +85,22 @@ class MediaSyncController {
 	play() {
 		if (this.playing) return;
 		this.playing = true;
+		this.applyRate();
 		this.audio.play().catch(() => {});
 		if (this.videoEnabled) this.video.play().catch(() => {});
 		fadeAudioIn();
 		console.trace("[MediaSync]", "play");
+	}
+
+	setRate(rate: number) {
+		if (!rate || rate <= 0) return;
+		this.rate = rate;
+		this.applyRate();
+	}
+
+	private applyRate() {
+		this.audio.playbackRate = this.rate;
+		if (this.video) this.video.playbackRate = this.rate;
 	}
 
 	pause() {
