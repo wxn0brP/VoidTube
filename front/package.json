@@ -15,6 +15,6 @@
     },
     "dependencies": {
         "@wxn0brp/flanker-ui": "^0.5.2",
-        "@wxn0brp/vql-client": "^0.2.13"
+        "@wxn0brp/vql-client": "^0.3.0"
     }
 }
