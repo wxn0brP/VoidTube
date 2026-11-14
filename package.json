@@ -25,7 +25,7 @@
         "@types/node": "*",
         "@wxn0brp/biome": "*",
         "@wxn0brp/vql-dev": "^0.6.3",
-        "electron": "^44.3.0",
+        "electron": "^45.0.0",
         "tsc-alias": "^1",
         "typescript": "^7"
     },
