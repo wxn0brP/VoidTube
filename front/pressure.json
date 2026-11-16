@@ -2,6 +2,9 @@
     "entryPoints": [
         "src/index.ts"
     ],
+    "external": [
+        "/favicon.svg"
+    ],
     "minify": true,
     "split": false,
     "jsx": true,
