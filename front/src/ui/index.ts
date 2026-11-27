@@ -58,12 +58,16 @@ export const components = [
 ];
 
 components.forEach(component => component.mount());
+changeView(null);
 
-export function changeView(view: string) {
+export function changeView(view: string | null) {
 	const views = $store.view;
 	for (const key of Object.keys(views)) {
 		if (storeKeys.includes(key)) continue;
-		views[key].set(key === view);
+		const cell = views[key];
+		const show = key === view;
+		if (cell.get() === show) cell.notify();
+		else cell.set(show);
 	}
 }
 

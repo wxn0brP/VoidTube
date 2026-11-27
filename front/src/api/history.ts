@@ -10,10 +10,10 @@ export async function updateVideoHistoryTime(id: string, time: number) {
 }
 
 export async function fetchVideoHistoryTime(id: string): Promise<number> {
-	if (!id) return;
+	if (!id) return 0;
 	const res = await fetchVQL(`user history! s._id = ${id}`);
 	if (!res) return 0;
-	return res.watched ? res.time : 0;
+	return res.watched ? (res.time ?? 0) : 0;
 }
 
 export async function fetchHistory(

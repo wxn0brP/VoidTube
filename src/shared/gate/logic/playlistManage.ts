@@ -14,7 +14,7 @@ interface PlaylistDoc {
 
 interface QuickMeta {
 	title?: string;
-	uploadDate?: string;
+	uploadDate?: string | null;
 }
 
 export async function managePlaylist(

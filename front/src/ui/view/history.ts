@@ -2,7 +2,7 @@ import { fetchHistory } from "#api/history";
 import { fetchVQL } from "#api/index";
 import { mgl } from "#mgl";
 import { $store } from "#store";
-import { HistoryEntry } from "#types/video";
+import { HistoryEntry, HistoryEntryInfo } from "#types/video";
 import { cardHelpers, filterCards } from "#ui/helpers/card";
 import queuePanel from "#ui/video/queue";
 import {
@@ -19,6 +19,19 @@ import uiFunc from "../modal";
 import navBarView from "../navBar";
 import { thumbnailMiddle } from "./channel";
 import { VQL_OP_Find } from "@wxn0brp/vql-client/vql";
+
+type HistoryEntryWithInfo = HistoryEntry & {
+	info: HistoryEntryInfo;
+};
+
+function hasInfo(entry: HistoryEntry): entry is HistoryEntryWithInfo {
+	return !!entry.info;
+}
+
+function formatUploadDate(raw?: string | null) {
+	if (!raw || raw.length < 8) return "";
+	return `${raw.slice(6, 8)}.${raw.slice(4, 6)}.${raw.slice(0, 4)}`;
+}
 
 class HistoryView implements UiComponent {
 	element: HTMLDivElement;
@@ -43,6 +56,7 @@ class HistoryView implements UiComponent {
 		}
 
 		history
+			.filter(hasInfo)
 			.sort((a, b) => b.last - a.last)
 			.forEach(entry => {
 				const card = document.createElement("div");
@@ -50,28 +64,21 @@ class HistoryView implements UiComponent {
 				card.clA("card");
 				card.dataset.id = entry._id;
 
-				const dateRaw = entry.info.uploadDate;
-				const date =
-					dateRaw[6] +
-					dateRaw[7] +
-					"." +
-					dateRaw[4] +
-					dateRaw[5] +
-					"." +
-					dateRaw[0] +
-					dateRaw[1] +
-					dateRaw[2] +
-					dateRaw[3];
+				const info = entry.info;
+				const date = formatUploadDate(info.uploadDate);
+				const channelId = info.channel ?? "";
+				const channelName = info.channelData?.name ?? "Unknown";
+				const avatar = info.channelData?.avatar;
 
 				card.innerHTML = `
-                    <div style="background-image: url(${getThumbnail(entry.info.thumbnail, entry._id)})" class="img"></div>
-                    <h3 title="${entry.info.title}">${entry.info.title}</h3>
-                    ${formatTime(entry.time, null)} / ${formatTime(entry.info.duration, null)} <br>
-                    ${numToLocale(entry.info.views)} views -
+                    <div style="background-image: url(${getThumbnail(info.thumbnail, entry._id)})" class="img"></div>
+                    <h3 title="${info.title}">${info.title}</h3>
+                    ${formatTime(entry.time, null)} / ${formatTime(info.duration, null)} <br>
+                    ${numToLocale(info.views)} views -
                     ${date}
                     <div class="author">
-                        <img src="${thumbnailMiddle + entry.info.channelData.avatar}" class="avatar">
-                        <a href="/?channel=${entry.info.channel}">${entry.info.channelData.name}</a>
+                        ${avatar ? `<img src="${thumbnailMiddle + avatar}" class="avatar">` : ""}
+                        ${channelId ? `<a href="/?channel=${channelId}">${channelName}</a>` : `<span>${channelName}</span>`}
                     </div>
                     <div class="btns">
                         <button button title="Queue" class="btn" data-id="queue">Queue➕</button>
@@ -81,7 +88,7 @@ class HistoryView implements UiComponent {
                 `;
 
 				cardHelpers.click(card, entry);
-				cardHelpers.author(card, entry.info.channel);
+				if (channelId) cardHelpers.author(card, channelId);
 				cardHelpers.queue(card, entry);
 				cardHelpers.playlist(card, entry);
 
@@ -150,6 +157,7 @@ class HistoryView implements UiComponent {
 			this.render(history);
 			card = this.container.qs(id, 1);
 		}
+		if (!card) return;
 		this.container.insertBefore(card, this.container.firstChild);
 	}
 

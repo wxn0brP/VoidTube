@@ -6,8 +6,8 @@ import { getTTL } from "#utils";
 export async function channelInfo(
 	id: string,
 	update = false,
-): Promise<ChannelInfo> {
-	if (!id) return {} as any;
+): Promise<ChannelInfo | null> {
+	if (!id) return null;
 	const channel = await db.cache.channel.findOne({
 		id,
 	});
@@ -15,7 +15,7 @@ export async function channelInfo(
 	if (!update) {
 		if (channel) return channel;
 	} else {
-		if (channel && channel.ttl > Math.floor(Date.now() / 1000)) {
+		if (channel && (channel.ttl ?? 0) > Math.floor(Date.now() / 1000)) {
 			return channel;
 		}
 	}

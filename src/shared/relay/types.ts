@@ -117,22 +117,22 @@ export interface YoutubeDlOptions {
 
 export interface YoutubeDlResult {
 	title: string;
-	description: string;
-	thumbnail: string;
-	duration: number;
-	upload_date: string;
-	view_count: number;
-	like_count: number;
-	channel_id: string;
-	formats: any[];
-	entries: any[];
-	id: string;
-	channel: string;
-	uploader: string;
-	thumbnails: any[];
-	channel_subscribers_count: number;
-	channel_follower_count: number;
-	automatic_captions: any;
-	chapters: any[];
-	name: string;
+	description?: string | null;
+	thumbnail?: string | null;
+	duration?: number | null;
+	upload_date?: string | null;
+	view_count?: number | null;
+	like_count?: number | null;
+	channel_id?: string | null;
+	formats?: any[];
+	entries?: any[];
+	id?: string;
+	channel?: string;
+	uploader?: string;
+	thumbnails?: any[];
+	channel_subscribers_count?: number | null;
+	channel_follower_count?: number | null;
+	automatic_captions?: any;
+	chapters?: any[] | null;
+	name?: string;
 }

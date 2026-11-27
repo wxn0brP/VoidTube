@@ -10,6 +10,13 @@ import { ValtheraCreate } from "@wxn0brp/db";
 
 note("ValtheraDB", "Database path:", getExternalResourcePath("internal-db"));
 
+export interface UserHistoryEntry {
+	_id: string;
+	time?: number;
+	watched?: boolean;
+	last?: number;
+}
+
 export const db = {
 	user: ValtheraCreate<{
 		settings: {
@@ -19,7 +26,7 @@ export const db = {
 			_id: string;
 			last: number;
 		};
-		history: QuickVideoInfo;
+		history: UserHistoryEntry;
 	}>(getExternalResourcePath("internal-db", "user")),
 
 	downloads: ValtheraCreate<{

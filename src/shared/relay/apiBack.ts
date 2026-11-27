@@ -47,28 +47,32 @@ export async function getVideoInfo(
 
 		const baseInfo: VideoInfo = {
 			title: result.title,
-			description: result.description,
-			thumbnail: result.thumbnail,
-			duration: result.duration,
-			uploadDate: result.upload_date,
-			views: result.view_count,
-			likes: result.like_count,
-			channel: result.channel_id,
-			chapters: result.chapters || [],
+			description: result.description ?? "",
+			thumbnail: result.thumbnail ?? "",
+			duration: result.duration ?? 0,
+			uploadDate: result.upload_date ?? "",
+			views: result.view_count ?? 0,
+			likes: result.like_count ?? 0,
+			channel: result.channel_id ?? "",
+			chapters: result.chapters ?? [],
 		};
 
 		if (!withFormats) return baseInfo;
 
-		const formats = (result.formats || [])
+		const formats = (result.formats ?? [])
 			.filter(format => format.url && !format.url.includes("ytimg.com"))
 			.filter(format => !format.url.includes("m3u8"))
 			.map(format => ({
 				url: format.url,
-				formatId: format.format_id,
-				resolution: format.resolution ?? `${format.width}x${format.height}`,
-				ext: format.ext,
-				fps: format.fps,
-				fileSize: format.filesize,
+				formatId: format.format_id ?? "",
+				resolution:
+					format.resolution ??
+					(format.width && format.height
+						? `${format.width}x${format.height}`
+						: "unknown"),
+				ext: format.ext ?? "",
+				fps: format.fps ?? 0,
+				fileSize: format.filesize ?? 0,
 				is_video: format.vcodec !== "none",
 				is_audio: format.acodec !== "none",
 			}));
@@ -98,14 +102,14 @@ export async function searchVideo(
 			`ytsearch${size}:"${title}"`,
 			opts,
 		);
-		return result.entries.map(entry => ({
-			title: entry.title,
-			id: entry.id,
-			thumbnail: entry.thumbnails[entry.thumbnails.length - 1].url,
-			duration: entry.duration,
-			views: entry.view_count,
-			channel: entry.channel_id,
-			channelName: entry.channel || entry.uploader,
+		return (result.entries ?? []).map(entry => ({
+			title: entry.title ?? "",
+			id: entry.id ?? "",
+			thumbnail: entry.thumbnails?.at(-1)?.url ?? "",
+			duration: entry.duration ?? 0,
+			views: entry.view_count ?? 0,
+			channel: entry.channel_id ?? "",
+			channelName: entry.channel ?? entry.uploader ?? "",
 		}));
 	} catch (error) {
 		console.error("Error while searching video:", error.message);
@@ -125,7 +129,9 @@ export async function getPlaylistIds(playlist: string): Promise<string[]> {
 			flatPlaylist: true,
 		});
 		const result = await wrapper<YoutubeDlResult>(playlist, opts);
-		return result.entries.map(entry => entry.id);
+		return (result.entries ?? [])
+			.map(entry => entry.id)
+			.filter((id): id is string => !!id);
 	} catch (error) {
 		console.error("Error while getting playlist ids:", error.message);
 		throw error;
@@ -193,22 +199,22 @@ export async function getChannelInfo(channelUrl: string): Promise<ChannelInfo> {
 		});
 
 		const result = await wrapper<YoutubeDlResult>(channelUrl + "/about", opts);
+		const thumbnails = result.thumbnails ?? [];
 
 		const avatar =
-			result.thumbnails.find(t => t.id === "avatar_uncropped")?.url ||
-			result.thumbnails[result.thumbnails.length - 1]?.url;
-		const banner = result.thumbnails.find(
-			t => t.id === "banner_uncropped",
-		)?.url;
+			thumbnails.find(t => t.id === "avatar_uncropped")?.url ??
+			thumbnails.at(-1)?.url ??
+			"";
+		const banner = thumbnails.find(t => t.id === "banner_uncropped")?.url ?? "";
 		return {
-			short_id: result.id,
-			id: result.channel_id,
-			name: result.title || result.name,
-			description: result.description,
+			short_id: result.id ?? "",
+			id: result.channel_id ?? "",
+			name: result.title || result.name || "",
+			description: result.description ?? "",
 			avatar,
 			banner,
 			subscribers:
-				result.channel_subscribers_count || result.channel_follower_count,
+				result.channel_subscribers_count || result.channel_follower_count || 0,
 		};
 	} catch (error) {
 		console.error("Error while fetching channel info:", error.message);
@@ -231,15 +237,15 @@ export async function getPlaylistInfo(
 		note("scraper", "getPlaylistInfo", playlistUrl);
 
 		const result = await wrapper<YoutubeDlResult>(playlistUrl, opts);
-		return result.entries.map(entry => ({
-			id: entry.id,
-			title: entry.title,
-			url: entry.url,
-			channel: entry.channel_id,
-			channelName: entry.channel || entry.uploader,
-			thumbnail: entry.thumbnails[entry.thumbnails.length - 1].url,
-			duration: entry.duration,
-			views: entry.view_count,
+		return (result.entries ?? []).map(entry => ({
+			id: entry.id ?? "",
+			title: entry.title ?? "",
+			url: entry.url ?? "",
+			channel: entry.channel_id ?? "",
+			channelName: entry.channel ?? entry.uploader ?? "",
+			thumbnail: entry.thumbnails?.at(-1)?.url ?? "",
+			duration: entry.duration ?? 0,
+			views: entry.view_count ?? 0,
 		}));
 	} catch (error) {
 		console.error("Error while fetching playlist info:", error.message);
@@ -265,12 +271,12 @@ export async function getChannelVideos(
 
 		const result = await wrapper<YoutubeDlResult>(channelUrl + "/videos", opts);
 
-		return result.entries.map(entry => ({
-			title: entry.title,
-			id: entry.id,
-			thumbnail: entry.thumbnails[entry.thumbnails.length - 1].url,
-			duration: entry.duration,
-			views: entry.view_count,
+		return (result.entries ?? []).map(entry => ({
+			title: entry.title ?? "",
+			id: entry.id ?? "",
+			thumbnail: entry.thumbnails?.at(-1)?.url ?? "",
+			duration: entry.duration ?? 0,
+			views: entry.view_count ?? 0,
 		}));
 	} catch (error) {
 		console.error("Error while fetching channel videos:", error.message);

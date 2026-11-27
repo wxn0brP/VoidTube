@@ -13,9 +13,8 @@ export async function fetchQuickCache(id: string) {
 		_id: id,
 	});
 	if (staticData) {
-		staticData.channelName = await channelInfo(staticData.channel).then(
-			c => c.name,
-		);
+		staticData.channelName =
+			(await channelInfo(staticData.channel))?.name ?? "";
 		return staticData;
 	}
 
@@ -52,11 +51,15 @@ export async function fetchQuickCache$(search: {
 	});
 	const channelName = new Map<string, string>();
 	for (const data of staticData) {
-		if (channelName.has(data.channel)) {
-			data.channelName = channelName.get(data.channel);
+		if (data.channel) {
+			let name = channelName.get(data.channel);
+			if (name === undefined) {
+				name = (await channelInfo(data.channel))?.name ?? "";
+				channelName.set(data.channel, name);
+			}
+			data.channelName = name;
 		} else {
-			data.channelName = (await channelInfo(data.channel)).name;
-			channelName.set(data.channel, data.channelName);
+			data.channelName = "";
 		}
 		map.set(data._id, data);
 	}

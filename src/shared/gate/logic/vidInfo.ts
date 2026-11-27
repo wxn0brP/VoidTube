@@ -7,27 +7,43 @@ import { VideoInfo, StaticVideoInfo, DynamicVideoInfo } from "#relay/types";
 
 export const apiExecutor = new Executor();
 
+type CachedVideoInfo = StaticVideoInfo &
+	Partial<DynamicVideoInfo> & {
+		url?: string;
+	};
+
+export function retrieveVideoData(
+	_id: string,
+	dynamic: false,
+	useCache?: boolean,
+): Promise<StaticVideoInfo | null>;
+export function retrieveVideoData(
+	_id: string,
+	dynamic?: boolean,
+	useCache?: boolean,
+): Promise<VideoInfo | null>;
 export async function retrieveVideoData(
-	url: string,
+	_id: string,
 	dynamic = true,
-	staticData?: any,
+	useCache = true,
 ): Promise<VideoInfo | null> {
-	if (staticData !== false)
-		staticData = await db.cache["video-static"].findOne({
-			_id: url,
-		});
+	const staticData = useCache
+		? await db.cache["video-static"].findOne({
+				_id,
+			})
+		: null;
 	if (!dynamic && staticData) return staticData;
 
 	async function fn(i = 0): Promise<VideoInfo | null> {
 		const dynamicData =
 			dynamic &&
 			(await db.cache["video-dynamic"].findOne({
-				_id: url,
+				_id,
 			}));
 
 		if (dynamic && staticData && dynamicData) {
 			if (dynamicData.ttl > Math.floor(Date.now() / 1000)) {
-				const data = {
+				const data: CachedVideoInfo = {
 					...staticData,
 					...dynamicData,
 				};
@@ -36,22 +52,22 @@ export async function retrieveVideoData(
 				return data;
 			} else {
 				db.cache["video-dynamic"].remove({
-					url,
+					_id,
 				});
 			}
 		}
 
 		let data: Awaited<ReturnType<typeof getVideoInfo>>;
 		try {
-			data = await getVideoInfo(url, dynamic);
+			data = await getVideoInfo(_id, dynamic);
 		} catch (e) {
 			if (e.message === "Task canceled") return null;
-			console.error("Failed to get video info:", url);
+			console.error("Failed to get video info:", _id);
 			return null;
 		}
 
 		const staticDataPayload: StaticVideoInfo = {
-			_id: url,
+			_id,
 			title: data.title,
 			description: data.description,
 			thumbnail: data.thumbnail,
@@ -64,21 +80,21 @@ export async function retrieveVideoData(
 		};
 		await db.cache["video-static"].updateOneOrAdd(
 			{
-				url,
+				_id,
 			},
 			staticDataPayload,
 		);
 
-		if ("formats" in data && data.formats.length > 3) {
+		if (data.formats && data.formats.length > 3) {
 			const dynamicDataPayload: DynamicVideoInfo = {
-				_id: url,
+				_id,
 				formats: data.formats,
 				ttl: getTTL(),
 			};
 
 			await db.cache["video-dynamic"].add(dynamicDataPayload);
 		} else if (dynamic) {
-			console.error("[API-VQL] Failed to get video formats:", url);
+			console.error("[API-VQL] Failed to get video formats:", _id);
 			if (i < 3) {
 				await new Promise(resolve => setTimeout(resolve, 1000));
 				note("API-VQL", "Retrying get video formats... (" + (i + 1) + " / 3)");
@@ -86,18 +102,20 @@ export async function retrieveVideoData(
 			}
 		}
 		db.cache["video-static-quick"].remove({
-			_id: url,
+			_id,
 		});
 
-		return data;
+		return dynamic ? data : staticDataPayload;
 	}
 
-	return await apiExecutor.add(url, fn, dynamic ? 1 : 0);
+	return await apiExecutor.add(_id, fn, dynamic ? 1 : 0);
 }
 
-export async function retrieveVideoData$(
-	search: any,
-): Promise<StaticVideoInfo[]> {
+export async function retrieveVideoData$(search: {
+	$in: {
+		_id: string[];
+	};
+}): Promise<StaticVideoInfo[]> {
 	const staticData = await db.cache["video-static"].find(search);
 	const ids = search.$in._id;
 
@@ -107,7 +125,9 @@ export async function retrieveVideoData$(
 			const missingData = await Promise.all(
 				missingIds.map(id => retrieveVideoData(id, false, false)),
 			);
-			staticData.push(...(missingData.filter(Boolean) as StaticVideoInfo[]));
+			staticData.push(
+				...missingData.filter((data): data is StaticVideoInfo => data !== null),
+			);
 		}
 	}
 

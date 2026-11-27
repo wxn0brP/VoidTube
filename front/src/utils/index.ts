@@ -18,10 +18,11 @@ export function clearQueryParams() {
 mgl.clearQueryParams = clearQueryParams;
 
 export function formatTime(
-	time: number,
+	time?: number | null,
 	hasHours: boolean | null = true,
 ): string {
-	if (Number.isNaN(time)) return (hasHours ? "00:" : "") + "00:00";
+	if (time === undefined || time === null || Number.isNaN(time))
+		return (hasHours ? "00:" : "") + "00:00";
 	const hours = Math.floor(time / 3600);
 	const minutes = Math.floor((time % 3600) / 60);
 	const seconds = Math.floor(time % 60);
@@ -93,7 +94,7 @@ export function numToLocale(num: number) {
 	return (num || 0).toLocaleString();
 }
 
-export function getThumbnail(data: string, id: string) {
+export function getThumbnail(data: string | null | undefined, id: string) {
 	if (!id) return "/favicon.svg";
 	if (data === "/favicon.svg") return "/favicon.svg";
 	if (!data) return "https://i.ytimg.com/vi/" + id + "/maxresdefault.jpg";

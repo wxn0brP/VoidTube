@@ -1,5 +1,5 @@
 {
-    cmd: "tsc --noEmit && bun run build --dev",
+    cmd: "tsc --noEmit && bun run build",
     watch: [
         "src"
     ],

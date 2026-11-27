@@ -37,32 +37,34 @@ export interface VideoCache {
 	views: number;
 }
 
+export interface HistoryEntryInfo {
+	title: string;
+	duration: number;
+	uploadDate?: string | null;
+	views: number;
+	thumbnail?: string | null;
+	channel?: string | null;
+	channelData?: {
+		name: string;
+		avatar?: string;
+	};
+}
+
 export interface HistoryEntry {
 	_id: string;
 	time: number;
 	watched: boolean;
 	last: number;
-	info: {
-		title: string;
-		duration: number;
-		uploadDate: string;
-		views: number;
-		thumbnail: string;
-		channel: string;
-		channelData: {
-			name: string;
-			avatar: string;
-		};
-	};
+	info?: HistoryEntryInfo;
 }
 
 export interface PlaylistEntry {
 	_id: string;
 	time: number;
-	info: {
+	info?: {
 		title: string;
 		duration: number;
-		thumbnail: string;
+		thumbnail?: string | null;
 	};
 }
 
@@ -87,13 +89,13 @@ export interface SearchEntry {
 export interface PlaylistSnapEntry {
 	_id: string;
 	time: number;
-	info: {
+	info?: {
 		title: string;
 		duration: number;
-		thumbnail: string;
+		thumbnail?: string | null;
 		views: number;
 	};
-	history: {
+	history?: {
 		time: number;
 	};
 }
@@ -107,7 +109,7 @@ export interface FeedEntry {
 	channel: {
 		avatar: string;
 	};
-	history: {
+	history?: {
 		time: number;
 	};
 }

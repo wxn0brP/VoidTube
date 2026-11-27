@@ -1,7 +1,7 @@
-import VQLProcessor from "@wxn0brp/vql";
+import VQLProcessor, { isVQLError } from "@wxn0brp/vql";
 import { db } from "#db";
 import { YouTubeAdapter } from "./vql";
-import { VQLUQ } from "@wxn0brp/vql/vql";
+import { VQLUQ } from "@wxn0brp/vql/types/vql";
 
 const vqlDb = Object.assign({}, db, {
 	api: YouTubeAdapter,
@@ -13,7 +13,6 @@ export default VQL;
 
 export async function fetchVQL<T = any>(query: VQLUQ<T>) {
 	const res = await VQL.execute(query as any, {});
-	// @ts-ignore
-	if (res.err) throw new Error(res.err);
+	if (isVQLError(res)) throw res;
 	return res as T;
 }

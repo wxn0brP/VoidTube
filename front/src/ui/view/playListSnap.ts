@@ -18,6 +18,14 @@ import { changeView } from "..";
 import navBarView from "../navBar";
 import playListsView from "./playListsView";
 
+type PlaylistSnapEntryWithInfo = PlaylistSnapEntry & {
+	info: NonNullable<PlaylistSnapEntry["info"]>;
+};
+
+function hasInfo(entry: PlaylistSnapEntry): entry is PlaylistSnapEntryWithInfo {
+	return !!entry.info;
+}
+
 class PlayListSnapView implements UiComponent {
 	element: HTMLDivElement;
 	container: HTMLDivElement;
@@ -25,16 +33,18 @@ class PlayListSnapView implements UiComponent {
 	playlistId = "";
 
 	render(data: PlaylistSnapEntry[]) {
-		this.container.innerHTML = "";
-		fewItems(this.container, data.length);
-		this.ids = data.map(entry => entry._id);
+		const items = data.filter(hasInfo);
 
-		if (!data.length) {
+		this.container.innerHTML = "";
+		fewItems(this.container, items.length);
+		this.ids = items.map(entry => entry._id);
+
+		if (!items.length) {
 			this.container.innerHTML = `<h1 style="text-align: center;">No Videos</h1>`;
 			return;
 		}
 
-		data.forEach(entry => {
+		items.forEach(entry => {
 			const card = document.createElement("div");
 			card.className = "playlistSnapCard";
 			card.clA("card");

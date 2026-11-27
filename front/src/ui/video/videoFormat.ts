@@ -36,7 +36,8 @@ export class VideoFormatsView implements UiComponent {
 	}
 }
 function getPreferredVideoUrl(videoFormats: Format[], preferred: string) {
-	const parseResolution = (res: string) => {
+	const parseResolution = (res?: string) => {
+		if (!res) return 0;
 		const match = res.match(/(\d+)x(\d+)/);
 		return match ? parseInt(match[2], 10) : 0;
 	};

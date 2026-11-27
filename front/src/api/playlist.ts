@@ -199,7 +199,7 @@ export async function fetchPlaylistSnapYouTube(
 				views: entry.views,
 			},
 			history: {
-				time: historyMap.get(entry.id),
+				time: historyMap.get(entry.id) ?? 0,
 			},
 		};
 		return snap;
